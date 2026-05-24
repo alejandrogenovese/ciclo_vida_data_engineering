@@ -1,0 +1,12 @@
+services:
+  ciclo-vida-data:
+    image: nginx:alpine
+    container_name: ciclo-vida-data
+    restart: unless-stopped
+    ports:
+      - "8090:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./style.css:/usr/share/nginx/html/style.css:ro
+      - ./app.js:/usr/share/nginx/html/app.js:ro
+      - ./data:/usr/share/nginx/html/data:ro

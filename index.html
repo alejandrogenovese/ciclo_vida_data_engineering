@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ciclo de Vida del Desarrollo · Data & IA — Banco Galicia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="brand-mark" id="brand-mark">Ciclo de Vida</span>
+    <h1 class="brand-title" id="brand-title">Ciclo de Vida del Desarrollo <em>· Data &amp; IA</em></h1>
+  </div>
+  <div class="header-tabs">
+    <button class="tab-btn tab-active" data-diagram="ciclo-vida" id="tab-ciclo-vida">
+      Ciclo de Vida
+    </button>
+    <button class="tab-btn" data-diagram="architecture-platform" id="tab-architecture-platform">
+      Arquitectura ↔ Plataforma
+    </button>
+  </div>
+  <div class="header-meta">
+    <span id="brand-org">Banco Galicia</span>
+    <span class="sep"></span>
+    <span id="meta-stage-counter">Etapa 01 / 11</span>
+  </div>
+</header>
+
+<main>
+  <!-- Flow selector: dos niveles — origen luego tipo de camino -->
+  <div class="flow-selector-bar" id="flowSelectorBar">
+    <div class="flow-origins">
+      <button class="flow-origin-btn flow-origin-active" data-origin="bs">Business Solution</button>
+      <button class="flow-origin-btn" data-origin="triage">Triage</button>
+      <button class="flow-origin-btn" data-origin="rt">Robustez Técnica</button>
+      <button class="flow-origin-btn" data-origin="arq">Arquitectura Data</button>
+    </div>
+    <div class="flow-sep" id="flowTypeSep"></div>
+    <div class="flow-types" id="flowTypeRow">
+      <button class="flow-type-btn flow-type-active" data-suffix="bau">BAU</button>
+      <button class="flow-type-btn" data-suffix="dp">Data Product</button>
+    </div>
+  </div>
+
+  <div class="diagram-pane">
+    <button class="btn ref-btn" id="refBtn" title="Ver diagrama de referencia completo">Referencia ↗</button>
+    <button class="btn legend-toggle" id="legendBtn">Leyenda</button>
+    <div class="zoom-controls">
+      <button class="btn zoom-btn" id="zoomInBtn" title="Zoom in (+)">+</button>
+      <button class="btn zoom-btn" id="zoomOutBtn" title="Zoom out (−)">−</button>
+      <button class="btn zoom-btn" id="zoomResetBtn" title="Restablecer zoom (0)">↺</button>
+    </div>
+    <div class="legend-panel" id="legendPanel">
+      <div class="legend-title">Roles transversales</div>
+      <div class="legend-list" id="legendRoles"></div>
+      <div class="legend-title" style="margin-top:18px">Atajos de teclado</div>
+      <div class="legend-list">
+        <div class="legend-item"><kbd>←</kbd> Etapa anterior</div>
+        <div class="legend-item"><kbd>→</kbd> Etapa siguiente</div>
+        <div class="legend-item"><kbd>Space</kbd> Play / Pause</div>
+        <div class="legend-item"><kbd>R</kbd> Reiniciar</div>
+        <div class="legend-item"><kbd>+</kbd> / <kbd>−</kbd> Zoom</div>
+        <div class="legend-item"><kbd>0</kbd> Reset zoom</div>
+      </div>
+    </div>
+
+    <div class="diagram-wrapper">
+      <svg class="flow" id="flowSvg" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#0D1B2A"/>
+          </marker>
+        </defs>
+        <g id="svgTransverse"></g>
+        <g id="svgEdges"></g>
+        <g id="svgAnnotations"></g>
+        <g id="svgNodes"></g>
+      </svg>
+    </div>
+  </div>
+
+  <aside class="narrative" id="narrative">
+    <div class="narrative-loading">Cargando…</div>
+  </aside>
+</main>
+
+<footer>
+  <div class="progress-strip" id="progressStrip"></div>
+
+  <div class="controls">
+    <button class="btn" id="prevBtn" title="Anterior (←)"><span class="arrow">←</span> Anterior</button>
+    <button class="btn btn-primary" id="playBtn" title="Play / Pause (Espacio)">▶ Auto-play</button>
+    <button class="btn" id="nextBtn" title="Siguiente (→)">Siguiente <span class="arrow">→</span></button>
+    <button class="btn" id="resetBtn" title="Reiniciar (R)">Reiniciar</button>
+  </div>
+
+  <div class="progress-counter">
+    Etapa <strong id="counter-current">01</strong> de <strong id="counter-total">11</strong>
+  </div>
+</footer>
+
+<!-- Diagrama de referencia — modal -->
+<div class="ref-modal" id="refModal" aria-hidden="true">
+  <div class="ref-modal-backdrop" id="refModalBackdrop"></div>
+  <div class="ref-modal-box">
+    <div class="ref-modal-header">
+      <span class="ref-modal-title">Ciclo de Vida del Desarrollo · Diagrama completo de referencia</span>
+      <button class="ref-modal-close" id="refModalClose">✕</button>
+    </div>
+    <div class="ref-modal-body" id="refModalBody">
+      <img src="img/referencia.png" alt="Diagrama de referencia — Ciclo de Vida del Desarrollo" class="ref-modal-img" id="refModalImg">
+    </div>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

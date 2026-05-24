@@ -1,0 +1,789 @@
+{
+  "default": "bs-bau",
+  "paths": {
+    "bs-bau": {
+      "label": "Business Solution",
+      "sublabel": "BAU",
+      "color": "#FF8C00",
+      "group": "bs",
+      "nodeSequence": ["business-solution", "clasificador", "factibilidad", "hub", "sincronizacion", "dinamica", "camino-bau", "producto"],
+      "stages": [
+        {
+          "nodeId": "business-solution",
+          "eyebrow": "Origen · Demanda funcional",
+          "title": "Iniciativa <span class=\"italic\">Business Solution</span> → BAU",
+          "lead": "Los Data Managers canalizan una necesidad del negocio. La analizan, priorizan y validan. Por sus características — opera sobre fuentes existentes sin modelado nuevo — se proyecta como una iniciativa BAU.",
+          "sections": [
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Data Managers</span><span class=\"pill\">Negocio</span></div>" },
+            { "label": "Entrada", "content": "Pedido del negocio: nueva métrica, ajuste de dashboard, automatización sobre fuentes conocidas." },
+            { "label": "Perfil BAU", "content": "Trabaja sobre fuentes existentes. No requiere modelado nuevo ni creación de dominio. Ciclo corto y alta repetibilidad." }
+          ],
+          "callout": "<strong>Criterio BAU:</strong> si la iniciativa opera sobre fuentes existentes sin requerir modelado nuevo, entra como BAU. El Clasificador lo confirma en el siguiente paso.",
+          "color": { "primary": "#FF8C00", "soft": "#FFF3E0" }
+        },
+        {
+          "nodeId": "clasificador",
+          "eyebrow": "Bifurcación · Camino BAU confirmado",
+          "title": "El <span class=\"italic\">Clasificador</span> confirma: BAU",
+          "lead": "La iniciativa llega al Clasificador. TLs y la Célula de Modelado evalúan: opera sobre fuentes existentes, no requiere modelado nuevo. El camino es BAU — entra al Grupo 1: Continuidad Operativa.",
+          "sections": [
+            { "label": "Decisión", "content": "<div class=\"pill-grid\"><span class=\"pill\">BAU ✓</span></div>" },
+            { "label": "Criterios", "content": "¿Trabaja sobre fuentes existentes? ¿No requiere modelado nuevo? ¿No crea un dominio nuevo? → BAU." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Célula de Modelado</span></div>" }
+          ],
+          "callout": "<strong>Por qué importa:</strong> clasificar antes de estimar evita rework y conflictos de prioridad. Una iniciativa mal clasificada consume recursos del camino equivocado.",
+          "color": { "primary": "#7B1FA2", "soft": "#F3E5F5" }
+        },
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Análisis · Antes de planificar",
+          "title": "Evaluación de <span class=\"italic\">Factibilidad Técnica</span> y estimación",
+          "lead": "Antes de entrar al Hub, la iniciativa pasa por análisis técnico. Se valida arquitectónicamente, se identifican dependencias, se estima esfuerzo y se levantan riesgos.",
+          "sections": [
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">Seguridad</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">Sourcing</span></div>" },
+            { "label": "Evaluación técnica", "content": "Validación arquitectónica · validación de Seguridad de Datos · identificación de dependencias · definición de enfoque técnico." },
+            { "label": "Estimación y riesgos", "content": "Estimación de esfuerzo y tiempos · dimensionamiento de recursos · identificación de riesgos y supuestos." }
+          ],
+          "callout": "<strong>Resultado:</strong> iniciativa con factibilidad confirmada, esfuerzo estimado y riesgos visibles. Lista para entrar al sprint planning.",
+          "color": { "primary": "#616161", "soft": "#F0F0F0" }
+        },
+        {
+          "nodeId": "hub",
+          "eyebrow": "Planificación · Visibilidad y capacidad",
+          "title": "<span class=\"italic\">Hub</span> de Convergencia y Planificación",
+          "lead": "Toda la capacidad del equipo de Data Engineering se visualiza en un tablero único. Los TLs confirman dependencias, reparten trabajo entre células y commitean el sprint.",
+          "sections": [
+            { "label": "Mecanismos", "content": "Tablero en ServiceNow con capacidad por DE · Sprints fijos de 15 días · TLs responsables de capacidad, tiempos y dependencias." },
+            { "label": "Modelado", "content": "La Célula de Modelado (DPS) estima esfuerzo de modelado, alinea dependencias de datos y valida factibilidad del diseño." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>" }
+          ],
+          "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint, se confirman dependencias y se distribuye el trabajo.",
+          "color": { "primary": "#1A237E", "soft": "#E8EAF6" }
+        },
+        {
+          "nodeId": "sincronizacion",
+          "eyebrow": "Operación · Cadencia de ejecución",
+          "title": "Sincronización y <span class=\"italic\">seguimiento</span>",
+          "lead": "Durante el sprint, dos cadencias mantienen el ritmo: el daily por célula y la reunión global semanal.",
+          "sections": [
+            { "label": "Daily", "content": "TL + DE + DPS + Seguridad de Datos. Seguimiento del avance diario por célula de trabajo." },
+            { "label": "Weekly", "content": "Reunión global. Mide % de progreso, identifica bloqueos y redistribuye recursos entre células si es necesario." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>" }
+          ],
+          "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos recurrentes, dependencias no resueltas. La weekly es el espacio para escalarlo.",
+          "color": { "primary": "#E65100", "soft": "#FFF3E0" }
+        },
+        {
+          "nodeId": "dinamica",
+          "eyebrow": "Distribución · Grupo 1 — Continuidad Operativa",
+          "title": "Grupo 1: <span class=\"italic\">Continuidad Operativa</span>",
+          "lead": "La iniciativa entra al Grupo 1. Un TL de Continuidad Operativa es el nexo central. Las células Minorista-Mayorista, Financiera-Riesgos y Clientes-Digital ejecutan según capacidad.",
+          "sections": [
+            { "label": "Células", "content": "<div class=\"pill-grid\"><span class=\"pill\">Minorista-Mayorista</span><span class=\"pill\">Financiera-Riesgos</span><span class=\"pill\">Clientes-Digital</span></div>" },
+            { "label": "TL nexo", "content": "El TL de Continuidad Operativa coordina entre células y el Hub. Es el punto de contacto para dependencias." },
+            { "label": "Ritmo", "content": "Sprints de 15 días. Alta repetibilidad. Foco en sostener la operación en producción sin frenar los Data Products nuevos." }
+          ],
+          "callout": "<strong>Separación deliberada:</strong> el Grupo 1 sostiene el negocio en producción mientras el Grupo 2 construye lo nuevo. No compiten por recursos.",
+          "color": { "primary": "#F9A825", "soft": "#FFFDE7" }
+        },
+        {
+          "nodeId": "camino-bau",
+          "eyebrow": "Ejecución · Camino BAU",
+          "title": "Camino <span class=\"italic\">BAU</span> · Continuidad Operativa",
+          "lead": "La iniciativa opera sobre fuentes existentes. Tres pasos: ingesta y desarrollo, validación y QA, puesta en producción. Ciclo corto y alta repetibilidad.",
+          "sections": [
+            { "label": "1 · Ingesta", "content": "Implementación de transformaciones sobre fuentes existentes. Célula de Sourcing continuidad operativa." },
+            { "label": "2 · Validación", "content": "Control de calidad, pruebas de regresión, certificación. Sourcing + QA." },
+            { "label": "3 · Producción", "content": "Deploy controlado, monitoreo post-implementación, documentación operativa. Sourcing + TL + DPS." }
+          ],
+          "callout": "<strong>Por qué importa:</strong> el camino BAU mantiene viva la operación día a día sin frenar a los Data Products nuevos. Son flujos deliberadamente separados.",
+          "color": { "primary": "#1565C0", "soft": "#E3F2FD" }
+        },
+        {
+          "nodeId": "producto",
+          "eyebrow": "Cierre · Entregable en uso",
+          "title": "Producto / Entregable <span class=\"italic\">en uso</span>",
+          "lead": "El entregable está disponible: tablero, automatización o dataset actualizado. Comienza la vida útil con monitoreo continuo y soporte BAU sobre la operación viva.",
+          "sections": [
+            { "label": "Formas de entrega", "content": "<div class=\"pill-grid\"><span class=\"pill\">Tableros</span><span class=\"pill\">Pipelines</span><span class=\"pill\">Datasets</span><span class=\"pill\">Automatizaciones</span></div>" },
+            { "label": "Después del deploy", "content": "Monitoreo de calidad, observabilidad de pipelines, soporte BAU. Si surge un incidente, vuelve a Triage. Si hay una mejora, vuelve a Business Solution." },
+            { "label": "Roles transversales", "content": "Data Governance mantiene contratos y DQ. Arquitectura sostiene estándares. Seguridad valida accesos." }
+          ],
+          "callout": "<strong>El ciclo no termina acá — vuelve a empezar.</strong> Cada entregable en uso genera nuevas necesidades que reingresan por Business Solution o Triage.",
+          "color": { "primary": "#FF6F00", "soft": "#FFE9D6" }
+        }
+      ]
+    },
+
+    "bs-dp": {
+      "label": "Business Solution",
+      "sublabel": "Data Product",
+      "color": "#FF8C00",
+      "group": "bs",
+      "nodeSequence": ["business-solution", "clasificador", "factibilidad", "hub", "sincronizacion", "dinamica", "camino-dp", "producto"],
+      "stages": [
+        {
+          "nodeId": "business-solution",
+          "eyebrow": "Origen · Demanda funcional",
+          "title": "Iniciativa <span class=\"italic\">Business Solution</span> → Data Product",
+          "lead": "Los Data Managers canalizan una necesidad del negocio que implica crear algo nuevo: un dominio de datos, un modelo diferente, un Data Product que no existe. La iniciativa se proyecta como Data Product.",
+          "sections": [
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Data Managers</span><span class=\"pill\">Negocio</span></div>" },
+            { "label": "Entrada", "content": "Necesidad de nuevo dominio de datos, modelo que no existe, o Data Product nuevo para el Marketplace." },
+            { "label": "Perfil DP", "content": "Requiere modelado nuevo. Crea un dominio o Data Product. Ciclo completo de 5 pasos. Involucra Arquitectura, Gobierno y Seguridad." }
+          ],
+          "callout": "<strong>Criterio Data Product:</strong> si la iniciativa requiere modelado nuevo o crea un dominio, entra como Data Product. El Clasificador lo confirma en el siguiente paso.",
+          "color": { "primary": "#FF8C00", "soft": "#FFF3E0" }
+        },
+        {
+          "nodeId": "clasificador",
+          "eyebrow": "Bifurcación · Data Product confirmado",
+          "title": "El <span class=\"italic\">Clasificador</span> confirma: Data Product",
+          "lead": "La iniciativa llega al Clasificador. TLs y la Célula de Modelado evalúan: requiere modelado nuevo, crea un dominio que no existe. El camino es Data Product — entra al Grupo 2.",
+          "sections": [
+            { "label": "Decisión", "content": "<div class=\"pill-grid\"><span class=\"pill\">Data Product ✓</span></div>" },
+            { "label": "Criterios", "content": "¿Requiere modelado nuevo? ¿Crea un dominio nuevo? ¿Genera un producto para el Marketplace? → Data Product." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Célula de Modelado</span></div>" }
+          ],
+          "callout": "<strong>Implica más:</strong> el camino Data Product involucra Arquitectura (RFC/ADR si aplica), Seguridad, Gobierno y publicación en Marketplace. El ciclo es completo y más largo.",
+          "color": { "primary": "#7B1FA2", "soft": "#F3E5F5" }
+        },
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Análisis · Antes de planificar",
+          "title": "Evaluación de <span class=\"italic\">Factibilidad Técnica</span> y estimación",
+          "lead": "Antes de entrar al Hub, la iniciativa pasa por análisis técnico profundo. Para un Data Product nuevo, esto incluye validación arquitectónica, decisión sobre RFC/ADR si aplica, y estimación del ciclo completo.",
+          "sections": [
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">Seguridad</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">Sourcing</span></div>" },
+            { "label": "Evaluación técnica", "content": "Validación arquitectónica · ¿requiere RFC/ADR? · validación de Seguridad de Datos · identificación de dependencias · definición de enfoque técnico." },
+            { "label": "Estimación y riesgos", "content": "Estimación del ciclo completo (5 pasos) · dimensionamiento de recursos · identificación de riesgos y supuestos." }
+          ],
+          "callout": "<strong>Resultado:</strong> iniciativa con factibilidad confirmada, esfuerzo estimado para el ciclo completo y riesgos visibles. Lista para entrar al sprint planning.",
+          "color": { "primary": "#616161", "soft": "#F0F0F0" }
+        },
+        {
+          "nodeId": "hub",
+          "eyebrow": "Planificación · Visibilidad y capacidad",
+          "title": "<span class=\"italic\">Hub</span> de Convergencia y Planificación",
+          "lead": "Toda la capacidad del equipo se visualiza en un tablero único. Para Data Products nuevos, la Célula de Modelado juega un rol central en la planificación del sprint.",
+          "sections": [
+            { "label": "Mecanismos", "content": "Tablero en ServiceNow con capacidad por DE · Sprints fijos de 15 días · TLs responsables de capacidad, tiempos y dependencias." },
+            { "label": "Modelado (clave)", "content": "La Célula de Modelado estima esfuerzo de modelado, valida factibilidad del diseño y alinea el contrato de datos preliminar." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>" }
+          ],
+          "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint, se confirman dependencias y se distribuye el trabajo.",
+          "color": { "primary": "#1A237E", "soft": "#E8EAF6" }
+        },
+        {
+          "nodeId": "sincronizacion",
+          "eyebrow": "Operación · Cadencia de ejecución",
+          "title": "Sincronización y <span class=\"italic\">seguimiento</span>",
+          "lead": "Durante el sprint, dos cadencias mantienen el ritmo: el daily por célula y la reunión global semanal.",
+          "sections": [
+            { "label": "Daily", "content": "TL + DE + DPS + Seguridad de Datos. Seguimiento del avance diario por célula de trabajo." },
+            { "label": "Weekly", "content": "Reunión global. Mide % de progreso, identifica bloqueos y redistribuye recursos entre células si es necesario." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>" }
+          ],
+          "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos recurrentes, dependencias no resueltas. La weekly es el espacio para escalarlo.",
+          "color": { "primary": "#E65100", "soft": "#FFF3E0" }
+        },
+        {
+          "nodeId": "dinamica",
+          "eyebrow": "Distribución · Grupo 2 — Nuevos Data Products",
+          "title": "Grupo 2: <span class=\"italic\">Nuevos Data Products</span>",
+          "lead": "La iniciativa entra al Grupo 2. Un TL de Data Products es el nexo central. Se asigna una célula dedicada por Data Product en construcción, con su propio ciclo completo de 5 pasos.",
+          "sections": [
+            { "label": "Células", "content": "<div class=\"pill-grid\"><span class=\"pill\">Célula Data Product 1</span><span class=\"pill\">Célula Data Product 2</span><span class=\"pill\">Célula DP N+1</span></div>" },
+            { "label": "TL nexo", "content": "El TL de Data Products coordina entre células y el Hub. Cada célula tiene plena autonomía sobre su Data Product." },
+            { "label": "Ciclo", "content": "5 pasos: Estimación → Diseño → Ingesta → Documentación y publicación → Uso." }
+          ],
+          "callout": "<strong>Cada Data Product, su propia célula:</strong> el aislamiento evita interferencias y permite que cada equipo tenga su ritmo propio sin competir por recursos.",
+          "color": { "primary": "#F9A825", "soft": "#FFFDE7" }
+        },
+        {
+          "nodeId": "camino-dp",
+          "eyebrow": "Ejecución · Camino Data Product",
+          "title": "Camino <span class=\"italic\">Data Product</span> · Ciclo completo",
+          "lead": "Para iniciativas que crean un dominio nuevo o un Data Product. Cinco pasos desde la estimación técnica hasta la publicación en el Marketplace y el uso activo.",
+          "sections": [
+            { "label": "1-2 · Diseño", "content": "Estimación técnica + arquitectura + seguridad + líder modelado. Modelo final, Data Product publicado, contrato preliminar." },
+            { "label": "3 · Ingesta", "content": "Capa RAW + transformaciones. Célula de Sourcing (incluye creación de objetos)." },
+            { "label": "4-5 · Entrega", "content": "Documentación técnica y funcional, publicación en Marketplace. Tableros, interfaces, exposición vía API. DM + Usuario de Negocio." }
+          ],
+          "callout": "<strong>Para arquitectos y gobierno:</strong> este es el camino donde se materializan ADRs nuevos, contratos de datos y políticas de PII. Es donde la plataforma crece.",
+          "color": { "primary": "#2E7D32", "soft": "#E8F5E9" }
+        },
+        {
+          "nodeId": "producto",
+          "eyebrow": "Cierre · Convergencia",
+          "title": "Producto / Entregable <span class=\"italic\">en uso</span>",
+          "lead": "El Data Product está disponible en el Marketplace. Los usuarios de negocio acceden vía tableros, interfaces o APIs. Comienza la vida útil con monitoreo continuo y Data Governance activo.",
+          "sections": [
+            { "label": "Formas de uso", "content": "<div class=\"pill-grid\"><span class=\"pill\">Tableros</span><span class=\"pill\">Interfaces</span><span class=\"pill\">APIs</span><span class=\"pill\">Datasets</span></div>" },
+            { "label": "Después del go-live", "content": "Monitoreo de calidad, observabilidad de pipelines, soporte BAU. Si surge un incidente, vuelve a Triage. Si hay una mejora, vuelve a Business Solution." },
+            { "label": "Roles transversales", "content": "Data Governance mantiene contratos, DQ y catálogo. Arquitectura sostiene estándares. Seguridad valida accesos y compliance." }
+          ],
+          "callout": "<strong>El ciclo no termina acá — vuelve a empezar.</strong> Cada Data Product en uso genera nuevas iniciativas que reingresan por Business Solution o Triage.",
+          "color": { "primary": "#FF6F00", "soft": "#FFE9D6" }
+        }
+      ]
+    },
+
+    "triage-bau": {
+      "label": "Triage",
+      "sublabel": "BAU",
+      "color": "#2E7D32",
+      "group": "triage",
+      "nodeSequence": ["triage", "triage", "clasificador", "factibilidad", "hub", "sincronizacion", "dinamica", "camino-bau", "producto"],
+      "stages": [
+        {
+          "nodeId": "triage",
+          "eyebrow": "Operación · Punto único de entrada",
+          "title": "<span class=\"italic\">Triage</span> recibe la operación",
+          "lead": "Triage es el punto único de entrada operativa. Recibe incidentes, universal requests e incidentes de usuario. Resuelve directamente lo que puede en N1/N2. Lo que excede su capacidad se escala de forma controlada.",
+          "sections": [
+            { "label": "Maneja", "content": "Gestión de incidentes · universal requests · incidentes de usuario. Resolución directa o escalamiento controlado." },
+            { "label": "Resolución", "content": "N1: resolución inmediata. N2: escalamiento de segundo nivel. Lo que excede → conexión directa a células de trabajo." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Triage</span><span class=\"pill\">N1 / N2</span></div>" }
+          ],
+          "callout": "<strong>Por qué importa:</strong> Triage protege a los equipos de desarrollo de interrupciones operativas no planificadas. Es el filtro que preserva la capacidad de las células.",
+          "color": { "primary": "#2E7D32", "soft": "#E8F5E9" }
+        },
+        {
+          "nodeId": "triage",
+          "eyebrow": "Triage · Escalamiento controlado",
+          "title": "Nexo directo con <span class=\"italic\">células de trabajo</span>",
+          "lead": "Lo que Triage no puede absorber pasa directamente a las células de trabajo. Este nexo garantiza que las células técnicas reciban la demanda de forma ordenada: priorizada, caracterizada y con contexto suficiente para actuar.",
+          "sections": [
+            { "label": "Qué se escala", "content": "Incidentes que requieren conocimiento técnico profundo, cambios urgentes en pipelines, resolución de dependencias entre productos." },
+            { "label": "Cómo", "content": "Triage entrega el caso con contexto completo, impacto estimado y prioridad asignada. La célula receptora lo ingresa al flujo." },
+            { "label": "Destino", "content": "El caso escalado llega al Clasificador para determinar el camino de resolución más adecuado." }
+          ],
+          "callout": "<strong>Nexo ≠ bypass:</strong> el escalamiento es controlado, no una cola sin orden. La célula recibe el caso con toda la información necesaria para actuar rápido.",
+          "color": { "primary": "#2E7D32", "soft": "#E8F5E9" }
+        },
+        {
+          "nodeId": "clasificador",
+          "eyebrow": "Bifurcación · Caso escalado desde Triage",
+          "title": "El <span class=\"italic\">Clasificador</span> procesa el escalamiento — BAU",
+          "lead": "El caso escalado desde Triage llega al Clasificador. Su naturaleza operativa — sobre fuentes existentes, sin modelado nuevo — lo clasifica como BAU. Entra al Grupo 1 con tratamiento de urgencia cuando corresponde.",
+          "sections": [
+            { "label": "Decisión", "content": "<div class=\"pill-grid\"><span class=\"pill\">BAU ✓</span></div>" },
+            { "label": "Contexto", "content": "El caso viene de Triage con prioridad asignada e impacto estimado. El Clasificador valida y formaliza el camino de resolución." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Célula de Modelado</span></div>" }
+          ],
+          "callout": "<strong>Urgencia preservada:</strong> si el caso viene con prioridad alta de Triage, el Clasificador lo refleja en la planificación del Hub para que entre al sprint inmediato.",
+          "color": { "primary": "#7B1FA2", "soft": "#F3E5F5" }
+        },
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Análisis · Antes de planificar",
+          "title": "Evaluación de <span class=\"italic\">Factibilidad Técnica</span> y estimación",
+          "lead": "El caso escalado pasa por análisis técnico. Se valida el enfoque de resolución, se estima el esfuerzo y se identifican dependencias. Para casos urgentes, este paso puede ser acelerado.",
+          "sections": [
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">Seguridad</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span></div>" },
+            { "label": "Evaluación técnica", "content": "Validación del enfoque de resolución · identificación de dependencias · definición de enfoque técnico." },
+            { "label": "Estimación", "content": "Estimación de esfuerzo · dimensionamiento de recursos · identificación de riesgos." }
+          ],
+          "callout": "<strong>Resultado:</strong> caso con factibilidad confirmada y esfuerzo estimado. Listo para entrar al sprint planning con la prioridad de Triage incorporada.",
+          "color": { "primary": "#616161", "soft": "#F0F0F0" }
+        },
+        {
+          "nodeId": "hub",
+          "eyebrow": "Planificación · Visibilidad y capacidad",
+          "title": "<span class=\"italic\">Hub</span> de Convergencia y Planificación",
+          "lead": "El caso entra al Hub con su prioridad asignada. Los TLs lo incorporan al sprint planning, confirmando dependencias y asignando capacidad de la célula correspondiente.",
+          "sections": [
+            { "label": "Mecanismos", "content": "Tablero en ServiceNow con capacidad por DE · Sprints fijos de 15 días · TLs responsables de capacidad, tiempos y dependencias." },
+            { "label": "Modelado", "content": "La Célula de Modelado (DPS) valida impacto del caso en el modelo existente y confirma que no requiere modelado nuevo." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>" }
+          ],
+          "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint con el caso de Triage incorporado a la capacidad.",
+          "color": { "primary": "#1A237E", "soft": "#E8EAF6" }
+        },
+        {
+          "nodeId": "sincronizacion",
+          "eyebrow": "Operación · Cadencia de ejecución",
+          "title": "Sincronización y <span class=\"italic\">seguimiento</span>",
+          "lead": "Durante el sprint, dos cadencias mantienen el ritmo: el daily por célula y la reunión global semanal.",
+          "sections": [
+            { "label": "Daily", "content": "TL + DE + DPS + Seguridad de Datos. Seguimiento del avance diario, incluyendo el caso escalado de Triage." },
+            { "label": "Weekly", "content": "Reunión global. Mide % de progreso, identifica bloqueos y redistribuye recursos entre células." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>" }
+          ],
+          "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos recurrentes, dependencias no resueltas. La weekly es el espacio para escalarlo.",
+          "color": { "primary": "#E65100", "soft": "#FFF3E0" }
+        },
+        {
+          "nodeId": "dinamica",
+          "eyebrow": "Distribución · Grupo 1 — Continuidad Operativa",
+          "title": "Grupo 1: <span class=\"italic\">Continuidad Operativa</span>",
+          "lead": "El caso entra al Grupo 1. Un TL de Continuidad Operativa es el nexo central. La célula con capacidad y dominio del problema ejecuta la resolución.",
+          "sections": [
+            { "label": "Células", "content": "<div class=\"pill-grid\"><span class=\"pill\">Minorista-Mayorista</span><span class=\"pill\">Financiera-Riesgos</span><span class=\"pill\">Clientes-Digital</span></div>" },
+            { "label": "TL nexo", "content": "El TL de Continuidad Operativa coordina entre células y el Hub. Asigna el caso a la célula con dominio del problema." },
+            { "label": "Ritmo", "content": "Sprints de 15 días. La urgencia del caso de Triage puede justificar tratamiento prioritario dentro del sprint." }
+          ],
+          "callout": "<strong>Prioridad operativa:</strong> los casos de Triage escalados como BAU tienen prioridad dentro del Grupo 1. La célula los resuelve sin bloquear la agenda del sprint.",
+          "color": { "primary": "#F9A825", "soft": "#FFFDE7" }
+        },
+        {
+          "nodeId": "camino-bau",
+          "eyebrow": "Ejecución · Camino BAU",
+          "title": "Camino <span class=\"italic\">BAU</span> · Continuidad Operativa",
+          "lead": "Tres pasos: ingesta y desarrollo, validación y QA, puesta en producción. El caso de Triage se resuelve con el proceso estándar BAU, con la urgencia incorporada en la priorización.",
+          "sections": [
+            { "label": "1 · Ingesta", "content": "Implementación de transformaciones sobre fuentes existentes. Célula de Sourcing continuidad operativa." },
+            { "label": "2 · Validación", "content": "Control de calidad, pruebas de regresión, certificación. Sourcing + QA." },
+            { "label": "3 · Producción", "content": "Deploy controlado, monitoreo post-implementación, documentación operativa. Sourcing + TL + DPS." }
+          ],
+          "callout": "<strong>Cierre del ciclo de Triage:</strong> la resolución del caso escalado se formaliza con el mismo rigor que cualquier iniciativa BAU, sin saltar pasos de validación.",
+          "color": { "primary": "#1565C0", "soft": "#E3F2FD" }
+        },
+        {
+          "nodeId": "producto",
+          "eyebrow": "Cierre · Resolución en producción",
+          "title": "Resolución / Entregable <span class=\"italic\">en uso</span>",
+          "lead": "El caso está resuelto y el entregable en producción. La operación se estabiliza. Triage registra el cierre y monitorea que el incidente no se repita.",
+          "sections": [
+            { "label": "Formas de entrega", "content": "<div class=\"pill-grid\"><span class=\"pill\">Fix en producción</span><span class=\"pill\">Pipeline estabilizado</span><span class=\"pill\">Dataset actualizado</span></div>" },
+            { "label": "Después del deploy", "content": "Monitoreo de calidad, observabilidad de pipelines. Si el incidente se repite, vuelve a Triage. Si se identifica una mejora, va a Business Solution." },
+            { "label": "Roles transversales", "content": "Data Governance valida que el fix no afecta contratos de datos. Seguridad verifica compliance." }
+          ],
+          "callout": "<strong>El ciclo se cierra:</strong> Triage recibe la confirmación de resolución. Si el problema vuelve a aparecer, el ciclo reinicia con el contexto del caso anterior.",
+          "color": { "primary": "#FF6F00", "soft": "#FFE9D6" }
+        }
+      ]
+    },
+
+    "triage-dp": {
+      "label": "Triage",
+      "sublabel": "Data Product",
+      "color": "#2E7D32",
+      "group": "triage",
+      "nodeSequence": ["triage", "triage", "clasificador", "factibilidad", "hub", "sincronizacion", "dinamica", "camino-dp", "producto"],
+      "stages": [
+        {
+          "nodeId": "triage",
+          "eyebrow": "Operación · Punto único de entrada",
+          "title": "<span class=\"italic\">Triage</span> recibe la operación",
+          "lead": "Triage es el punto único de entrada operativa. Recibe incidentes, universal requests e incidentes de usuario. Resuelve directamente lo que puede en N1/N2. Lo que excede su capacidad se escala de forma controlada.",
+          "sections": [
+            { "label": "Maneja", "content": "Gestión de incidentes · universal requests · incidentes de usuario. Resolución directa o escalamiento controlado." },
+            { "label": "Resolución", "content": "N1: resolución inmediata. N2: escalamiento de segundo nivel. Lo que excede → conexión directa a células de trabajo." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Triage</span><span class=\"pill\">N1 / N2</span></div>" }
+          ],
+          "callout": "<strong>Por qué importa:</strong> Triage protege a los equipos de desarrollo de interrupciones no planificadas. Es el filtro que preserva la capacidad de las células.",
+          "color": { "primary": "#2E7D32", "soft": "#E8F5E9" }
+        },
+        {
+          "nodeId": "triage",
+          "eyebrow": "Triage · Escalamiento controlado",
+          "title": "Nexo directo con <span class=\"italic\">células de trabajo</span>",
+          "lead": "Lo que Triage escala revela una necesidad más profunda: no solo un fix, sino la construcción de algo nuevo. El caso se eleva como iniciativa Data Product porque requiere modelado o un dominio que no existe.",
+          "sections": [
+            { "label": "Qué revela", "content": "El incidente destapa una brecha estructural: datos que no existen, modelo incorrecto o Data Product ausente que causó el problema." },
+            { "label": "Cómo", "content": "Triage entrega el caso con contexto completo. La célula receptora lo clasifica como iniciativa Data Product en lugar de fix puntual." },
+            { "label": "Destino", "content": "El caso escalado llega al Clasificador con recomendación de camino Data Product." }
+          ],
+          "callout": "<strong>Insight de Triage:</strong> cuando el mismo tipo de incidente se repite, muchas veces la solución correcta es un Data Product nuevo, no otro parche.",
+          "color": { "primary": "#2E7D32", "soft": "#E8F5E9" }
+        },
+        {
+          "nodeId": "clasificador",
+          "eyebrow": "Bifurcación · Caso escalado desde Triage",
+          "title": "El <span class=\"italic\">Clasificador</span> confirma: Data Product",
+          "lead": "El caso escalado desde Triage llega al Clasificador. La evaluación revela que la solución requiere modelado nuevo o crear un dominio que no existe. El camino es Data Product — entra al Grupo 2.",
+          "sections": [
+            { "label": "Decisión", "content": "<div class=\"pill-grid\"><span class=\"pill\">Data Product ✓</span></div>" },
+            { "label": "Contexto", "content": "El caso viene de Triage revelando una brecha estructural. El Clasificador valida que la solución correcta es un Data Product nuevo." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Célula de Modelado</span></div>" }
+          ],
+          "callout": "<strong>De incidente a producto:</strong> el caso de Triage se transforma en una iniciativa de construcción formal. Requiere el ciclo completo con Arquitectura, Gobierno y Seguridad.",
+          "color": { "primary": "#7B1FA2", "soft": "#F3E5F5" }
+        },
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Análisis · Antes de planificar",
+          "title": "Evaluación de <span class=\"italic\">Factibilidad Técnica</span> y estimación",
+          "lead": "El caso se analiza como iniciativa Data Product completa. Se valida arquitectónicamente, se decide si requiere RFC/ADR, se estima el ciclo completo de 5 pasos.",
+          "sections": [
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">Seguridad</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span></div>" },
+            { "label": "Evaluación técnica", "content": "Validación arquitectónica · ¿requiere RFC/ADR? · validación de Seguridad · identificación de dependencias." },
+            { "label": "Estimación", "content": "Estimación del ciclo completo · dimensionamiento de recursos · identificación de riesgos." }
+          ],
+          "callout": "<strong>Resultado:</strong> la iniciativa tiene factibilidad confirmada y esfuerzo estimado para el ciclo completo. Lista para entrar al sprint planning como Data Product.",
+          "color": { "primary": "#616161", "soft": "#F0F0F0" }
+        },
+        {
+          "nodeId": "hub",
+          "eyebrow": "Planificación · Visibilidad y capacidad",
+          "title": "<span class=\"italic\">Hub</span> de Convergencia y Planificación",
+          "lead": "La iniciativa entra al Hub como Data Product nuevo. Los TLs la incorporan al sprint planning del Grupo 2, con la Célula de Modelado como actor central.",
+          "sections": [
+            { "label": "Mecanismos", "content": "Tablero en ServiceNow con capacidad por DE · Sprints fijos de 15 días · TLs responsables de capacidad, tiempos y dependencias." },
+            { "label": "Modelado (clave)", "content": "La Célula de Modelado estima esfuerzo de modelado, valida factibilidad del diseño y alinea el contrato de datos preliminar." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>" }
+          ],
+          "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint con el nuevo Data Product incorporado al Grupo 2.",
+          "color": { "primary": "#1A237E", "soft": "#E8EAF6" }
+        },
+        {
+          "nodeId": "sincronizacion",
+          "eyebrow": "Operación · Cadencia de ejecución",
+          "title": "Sincronización y <span class=\"italic\">seguimiento</span>",
+          "lead": "Durante el sprint, dos cadencias mantienen el ritmo: el daily por célula y la reunión global semanal.",
+          "sections": [
+            { "label": "Daily", "content": "TL + DE + DPS + Seguridad de Datos. Seguimiento del avance diario del Data Product en construcción." },
+            { "label": "Weekly", "content": "Reunión global. Mide % de progreso, identifica bloqueos y redistribuye recursos entre células." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>" }
+          ],
+          "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos recurrentes, dependencias no resueltas. La weekly es el espacio para escalarlo.",
+          "color": { "primary": "#E65100", "soft": "#FFF3E0" }
+        },
+        {
+          "nodeId": "dinamica",
+          "eyebrow": "Distribución · Grupo 2 — Nuevos Data Products",
+          "title": "Grupo 2: <span class=\"italic\">Nuevos Data Products</span>",
+          "lead": "La iniciativa entra al Grupo 2. Se asigna una célula dedicada al nuevo Data Product. El TL de Data Products es el nexo central entre la célula, el Hub y los stakeholders.",
+          "sections": [
+            { "label": "Células", "content": "<div class=\"pill-grid\"><span class=\"pill\">Célula Data Product 1</span><span class=\"pill\">Célula Data Product 2</span><span class=\"pill\">Célula DP N+1</span></div>" },
+            { "label": "TL nexo", "content": "El TL de Data Products coordina entre células y el Hub. La célula asignada tiene plena autonomía sobre el nuevo Data Product." },
+            { "label": "Ciclo", "content": "5 pasos: Estimación → Diseño → Ingesta → Documentación y publicación → Uso." }
+          ],
+          "callout": "<strong>Origen en Triage, destino en Grupo 2:</strong> el caso que empezó como un incidente operativo se convierte en un Data Product que previene ese tipo de incidentes a futuro.",
+          "color": { "primary": "#F9A825", "soft": "#FFFDE7" }
+        },
+        {
+          "nodeId": "camino-dp",
+          "eyebrow": "Ejecución · Camino Data Product",
+          "title": "Camino <span class=\"italic\">Data Product</span> · Ciclo completo",
+          "lead": "Cinco pasos desde la estimación técnica hasta la publicación en el Marketplace. El nuevo Data Product resuelve de forma permanente la brecha que reveló el incidente de Triage.",
+          "sections": [
+            { "label": "1-2 · Diseño", "content": "Estimación técnica + arquitectura + seguridad. Modelo final, Data Product publicado, contrato preliminar." },
+            { "label": "3 · Ingesta", "content": "Capa RAW + transformaciones. Célula de Sourcing (incluye creación de objetos)." },
+            { "label": "4-5 · Entrega", "content": "Documentación técnica y funcional, publicación en Marketplace. Tableros, interfaces, exposición vía API." }
+          ],
+          "callout": "<strong>Solución permanente:</strong> el Data Product construido resuelve la causa raíz del incidente. No es un parche — es la solución definitiva.",
+          "color": { "primary": "#2E7D32", "soft": "#E8F5E9" }
+        },
+        {
+          "nodeId": "producto",
+          "eyebrow": "Cierre · Convergencia",
+          "title": "Producto / Entregable <span class=\"italic\">en uso</span>",
+          "lead": "El Data Product está disponible. La brecha que reveló el incidente de Triage está resuelta de forma permanente. Los usuarios acceden al dato correcto, en el momento correcto.",
+          "sections": [
+            { "label": "Formas de uso", "content": "<div class=\"pill-grid\"><span class=\"pill\">Tableros</span><span class=\"pill\">Interfaces</span><span class=\"pill\">APIs</span><span class=\"pill\">Datasets</span></div>" },
+            { "label": "Después del go-live", "content": "Monitoreo de calidad, observabilidad de pipelines, soporte BAU. Si surge un nuevo incidente, vuelve a Triage." },
+            { "label": "Roles transversales", "content": "Data Governance mantiene contratos, DQ y catálogo. Arquitectura sostiene estándares. Seguridad valida accesos." }
+          ],
+          "callout": "<strong>El ciclo se cierra con aprendizaje:</strong> el incidente que activó Triage se convirtió en un Data Product que fortalece la plataforma.",
+          "color": { "primary": "#FF6F00", "soft": "#FFE9D6" }
+        }
+      ]
+    },
+
+    "rt-bau": {
+      "label": "Robustez Técnica",
+      "sublabel": "BAU",
+      "color": "#D32F2F",
+      "group": "rt",
+      "nodeSequence": ["robustez-tecnica", "clasificador", "factibilidad", "hub", "sincronizacion", "dinamica", "camino-bau", "producto"],
+      "stages": [
+        {
+          "nodeId": "robustez-tecnica",
+          "eyebrow": "Origen · Iniciativa técnica",
+          "title": "Iniciativa de <span class=\"italic\">Robustez Técnica</span> → BAU",
+          "lead": "La iniciativa surge de un actor técnico del banco: TLs, DPS, Arquitectura Data u otro equipo. Es 100% técnica — refactoring, reducción de deuda, mejora de performance, estabilización. Se proyecta como BAU.",
+          "sections": [
+            { "label": "Origen", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">Arquitectura Data</span><span class=\"pill\">Otro actor técnico</span></div>" },
+            { "label": "Qué incluye", "content": "Refactoring de pipelines · reducción de deuda técnica · mejoras de performance · estabilización de componentes · hardening de seguridad." },
+            { "label": "Perfil BAU", "content": "Trabaja sobre componentes existentes. No crea un dominio nuevo. Ciclo de resolución corto, alta repetibilidad." }
+          ],
+          "callout": "<strong>Canal formal para lo técnico:</strong> tener un camino propio para robustez evita que la deuda se acumule. El negocio no compite con la salud del sistema — ambos entran al mismo Hub.",
+          "color": { "primary": "#D32F2F", "soft": "#FFEBEE" }
+        },
+        {
+          "nodeId": "clasificador",
+          "eyebrow": "Bifurcación · Iniciativa técnica BAU",
+          "title": "El <span class=\"italic\">Clasificador</span> confirma: BAU técnico",
+          "lead": "La iniciativa de Robustez Técnica llega al Clasificador. Opera sobre infraestructura o pipelines existentes, sin crear un dominio nuevo. El camino es BAU técnico — entra al Grupo 1.",
+          "sections": [
+            { "label": "Decisión", "content": "<div class=\"pill-grid\"><span class=\"pill\">BAU técnico ✓</span></div>" },
+            { "label": "Criterios", "content": "¿Trabaja sobre componentes existentes? ¿No crea nuevo dominio? ¿Es continuidad técnica sin nueva arquitectura? → BAU." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Arquitectura (si aplica)</span></div>" }
+          ],
+          "callout": "<strong>Contexto técnico:</strong> las iniciativas de robustez que entran como BAU tienen su propia prioridad en el Hub. No desplazan la demanda de negocio — coexisten.",
+          "color": { "primary": "#7B1FA2", "soft": "#F3E5F5" }
+        },
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Análisis · Antes de planificar",
+          "title": "Evaluación de <span class=\"italic\">Factibilidad Técnica</span> y estimación",
+          "lead": "La iniciativa pasa por análisis técnico. Se valida el enfoque de refactoring o mejora, se estima el esfuerzo de implementación y se identifican riesgos de regresión.",
+          "sections": [
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span></div>" },
+            { "label": "Evaluación técnica", "content": "Validación del enfoque de mejora · riesgos de regresión · identificación de dependencias · definición de alcance técnico." },
+            { "label": "Estimación", "content": "Estimación de esfuerzo · dimensionamiento de recursos · plan de rollback si aplica." }
+          ],
+          "callout": "<strong>Resultado:</strong> iniciativa con alcance técnico confirmado, esfuerzo estimado y plan de mitigación de regresiones. Lista para el sprint planning.",
+          "color": { "primary": "#616161", "soft": "#F0F0F0" }
+        },
+        {
+          "nodeId": "hub",
+          "eyebrow": "Planificación · Visibilidad y capacidad",
+          "title": "<span class=\"italic\">Hub</span> de Convergencia y Planificación",
+          "lead": "La iniciativa entra al Hub. Los TLs la incorporan al sprint planning del Grupo 1 junto a la demanda de negocio, con su prioridad técnica explícita.",
+          "sections": [
+            { "label": "Mecanismos", "content": "Tablero en ServiceNow · Sprints de 15 días · TLs responsables de capacidad y dependencias." },
+            { "label": "Priorización", "content": "Las iniciativas de robustez se incorporan al sprint con visibilidad explícita. No son 'extras' — tienen su espacio en el backlog." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>" }
+          ],
+          "callout": "<strong>Para los líderes:</strong> hacer visible la robustez técnica en el Hub es lo que evita que se acumule indefinidamente. Lo que no entra al sprint, no se hace.",
+          "color": { "primary": "#1A237E", "soft": "#E8EAF6" }
+        },
+        {
+          "nodeId": "sincronizacion",
+          "eyebrow": "Operación · Cadencia de ejecución",
+          "title": "Sincronización y <span class=\"italic\">seguimiento</span>",
+          "lead": "Durante el sprint, dos cadencias mantienen el ritmo: el daily por célula y la reunión global semanal.",
+          "sections": [
+            { "label": "Daily", "content": "TL + DE + DPS. Seguimiento del avance de la iniciativa de robustez junto a la demanda de negocio." },
+            { "label": "Weekly", "content": "Reunión global. Mide % de progreso, identifica bloqueos y redistribuye recursos entre células." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>" }
+          ],
+          "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos técnicos recurrentes, dependencias no resueltas.",
+          "color": { "primary": "#E65100", "soft": "#FFF3E0" }
+        },
+        {
+          "nodeId": "dinamica",
+          "eyebrow": "Distribución · Grupo 1 — Continuidad Operativa",
+          "title": "Grupo 1: <span class=\"italic\">Continuidad Operativa</span>",
+          "lead": "La iniciativa de robustez entra al Grupo 1. Se asigna a la célula con dominio del componente afectado. El TL de Continuidad Operativa es el nexo central.",
+          "sections": [
+            { "label": "Células", "content": "<div class=\"pill-grid\"><span class=\"pill\">Minorista-Mayorista</span><span class=\"pill\">Financiera-Riesgos</span><span class=\"pill\">Clientes-Digital</span></div>" },
+            { "label": "Asignación", "content": "La célula asignada es la que tiene dominio del componente a mejorar o refactorizar." },
+            { "label": "Ritmo", "content": "Sprints de 15 días. Las mejoras de robustez se intercalan con las iniciativas de negocio del sprint." }
+          ],
+          "callout": "<strong>Robustez como primera clase:</strong> las iniciativas técnicas en el Grupo 1 tienen el mismo tratamiento que la demanda de negocio. No son ciudadanos de segunda.",
+          "color": { "primary": "#F9A825", "soft": "#FFFDE7" }
+        },
+        {
+          "nodeId": "camino-bau",
+          "eyebrow": "Ejecución · Camino BAU",
+          "title": "Camino <span class=\"italic\">BAU</span> · Ejecución técnica",
+          "lead": "La mejora técnica se ejecuta con el mismo proceso estándar BAU. Tres pasos: implementación, validación (especialmente pruebas de regresión) y puesta en producción controlada.",
+          "sections": [
+            { "label": "1 · Implementación", "content": "Refactoring, mejora de performance o estabilización del componente. Célula de Sourcing continuidad operativa." },
+            { "label": "2 · Validación", "content": "Pruebas de regresión extensivas, certificación de calidad. Sin regresión validada no hay deploy. Sourcing + QA." },
+            { "label": "3 · Producción", "content": "Deploy controlado con plan de rollback. Monitoreo intensivo post-deploy. Sourcing + TL + DPS." }
+          ],
+          "callout": "<strong>Regresión cero:</strong> las iniciativas de robustez tienen un riesgo especial — pueden romper algo que funcionaba. El paso de validación es crítico antes de producción.",
+          "color": { "primary": "#1565C0", "soft": "#E3F2FD" }
+        },
+        {
+          "nodeId": "producto",
+          "eyebrow": "Cierre · Mejora en producción",
+          "title": "Mejora técnica <span class=\"italic\">en producción</span>",
+          "lead": "La mejora técnica está en producción. El sistema es más robusto, la deuda se redujo y la plataforma está en mejor forma para soportar la demanda de negocio.",
+          "sections": [
+            { "label": "Resultado técnico", "content": "<div class=\"pill-grid\"><span class=\"pill\">Performance mejorada</span><span class=\"pill\">Deuda reducida</span><span class=\"pill\">Sistema estabilizado</span></div>" },
+            { "label": "Monitoreo", "content": "Observabilidad de pipelines para confirmar la mejora. Alertas configuradas para detectar regresiones tardías." },
+            { "label": "Roles transversales", "content": "Arquitectura verifica alineación con estándares. Seguridad valida que la mejora no introduce nuevos vectores." }
+          ],
+          "callout": "<strong>Inversión en el futuro:</strong> cada mejora de robustez reduce la probabilidad de incidentes futuros y la velocidad de desarrollo de nuevas iniciativas.",
+          "color": { "primary": "#FF6F00", "soft": "#FFE9D6" }
+        }
+      ]
+    },
+
+    "rt-dp": {
+      "label": "Robustez Técnica",
+      "sublabel": "Data Product",
+      "color": "#D32F2F",
+      "group": "rt",
+      "nodeSequence": ["robustez-tecnica", "clasificador", "factibilidad", "hub", "sincronizacion", "dinamica", "camino-dp", "producto"],
+      "stages": [
+        {
+          "nodeId": "robustez-tecnica",
+          "eyebrow": "Origen · Iniciativa técnica",
+          "title": "Iniciativa de <span class=\"italic\">Robustez Técnica</span> → Data Product",
+          "lead": "La iniciativa surge de un actor técnico del banco. Es 100% técnica pero implica crear algo nuevo: un componente de plataforma, un patrón de integración, o un dominio técnico que no existe. Requiere el ciclo completo.",
+          "sections": [
+            { "label": "Origen", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">Arquitectura Data</span><span class=\"pill\">Otro actor técnico</span></div>" },
+            { "label": "Qué incluye", "content": "Nuevos componentes de plataforma · patrones de integración no existentes · dominios técnicos nuevos · herramientas que requieren decisión arquitectónica." },
+            { "label": "Perfil DP", "content": "Crea algo nuevo. Requiere decisión arquitectónica formal (RFC/ADR). Involucra Arquitectura, Gobierno y Seguridad." }
+          ],
+          "callout": "<strong>Robustez con arquitectura:</strong> cuando una iniciativa técnica crea algo estructuralmente nuevo, necesita el ciclo completo — incluyendo RFC, ADR y HLD — antes de implementarse.",
+          "color": { "primary": "#D32F2F", "soft": "#FFEBEE" }
+        },
+        {
+          "nodeId": "clasificador",
+          "eyebrow": "Bifurcación · Iniciativa técnica Data Product",
+          "title": "El <span class=\"italic\">Clasificador</span> confirma: nuevo componente",
+          "lead": "La iniciativa llega al Clasificador. La evaluación revela que crea algo nuevo — un componente de plataforma, un patrón arquitectónico o un dominio técnico. El camino es Data Product — entra al Grupo 2.",
+          "sections": [
+            { "label": "Decisión", "content": "<div class=\"pill-grid\"><span class=\"pill\">Data Product técnico ✓</span></div>" },
+            { "label": "Criterios", "content": "¿Crea un componente nuevo? ¿Requiere decisión arquitectónica formal (RFC/ADR)? ¿Genera un nuevo patrón? → Data Product." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Arquitectura Data</span></div>" }
+          ],
+          "callout": "<strong>Distinguir robustez BAU de DP:</strong> mejorar algo existente → BAU. Crear algo nuevo que cambia la arquitectura → Data Product. La diferencia es estructural.",
+          "color": { "primary": "#7B1FA2", "soft": "#F3E5F5" }
+        },
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Análisis · Antes de planificar",
+          "title": "Evaluación de <span class=\"italic\">Factibilidad Técnica</span> y estimación",
+          "lead": "La iniciativa se analiza como Data Product técnico completo. Se valida arquitectónicamente, se decide sobre RFC/ADR, y se estima el ciclo completo de 5 pasos.",
+          "sections": [
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">Seguridad</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span></div>" },
+            { "label": "Evaluación técnica", "content": "Validación arquitectónica · RFC/ADR requerido → ciclo con Plataforma · validación de Seguridad · identificación de dependencias." },
+            { "label": "Estimación", "content": "Estimación del ciclo completo · dimensionamiento de recursos · identificación de riesgos arquitectónicos." }
+          ],
+          "callout": "<strong>Resultado:</strong> la iniciativa tiene factibilidad confirmada y esfuerzo estimado para el ciclo completo. El ciclo de Arquitectura con Plataforma es parte del plan.",
+          "color": { "primary": "#616161", "soft": "#F0F0F0" }
+        },
+        {
+          "nodeId": "hub",
+          "eyebrow": "Planificación · Visibilidad y capacidad",
+          "title": "<span class=\"italic\">Hub</span> de Convergencia y Planificación",
+          "lead": "La iniciativa técnica entra al Hub como Data Product. Los TLs la incorporan al sprint planning del Grupo 2, con Arquitectura Data y Modelado como actores clave.",
+          "sections": [
+            { "label": "Mecanismos", "content": "Tablero en ServiceNow · Sprints de 15 días · TLs responsables de capacidad y dependencias." },
+            { "label": "Arquitectura presente", "content": "Las decisiones arquitectónicas tomadas durante Factibilidad se reflejan en el plan del sprint. Arquitectura Data acompaña el desarrollo." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span><span class=\"pill\">Arquitectura</span></div>" }
+          ],
+          "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint con el nuevo componente técnico incorporado al Grupo 2.",
+          "color": { "primary": "#1A237E", "soft": "#E8EAF6" }
+        },
+        {
+          "nodeId": "sincronizacion",
+          "eyebrow": "Operación · Cadencia de ejecución",
+          "title": "Sincronización y <span class=\"italic\">seguimiento</span>",
+          "lead": "Durante el sprint, dos cadencias mantienen el ritmo: el daily por célula y la reunión global semanal.",
+          "sections": [
+            { "label": "Daily", "content": "TL + DE + DPS + Arquitectura (cuando aplica). Seguimiento del avance del nuevo componente técnico." },
+            { "label": "Weekly", "content": "Reunión global. Mide % de progreso, identifica bloqueos y redistribuye recursos." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>" }
+          ],
+          "callout": "<strong>Lo que dispara una alerta:</strong> desviaciones respecto al ADR aprobado, bloqueos técnicos, dependencias con Plataforma no resueltas.",
+          "color": { "primary": "#E65100", "soft": "#FFF3E0" }
+        },
+        {
+          "nodeId": "dinamica",
+          "eyebrow": "Distribución · Grupo 2 — Nuevos Data Products",
+          "title": "Grupo 2: <span class=\"italic\">Nuevos Data Products</span>",
+          "lead": "La iniciativa técnica entra al Grupo 2. Se asigna una célula dedicada al nuevo componente. El TL de Data Products coordina con Arquitectura y Plataforma durante la construcción.",
+          "sections": [
+            { "label": "Células", "content": "<div class=\"pill-grid\"><span class=\"pill\">Célula Data Product 1</span><span class=\"pill\">Célula Data Product 2</span><span class=\"pill\">Célula DP N+1</span></div>" },
+            { "label": "TL nexo", "content": "El TL de Data Products coordina entre la célula, Arquitectura y el Hub. Asegura fidelidad al ADR aprobado." },
+            { "label": "Ciclo", "content": "5 pasos, con énfasis en diseño técnico (ADR/HLD) y validación de integración con Plataforma." }
+          ],
+          "callout": "<strong>Robustez como Data Product:</strong> el nuevo componente técnico tiene el mismo ciclo de vida que un Data Product de negocio — con toda la trazabilidad arquitectónica.",
+          "color": { "primary": "#F9A825", "soft": "#FFFDE7" }
+        },
+        {
+          "nodeId": "camino-dp",
+          "eyebrow": "Ejecución · Camino Data Product",
+          "title": "Camino <span class=\"italic\">Data Product</span> · Nuevo componente técnico",
+          "lead": "Cinco pasos desde el diseño técnico hasta la puesta en producción y disponibilidad del nuevo componente para el resto de los equipos.",
+          "sections": [
+            { "label": "1-2 · Diseño", "content": "Implementación del ADR/HLD aprobado. Diseño físico con Plataforma. TSR co-firmado." },
+            { "label": "3 · Construcción", "content": "Implementación del componente técnico. Integración con la infraestructura existente. Validación con Plataforma." },
+            { "label": "4-5 · Entrega", "content": "Documentación técnica completa. Publicación y adopción por los equipos. Monitoreo de integración." }
+          ],
+          "callout": "<strong>Para arquitectos y gobierno:</strong> el nuevo componente técnico materializa una decisión del ADR. La trazabilidad desde la decisión hasta el deploy es completa.",
+          "color": { "primary": "#2E7D32", "soft": "#E8F5E9" }
+        },
+        {
+          "nodeId": "producto",
+          "eyebrow": "Cierre · Componente técnico en producción",
+          "title": "Componente técnico <span class=\"italic\">en producción</span>",
+          "lead": "El nuevo componente técnico está disponible. La plataforma es más robusta, los equipos tienen un nuevo patrón que usar y la decisión arquitectónica está implementada y documentada.",
+          "sections": [
+            { "label": "Resultado", "content": "<div class=\"pill-grid\"><span class=\"pill\">Componente disponible</span><span class=\"pill\">ADR implementado</span><span class=\"pill\">Documentación publicada</span></div>" },
+            { "label": "Adopción", "content": "Los demás equipos pueden comenzar a usar el nuevo componente o patrón. El TL de Data Products gestiona la adopción." },
+            { "label": "Roles transversales", "content": "Arquitectura verifica fidelidad al ADR. Plataforma monitorea la operación. Gobierno valida trazabilidad." }
+          ],
+          "callout": "<strong>Plataforma mejorada:</strong> cada componente técnico nuevo construido como Data Product fortalece la capacidad del equipo de construir más y mejor.",
+          "color": { "primary": "#FF6F00", "soft": "#FFE9D6" }
+        }
+      ]
+    },
+
+    "arquitectura": {
+      "label": "Arquitectura Data",
+      "sublabel": null,
+      "color": "#1F3864",
+      "group": "arq",
+      "nodeSequence": ["factibilidad", "arquitectura-data", "arquitectura-data", "arquitectura-data", "factibilidad"],
+      "stages": [
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Arquitectura Data · Punto de entrada",
+          "title": "Arquitectura Data recibe el <span class=\"italic\">pedido</span>",
+          "lead": "Durante la Evaluación de Factibilidad Técnica, Arquitectura Data identifica las iniciativas que requieren decisión arquitectónica formal. Evalúa, toma propiedad e inicia el ciclo formal de decisión.",
+          "sections": [
+            { "label": "Qué identifica", "content": "Iniciativas que requieren nueva arquitectura, cambio estructural, evaluación de herramientas o decisiones que afectan múltiples productos." },
+            { "label": "Cómo llega", "content": "Puede venir de cualquier célula técnica, de Business Solution o de Triage. Lo que lo convierte en flujo de Arquitectura es la ausencia de una decisión previa o la necesidad de revisar una existente." },
+            { "label": "Toma de propiedad", "content": "Arquitectura Data es propietaria del proceso desde este punto. Inicia el ciclo: RFC → ADR → HLD → TSR." }
+          ],
+          "callout": "<strong>Para todos:</strong> cuando una iniciativa toca arquitectura nueva, Arquitectura Data toma el volante. No se avanza a implementación sin una decisión formal.",
+          "color": { "primary": "#616161", "soft": "#F0F0F0" }
+        },
+        {
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · RFC y toma de pedidos",
+          "title": "<span class=\"italic\">Arquitectura Data</span> inicia el proceso",
+          "lead": "Arquitectura Data toma el pedido y abre un RFC (Request for Comments). Propuesta abierta que documenta el problema, las opciones técnicas evaluadas, sus trade-offs, costos estimados y riesgos. Múltiples voces pueden cuestionar y mejorar la propuesta.",
+          "sections": [
+            { "label": "RFC", "content": "Propuesta abierta. Arquitectura expone el problema, las opciones y los trade-offs. Equipos técnicos comentan, cuestionan y proponen mejoras." },
+            { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura (owner)</span><span class=\"pill\">Plataforma</span><span class=\"pill\">TLs</span><span class=\"pill\">Técnicos varios</span></div>" },
+            { "label": "Contenido del RFC", "content": "Problema, opciones técnicas evaluadas, pros/contras de cada una, costos estimados, riesgos y alternativas." }
+          ],
+          "callout": "<strong>Ver el detalle completo:</strong> el ciclo Arquitectura ↔ Plataforma está documentado paso a paso en el tab «Arquitectura ↔ Plataforma».",
+          "color": { "primary": "#1F3864", "soft": "#E8EEF7" }
+        },
+        {
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · Ciclo con Plataforma",
+          "title": "Ciclo de vida con <span class=\"italic\">Plataforma</span>",
+          "lead": "Arquitectura lleva el RFC por su ciclo formal con Plataforma: revisión técnica, feedback consolidado, POC Charter si hay incertidumbre, ADR (decisión inmutable) y HLD. El resultado es una decisión técnica documentada y aprobada.",
+          "sections": [
+            { "label": "Revisión RFC", "content": "Plataforma evalúa viabilidad operacional, restricciones y costos reales. Devuelve feedback consolidado a Arquitectura." },
+            { "label": "ADR + HLD", "content": "Arquitectura formaliza la decisión en un ADR (inmutable). Luego crea el HLD — el plano de la arquitectura decidida." },
+            { "label": "TSR", "content": "HLD + propuesta de diseño físico de Plataforma confluyen en el TSR. Co-firma entre Arquitectura y Plataforma. Gate de calidad." }
+          ],
+          "callout": "<strong>Tab dedicado:</strong> todo este ciclo está detallado en «Arquitectura ↔ Plataforma». Navegá allí para ver cada paso — RFC, ADR, HLD, TSR — con su narrativa completa.",
+          "color": { "primary": "#1F3864", "soft": "#E8EEF7" }
+        },
+        {
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · Validación de Gobierno",
+          "title": "Validación con <span class=\"italic\">Data Governance</span> (si aplica)",
+          "lead": "Cuando la decisión arquitectónica involucra datos sensibles, contratos de datos, políticas de PII, catálogo o retención, Data Governance valida antes de cerrar el ciclo. Es un paso condicional.",
+          "sections": [
+            { "label": "Cuándo aplica", "content": "<div class=\"pill-grid\"><span class=\"pill\">Datos sensibles / PII</span><span class=\"pill\">Contratos de datos</span><span class=\"pill\">Catálogo y metadatos</span><span class=\"pill\">Políticas de retención</span></div>" },
+            { "label": "Qué valida", "content": "Estándares de calidad de datos · compliance · trazabilidad y lineage end-to-end · catálogo y metadatos · monitoreo de métricas de gobierno." },
+            { "label": "Resultado", "content": "Aval de Gobierno para proceder. Sin este aval, cuando aplica, el ciclo no se cierra." }
+          ],
+          "callout": "<strong>Transversal y siempre presente:</strong> Data Governance no bloquea — acompaña. Su participación garantiza que la decisión arquitectónica sea coherente con las políticas de datos del banco.",
+          "color": { "primary": "#1F3864", "soft": "#E8EEF7" }
+        },
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Arquitectura Data · Cierre del ciclo",
+          "title": "Arquitectura devuelve el <span class=\"italic\">resultado</span>",
+          "lead": "Con ADR aprobado, TSR co-firmado y Gobierno validado si aplicó, Arquitectura Data devuelve el resultado. La Evaluación de Factibilidad puede continuar con la certeza técnica completa para avanzar al Hub.",
+          "sections": [
+            { "label": "Qué devuelve", "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR</span><span class=\"pill\">HLD</span><span class=\"pill\">TSR</span><span class=\"pill\">Aval Gobierno</span></div>" },
+            { "label": "Impacto", "content": "La iniciativa tiene una decisión técnica documentada, aprobada y trazable. Puede proceder al Hub con certeza arquitectónica." },
+            { "label": "Trazabilidad", "content": "Todos los artefactos quedan como referencia permanente. Si la dirección cambia, se crea un nuevo ADR que revoca el anterior." }
+          ],
+          "callout": "<strong>El ciclo se cierra:</strong> la iniciativa vuelve al flujo principal con una base técnica sólida. Desde acá puede avanzar al Hub y al sprint planning.",
+          "color": { "primary": "#616161", "soft": "#F0F0F0" }
+        }
+      ]
+    }
+  }
+}

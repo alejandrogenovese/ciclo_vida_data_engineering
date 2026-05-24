@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: ciclo-vida-data
+    runtime: docker
+    plan: free
+    healthCheckPath: /

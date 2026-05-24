@@ -1,0 +1,211 @@
+{
+  "viewBox": "0 0 1500 420",
+  "config": {
+    "brand": {
+      "mark": "Arquitectura",
+      "title": "Interacción Arquitectura ↔ Plataforma",
+      "org": "Banco Galicia"
+    },
+    "autoplayMs": 6500
+  },
+  "transverse": {
+    "enabled": false
+  },
+  "roles": [
+    { "name": "Arquitectura", "color": "#1F3864" },
+    { "name": "Plataforma", "color": "#595959" },
+    { "name": "Co-firmado Arq + Plat", "color": "#FF8C00" }
+  ],
+  "nodes": [
+    {
+      "id": "caso-uso",
+      "stageIndex": 0,
+      "shape": "rect",
+      "geom": { "x": 50, "y": 40, "w": 130, "h": 70, "rx": 4 },
+      "labelPos": { "numY": 63, "labelY": 80, "sublabelY": 93 },
+      "pulse": { "cx": 115, "cy": 75, "r": 60 },
+      "num": "01",
+      "label": "Modelado /",
+      "sublabel": "Ingeniería",
+      "colorVar": "--c-arq"
+    },
+    {
+      "id": "rfc",
+      "stageIndex": 1,
+      "shape": "rect",
+      "geom": { "x": 240, "y": 40, "w": 130, "h": 70, "rx": 4 },
+      "labelPos": { "numY": 63, "labelY": 80, "sublabelY": 93 },
+      "pulse": { "cx": 305, "cy": 75, "r": 60 },
+      "num": "02",
+      "label": "RFC",
+      "sublabel": "prop. Arquitectura",
+      "colorVar": "--c-arq"
+    },
+    {
+      "id": "revision-rfc",
+      "stageIndex": 2,
+      "shape": "rect",
+      "geom": { "x": 155, "y": 215, "w": 130, "h": 70, "rx": 4 },
+      "labelPos": { "numY": 237, "labelY": 255, "sublabelY": 268 },
+      "pulse": { "cx": 220, "cy": 250, "r": 60 },
+      "num": "03",
+      "label": "Revisión RFC",
+      "sublabel": "feedback Plataforma",
+      "colorVar": "--c-sec"
+    },
+    {
+      "id": "poc-charter",
+      "stageIndex": 3,
+      "shape": "rect",
+      "geom": { "x": 385, "y": 215, "w": 130, "h": 70, "rx": 4 },
+      "labelPos": { "numY": 237, "labelY": 255, "sublabelY": 268 },
+      "pulse": { "cx": 450, "cy": 250, "r": 60 },
+      "num": "3.1",
+      "label": "POC Charter",
+      "sublabel": "si incertidumbre",
+      "colorVar": "--c-sec"
+    },
+    {
+      "id": "adr",
+      "stageIndex": 4,
+      "shape": "rect",
+      "geom": { "x": 640, "y": 40, "w": 130, "h": 70, "rx": 4 },
+      "labelPos": { "numY": 63, "labelY": 80, "sublabelY": 93 },
+      "pulse": { "cx": 705, "cy": 75, "r": 60 },
+      "num": "04",
+      "label": "ADR",
+      "sublabel": "decisión técnica",
+      "colorVar": "--c-arq"
+    },
+    {
+      "id": "hld",
+      "stageIndex": 5,
+      "shape": "rect",
+      "geom": { "x": 860, "y": 40, "w": 130, "h": 70, "rx": 4 },
+      "labelPos": { "numY": 63, "labelY": 80, "sublabelY": 93 },
+      "pulse": { "cx": 925, "cy": 75, "r": 60 },
+      "num": "05",
+      "label": "HLD",
+      "sublabel": "High Level Design",
+      "colorVar": "--c-arq"
+    },
+    {
+      "id": "diseno-fisico",
+      "stageIndex": 6,
+      "shape": "rect",
+      "geom": { "x": 860, "y": 215, "w": 130, "h": 70, "rx": 4 },
+      "labelPos": { "numY": 237, "labelY": 255, "sublabelY": 268 },
+      "pulse": { "cx": 925, "cy": 250, "r": 60 },
+      "num": "06",
+      "label": "Propuesta",
+      "sublabel": "Diseño Físico",
+      "colorVar": "--c-plat"
+    },
+    {
+      "id": "tsr",
+      "stageIndex": 7,
+      "shape": "rect",
+      "geom": { "x": 1080, "y": 215, "w": 130, "h": 70, "rx": 4 },
+      "labelPos": { "numY": 237, "labelY": 255, "sublabelY": 268 },
+      "pulse": { "cx": 1145, "cy": 250, "r": 60 },
+      "num": "07",
+      "label": "TSR",
+      "sublabel": "co-firma Arq+Plat",
+      "colorVar": "--c-sec"
+    },
+    {
+      "id": "implementacion",
+      "stageIndex": 8,
+      "shape": "rect",
+      "geom": { "x": 1280, "y": 40, "w": 130, "h": 70, "rx": 4 },
+      "labelPos": { "numY": 63, "labelY": 80, "sublabelY": 93 },
+      "pulse": { "cx": 1345, "cy": 75, "r": 60 },
+      "num": "08",
+      "label": "Implementación",
+      "sublabel": "deploy y rollout",
+      "colorVar": "--c-plat"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-caso-rfc",
+      "d": "M 180 75 L 240 75",
+      "activeAt": [1],
+      "pastFrom": 0
+    },
+    {
+      "id": "e-rfc-revision",
+      "d": "M 280 110 C 265 155, 245 185, 220 215",
+      "activeAt": [2],
+      "pastFrom": 1
+    },
+    {
+      "id": "e-revision-poc",
+      "d": "M 285 250 L 385 250",
+      "activeAt": [3],
+      "pastFrom": 2
+    },
+    {
+      "id": "e-revision-adr",
+      "d": "M 285 245 C 440 235, 580 140, 640 110",
+      "activeAt": [4],
+      "pastFrom": 2
+    },
+    {
+      "id": "e-poc-adr",
+      "d": "M 515 245 C 570 230, 620 160, 640 110",
+      "activeAt": [4],
+      "pastFrom": 3
+    },
+    {
+      "id": "e-adr-hld",
+      "d": "M 770 75 L 860 75",
+      "activeAt": [5],
+      "pastFrom": 4
+    },
+    {
+      "id": "e-hld-diseno",
+      "d": "M 925 110 L 925 215",
+      "activeAt": [6],
+      "pastFrom": 5
+    },
+    {
+      "id": "e-diseno-tsr",
+      "d": "M 990 250 L 1080 250",
+      "activeAt": [7],
+      "pastFrom": 6
+    },
+    {
+      "id": "e-tsr-impl",
+      "d": "M 1210 245 C 1248 215, 1270 152, 1280 110",
+      "activeAt": [8],
+      "pastFrom": 7
+    }
+  ],
+  "annotations": [
+    {
+      "id": "ann-comentarios",
+      "x": 247,
+      "y": 158,
+      "text": "comentarios",
+      "anchor": "end",
+      "activeAt": [2]
+    },
+    {
+      "id": "ann-feedback",
+      "x": 412,
+      "y": 207,
+      "text": "feedback",
+      "anchor": "start",
+      "activeAt": [2, 3, 4]
+    },
+    {
+      "id": "ann-resultado",
+      "x": 563,
+      "y": 207,
+      "text": "resultado",
+      "anchor": "middle",
+      "activeAt": [3, 4]
+    }
+  ]
+}
