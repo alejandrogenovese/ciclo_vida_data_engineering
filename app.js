@@ -5,6 +5,110 @@
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+// ============ AUTH ============
+const AUTH_USERS = {
+  admin: { password: 'data2024', role: 'admin' },
+  visor: { password: 'galicia',  role: 'visor'  },
+};
+const AUTH_KEY = 'cvd_session';
+
+function authGetSession() {
+  try { return JSON.parse(sessionStorage.getItem(AUTH_KEY)); } catch { return null; }
+}
+function authSetSession(user, role) {
+  sessionStorage.setItem(AUTH_KEY, JSON.stringify({ user, role }));
+}
+function authClearSession() {
+  sessionStorage.removeItem(AUTH_KEY);
+}
+function isAdmin() {
+  const s = authGetSession();
+  return s?.role === 'admin';
+}
+
+function initLogin() {
+  const screen  = document.getElementById('login-screen');
+  const form    = document.getElementById('loginForm');
+  const userIn  = document.getElementById('loginUser');
+  const passIn  = document.getElementById('loginPass');
+  const errDiv  = document.getElementById('loginError');
+  const showBtn = document.getElementById('loginShowPass');
+
+  if (!screen) return;
+
+  // Si ya hay sesión válida, saltar login
+  const existing = authGetSession();
+  if (existing?.role) {
+    screen.remove();
+    applyRoleUI(existing.role);
+    return;
+  }
+
+  // Mostrar/ocultar contraseña
+  showBtn?.addEventListener('click', () => {
+    const isText = passIn.type === 'text';
+    passIn.type = isText ? 'password' : 'text';
+    showBtn.textContent = isText ? '👁' : '🙈';
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const user = userIn.value.trim().toLowerCase();
+    const pass = passIn.value;
+    const match = AUTH_USERS[user];
+
+    if (!match || match.password !== pass) {
+      errDiv.textContent = 'Usuario o contraseña incorrectos.';
+      passIn.value = '';
+      passIn.focus();
+      // Shake input
+      form.classList.add('login-shake');
+      setTimeout(() => form.classList.remove('login-shake'), 400);
+      return;
+    }
+
+    errDiv.textContent = '';
+    authSetSession(user, match.role);
+
+    // Dismiss con animación
+    screen.classList.add('is-hiding');
+    setTimeout(() => {
+      screen.remove();
+      applyRoleUI(match.role);
+    }, 500);
+  });
+}
+
+function applyRoleUI(role) {
+  const downloadBtn = document.getElementById('adminDownloadBtn');
+  const logoutBtn   = document.getElementById('headerLogoutBtn');
+
+  // Badge de rol en header-meta
+  const meta = document.querySelector('.header-meta');
+  if (meta && !document.getElementById('roleBadge')) {
+    const badge = document.createElement('span');
+    badge.id = 'roleBadge';
+    badge.className = `header-role-badge ${role === 'admin' ? 'role-admin' : ''}`;
+    badge.textContent = role;
+    meta.insertBefore(badge, meta.firstChild);
+  }
+
+  // Botón descarga JSONs — solo admin
+  if (downloadBtn) {
+    downloadBtn.style.display = role === 'admin' ? '' : 'none';
+    downloadBtn.addEventListener('click', exportChanges);
+  }
+
+  // Botón salir — siempre visible una vez logueado
+  if (logoutBtn) {
+    logoutBtn.style.display = '';
+    logoutBtn.addEventListener('click', () => {
+      authClearSession();
+      location.reload();
+    });
+  }
+}
+
 // ============ STATE ============
 const state = {
   diagrams: {},
@@ -556,10 +660,10 @@ function renderNarrative() {
     </div>`
   ).join('');
 
-  const editBtnHTML = `
+  const editBtnHTML = isAdmin() ? `
     <button class="btn edit-stage-btn ${state.editMode ? 'edit-active' : ''}" id="editStageBtn" title="Editar esta etapa">
       ${state.editMode ? '✕ Cerrar editor' : '✎ Editar'}
-    </button>`;
+    </button>` : '';
 
   narrative.innerHTML = `
     <div class="narrative-accent-bar"></div>
@@ -1093,6 +1197,7 @@ function initCover() {
 // ============ INIT ============
 async function init() {
   try {
+    initLogin();   // login primero — puede redirigir o continuar
     await loadData();
     bindEvents();
     initCover();
