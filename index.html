@@ -118,6 +118,79 @@
   </div>
 </div>
 
+<!-- ============ COVER SCREEN ============ -->
+<div id="cover-screen" role="dialog" aria-modal="true" aria-label="Bienvenida al Ciclo de Vida del Desarrollo">
+
+  <!-- Fondo decorativo -->
+  <div class="cover-bg" aria-hidden="true">
+    <svg class="cover-deco" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="300" cy="300" r="260" stroke="#1F3864" stroke-width="1"/>
+      <circle cx="300" cy="300" r="200" stroke="#1F3864" stroke-width="1" stroke-dasharray="4 6"/>
+      <circle cx="300" cy="300" r="140" stroke="#FF8C00" stroke-width="1"/>
+      <circle cx="300" cy="300" r="80"  stroke="#1F3864" stroke-width="1" stroke-dasharray="2 4"/>
+      <!-- Nodos estilizados -->
+      <rect x="168" y="275" width="60" height="30" rx="4" fill="#FF8C00" opacity="0.85"/>
+      <rect x="372" y="180" width="60" height="30" rx="4" fill="#2E7D32" opacity="0.7"/>
+      <rect x="420" y="310" width="60" height="30" rx="4" fill="#D32F2F" opacity="0.6"/>
+      <rect x="270" y="390" width="60" height="30" rx="4" fill="#1A237E" opacity="0.65"/>
+      <rect x="180" y="360" width="60" height="30" rx="4" fill="#7B1FA2" opacity="0.55"/>
+      <!-- Conexiones -->
+      <line x1="228" y1="290" x2="372" y2="195" stroke="#0D1B2A" stroke-width="1" opacity="0.3"/>
+      <line x1="432" y1="195" x2="450" y2="310" stroke="#0D1B2A" stroke-width="1" opacity="0.3"/>
+      <line x1="450" y1="340" x2="330" y2="390" stroke="#0D1B2A" stroke-width="1" opacity="0.3"/>
+      <line x1="270" y1="405" x2="240" y2="375" stroke="#0D1B2A" stroke-width="1" opacity="0.3"/>
+      <line x1="210" y1="360" x2="210" y2="305" stroke="#0D1B2A" stroke-width="1" opacity="0.3"/>
+    </svg>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="cover-inner">
+
+    <div class="cover-org">
+      <span class="cover-org-line"></span>
+      Banco Galicia &nbsp;·&nbsp; Data &amp; Analytics IT
+    </div>
+
+    <h1 class="cover-title">
+      Ciclo de Vida<br>
+      <em>del Desarrollo</em>
+    </h1>
+
+    <p class="cover-desc">Modelo Operativo Interactivo &nbsp;·&nbsp; Data &amp; IA &nbsp;·&nbsp; v5.0</p>
+
+    <div class="cover-divider"></div>
+
+    <p class="cover-hint">
+      Recorrido guiado etapa por etapa del ciclo operativo de Data Engineering —
+      desde el ingreso de una iniciativa hasta la entrega del producto de datos.
+      Narrativa sincronizada con el diagrama para cada origen y camino de entrega.
+    </p>
+
+    <div class="cover-actions">
+      <button class="cover-cta" id="coverCta">
+        Explorar modelo
+        <span class="cover-arrow">→</span>
+      </button>
+      <div class="cover-paths">
+        <span class="cover-path-tag">Business Solution</span>
+        <span class="cover-path-tag">Triage</span>
+        <span class="cover-path-tag">Robustez Técnica</span>
+        <span class="cover-path-tag">Arquitectura Data</span>
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <span>Vertical Data</span>
+      <span class="cover-meta-dot"></span>
+      <span>Ingeniería · Modelado · Arquitectura</span>
+      <span class="cover-meta-dot"></span>
+      <span>BAU · Data Product</span>
+    </div>
+
+  </div>
+
+</div>
+
 <script type="module" src="app.js"></script>
 </body>
 </html>

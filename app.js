@@ -420,6 +420,30 @@ function buildNode(node) {
 }
 
 // ============ RENDER NARRATIVE ============
+function buildPathCrumb() {
+  if (state.currentDiagram !== 'ciclo-vida' || !state.currentPath) return '';
+
+  const p = state.currentPath;
+  const total = p.stages.length;
+  const stepNum = String(state.current + 1).padStart(2, '0');
+  const totalStr = String(total).padStart(2, '0');
+
+  // Label del camino: origen + tipo
+  const pathLabel = p.label || '';
+  const subLabel  = p.sublabel ? ` · ${p.sublabel}` : '';
+
+  return `
+    <div class="narrative-path-crumb">
+      <span>${pathLabel}</span>
+      <span class="crumb-sep">›</span>
+      <span>${subLabel.replace(' · ', '')}</span>
+      <span class="crumb-sep">›</span>
+      <span class="crumb-active">Paso ${stepNum} / ${totalStr}</span>
+    </div>
+    <div class="narrative-step-badge">Etapa ${stepNum}</div>
+  `;
+}
+
 function renderNarrative() {
   const narrative = $('narrative');
   const stages = getActiveStages();
@@ -440,17 +464,23 @@ function renderNarrative() {
   ).join('');
 
   narrative.innerHTML = `
-    <div class="stage-eyebrow">
-      <span class="stage-dot"></span>
-      ${s.eyebrow}
+    <div class="narrative-accent-bar"></div>
+    <div class="narrative-header">
+      ${buildPathCrumb()}
     </div>
-    <h2 class="stage-title">${s.title}</h2>
-    <p class="stage-lead">${s.lead}</p>
-    ${sectionsHTML}
-    ${s.callout ? `<div class="stage-callout">${s.callout}</div>` : ''}
+    <div class="narrative-content">
+      <div class="stage-eyebrow">
+        <span class="stage-dot"></span>
+        ${s.eyebrow}
+      </div>
+      <h2 class="stage-title">${s.title}</h2>
+      <p class="stage-lead">${s.lead}</p>
+      ${sectionsHTML}
+      ${s.callout ? `<div class="stage-callout">${s.callout}</div>` : ''}
+    </div>
   `;
 
-  narrative.querySelectorAll('*').forEach(el => {
+  narrative.querySelectorAll('.narrative-content > *').forEach(el => {
     el.style.animation = 'none';
     el.offsetHeight;
     el.style.animation = '';
@@ -701,11 +731,40 @@ function bindEvents() {
   bindZoom();
 }
 
+// ============ COVER SCREEN ============
+function initCover() {
+  const cover = document.getElementById('cover-screen');
+  const cta   = document.getElementById('coverCta');
+  if (!cover || !cta) return;
+
+  function dismissCover() {
+    cover.classList.add('is-hiding');
+    // Foco en el primer control al descubrir la app
+    setTimeout(() => {
+      cover.remove();
+      const nextBtn = $('nextBtn');
+      if (nextBtn) nextBtn.focus();
+    }, 800);
+  }
+
+  cta.addEventListener('click', dismissCover);
+
+  // También se puede descartar con Escape o Enter desde el botón
+  cover.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' || (e.key === 'Enter' && e.target === cta)) {
+      dismissCover();
+    }
+  });
+
+  // Pre-carga la app en background mientras el cover está visible
+}
+
 // ============ INIT ============
 async function init() {
   try {
     await loadData();
     bindEvents();
+    initCover();
   } catch (err) {
     console.error('Init falló:', err);
   }
