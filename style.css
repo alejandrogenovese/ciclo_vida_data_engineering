@@ -149,22 +149,47 @@ main {
   overflow: hidden;
 }
 
-/* ============ FLOW SELECTOR — DOS NIVELES ============ */
+/* ============ FLOW SELECTOR — TRES NIVELES ============ */
+/* Nivel 1: diagrama (tabs del header)
+   Nivel 2: equipo solicitante
+   Nivel 3: tipo de entrega (BAU / Data Product)       */
+
 .flow-selector-bar {
   grid-column: 1 / -1;
   display: flex;
-  align-items: center;
-  padding: 9px 32px;
+  flex-direction: column;
   background: var(--bg-elev);
   border-bottom: 1px solid var(--line);
-  overflow-x: auto;
-  gap: 0;
   flex-shrink: 0;
 }
 
-.flow-selector-bar::-webkit-scrollbar { height: 0; }
+.flow-level {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 7px 32px;
+  overflow-x: auto;
+}
 
-/* Nivel 1: origen */
+.flow-level::-webkit-scrollbar { height: 0; }
+
+.flow-level + .flow-level {
+  border-top: 1px solid var(--line-soft);
+}
+
+.flow-level-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  min-width: 108px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Nivel 2: origen */
 .flow-origins {
   display: flex;
   gap: 5px;
@@ -196,16 +221,7 @@ main {
   border-color: var(--ink);
 }
 
-/* Separador entre niveles */
-.flow-sep {
-  width: 1px;
-  height: 20px;
-  background: var(--line);
-  margin: 0 14px;
-  flex-shrink: 0;
-}
-
-/* Nivel 2: tipo de camino */
+/* Nivel 3: tipo de camino */
 .flow-types {
   display: flex;
   gap: 5px;
@@ -1150,7 +1166,7 @@ kbd {
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1100px) {
   main { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }
-  .flow-selector-bar { padding: 8px 20px; }
+  .flow-level { padding: 7px 20px; }
   .diagram-pane { border-right: none; border-bottom: 1px solid var(--line); min-height: 380px; }
   .narrative-content { padding: 16px 24px 20px; }
   .narrative-header { padding: 12px 24px 0; }
@@ -1199,25 +1215,29 @@ kbd {
     grid-template-rows: auto auto 1fr;
   }
   
-  .flow-selector-bar {
-    padding: 8px 12px;
-    gap: 8px;
-    flex-wrap: wrap;
+  .flow-level {
+    padding: 6px 12px;
+    gap: 10px;
   }
-  
+
+  .flow-level-label {
+    min-width: 90px;
+    font-size: 8px;
+  }
+
   .flow-origins {
     gap: 4px;
   }
-  
+
   .flow-origin-btn {
     font-size: 11px;
     padding: 5px 11px;
   }
-  
+
   .flow-types {
     gap: 4px;
   }
-  
+
   .flow-type-btn {
     font-size: 9px;
     padding: 4px 10px;
@@ -1323,36 +1343,34 @@ kbd {
     grid-template-rows: auto auto 1fr auto;
   }
   
-  .flow-selector-bar {
-    padding: 6px 8px;
-    gap: 6px;
+  .flow-level {
+    padding: 5px 8px;
+    gap: 8px;
     flex-wrap: wrap;
-    border-bottom: 1px solid var(--line);
   }
-  
-  .flow-sep {
-    display: none;
+
+  .flow-level-label {
+    min-width: 80px;
+    font-size: 7.5px;
   }
-  
+
   .flow-origins {
     gap: 3px;
-    width: 100%;
     flex-wrap: wrap;
   }
-  
+
   .flow-origin-btn {
     font-size: 10px;
     padding: 4px 9px;
     flex: 1;
     min-width: 90px;
   }
-  
+
   .flow-types {
     gap: 3px;
-    width: 100%;
     flex-wrap: wrap;
   }
-  
+
   .flow-type-btn {
     font-size: 8px;
     padding: 3px 8px;

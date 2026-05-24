@@ -32,18 +32,25 @@
 </header>
 
 <main>
-  <!-- Flow selector: dos niveles — origen luego tipo de camino -->
+  <!-- Flow selector: tres niveles — diagrama (header) → equipo solicitante → tipo de entrega -->
   <div class="flow-selector-bar" id="flowSelectorBar">
-    <div class="flow-origins">
-      <button class="flow-origin-btn flow-origin-active" data-origin="bs">Business Solution</button>
-      <button class="flow-origin-btn" data-origin="triage">Triage</button>
-      <button class="flow-origin-btn" data-origin="rt">Robustez Técnica</button>
-      <button class="flow-origin-btn" data-origin="arq">Arquitectura Data</button>
+    <!-- Nivel 2: equipo solicitante -->
+    <div class="flow-level flow-level-origins">
+      <span class="flow-level-label">Equipo solicitante</span>
+      <div class="flow-origins">
+        <button class="flow-origin-btn flow-origin-active" data-origin="bs">Business Solution</button>
+        <button class="flow-origin-btn" data-origin="triage">Triage</button>
+        <button class="flow-origin-btn" data-origin="rt">Robustez Técnica</button>
+        <button class="flow-origin-btn" data-origin="arq">Arquitectura Data</button>
+      </div>
     </div>
-    <div class="flow-sep" id="flowTypeSep"></div>
-    <div class="flow-types" id="flowTypeRow">
-      <button class="flow-type-btn flow-type-active" data-suffix="bau">BAU</button>
-      <button class="flow-type-btn" data-suffix="dp">Data Product</button>
+    <!-- Nivel 3: tipo de entrega -->
+    <div class="flow-level flow-level-types" id="flowTypeRow">
+      <span class="flow-level-label">Tipo de entrega</span>
+      <div class="flow-types">
+        <button class="flow-type-btn flow-type-active" data-suffix="bau">BAU</button>
+        <button class="flow-type-btn" data-suffix="dp">Data Product</button>
+      </div>
     </div>
   </div>
 

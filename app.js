@@ -232,7 +232,10 @@ function switchPath(pathId) {
   updateControls();
 }
 
-// Sync the two-level selector buttons to reflect a given pathId
+// Sync the three-level selector buttons to reflect a given pathId
+// Nivel 1 = header tabs (Ciclo de Vida / Arquitectura ↔ Plataforma)
+// Nivel 2 = equipo solicitante (origin buttons)
+// Nivel 3 = tipo de entrega (BAU / Data Product)
 function syncFlowSelectorUI(pathId) {
   let origin, suffix;
   if (pathId === 'arquitectura') {
@@ -250,15 +253,12 @@ function syncFlowSelectorUI(pathId) {
   document.querySelectorAll('.flow-origin-btn').forEach(btn =>
     btn.classList.toggle('flow-origin-active', btn.dataset.origin === origin));
 
+  // Nivel 3: solo visible si el origen no es arquitectura
   const typeRow = $('flowTypeRow');
-  const typeSep = $('flowTypeSep');
-
   if (origin === 'arq') {
     typeRow.style.display = 'none';
-    typeSep.style.display = 'none';
   } else {
     typeRow.style.display = 'flex';
-    typeSep.style.display = 'block';
     document.querySelectorAll('.flow-type-btn').forEach(btn =>
       btn.classList.toggle('flow-type-active', btn.dataset.suffix === suffix));
   }
