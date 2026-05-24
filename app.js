@@ -40,10 +40,21 @@ function applyVB(vb) {
 
 function clampVB({ x, y, w, h }) {
   const base = state.baseVB;
-  const minW = base.w * 0.2;
-  const maxW = base.w * 4;
+
+  // Zoom limits: entre 25% y 300% del tamaño base
+  const minW = base.w * 0.25;
+  const maxW = base.w * 3;
   w = Math.max(minW, Math.min(maxW, w));
   h = w * base.h / base.w;
+
+  // Posición: siempre mantener el diagrama visible en el viewport.
+  // Permite panoramizar hasta 60% del tamaño base fuera de bordes,
+  // pero nunca perder el contenido completamente.
+  const padX = base.w * 0.6;
+  const padY = base.h * 0.6;
+  x = Math.max(-padX, Math.min(base.w + padX - w * 0.15, x));
+  y = Math.max(-padY, Math.min(base.h + padY - h * 0.15, y));
+
   return { x, y, w, h };
 }
 
@@ -101,12 +112,12 @@ function bindZoom() {
     if (state.dragMoved) {
       const cur = screenToSVG(e.clientX, e.clientY);
       const vb = state.zoomVB;
-      state.zoomVB = {
+      state.zoomVB = clampVB({
         x: vb.x + (state.lastDragSVG.x - cur.x),
         y: vb.y + (state.lastDragSVG.y - cur.y),
         w: vb.w,
         h: vb.h,
-      };
+      });
       applyVB(state.zoomVB);
       state.lastDragSVG = screenToSVG(e.clientX, e.clientY);
     }
@@ -115,6 +126,12 @@ function bindZoom() {
   window.addEventListener('mouseup', () => {
     state.dragging = false;
     svg.classList.remove('is-dragging');
+  });
+
+  // Doble-click en el SVG: reset zoom (escape rápido si se pierde la vista)
+  svg.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    resetZoom();
   });
 
   $('zoomInBtn').addEventListener('click', () => {

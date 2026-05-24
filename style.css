@@ -478,28 +478,30 @@ svg.flow.is-dragging * {
   pointer-events: none;
 }
 .node[data-state="inactive"] .node-rect {
-  opacity: 0.22;
+  opacity: 0.38;
   stroke: var(--line-soft);
 }
 .node[data-state="inactive"] .node-label,
 .node[data-state="inactive"] .node-sublabel,
-.node[data-state="inactive"] .node-num { opacity: 0.20; }
-.node[data-state="inactive"] .node-accent { opacity: 0.08; }
+.node[data-state="inactive"] .node-num { opacity: 0.35; }
+.node[data-state="inactive"] .node-accent { opacity: 0.12; }
 .node[data-state="inactive"] .pulse-ring { display: none; }
 
-.edge.inactive { opacity: 0.12; }
+.edge.inactive { opacity: 0.15; }
 
-.node[data-state="future"] .node-rect { opacity: 0.55; }
+/* Nodos futuros — visibles y legibles, solo un toque más suaves que el activo */
+.node[data-state="future"] .node-rect { opacity: 0.82; }
 .node[data-state="future"] .node-label,
 .node[data-state="future"] .node-sublabel,
-.node[data-state="future"] .node-num { opacity: 0.60; }
-.node[data-state="future"] .node-accent { opacity: 0.18; }
+.node[data-state="future"] .node-num { opacity: 0.85; }
+.node[data-state="future"] .node-accent { opacity: 0.30; }
 
-.node[data-state="past"] .node-rect { opacity: 0.88; }
+/* Nodos pasados — plena visibilidad */
+.node[data-state="past"] .node-rect { opacity: 0.95; }
 .node[data-state="past"] .node-label,
 .node[data-state="past"] .node-sublabel,
-.node[data-state="past"] .node-num { opacity: 0.80; }
-.node[data-state="past"] .node-accent { opacity: 0.45; }
+.node[data-state="past"] .node-num { opacity: 0.90; }
+.node[data-state="past"] .node-accent { opacity: 0.55; }
 
 /* Nodo activo — scale + shadow pronunciado */
 .node[data-state="current"] {

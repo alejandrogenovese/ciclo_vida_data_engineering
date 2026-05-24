@@ -9,7 +9,7 @@
     "autoplayMs": 6500
   },
   "transverse": {
-    "enabled": true,
+    "enabled": false,
     "bracket": "M 660 90 L 695 90 L 695 870 L 660 870",
     "labelPos": {
       "x": 703,
