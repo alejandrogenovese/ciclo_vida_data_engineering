@@ -42,9 +42,7 @@
       {
         "label": "Participan",
         "actors": [
-          "plataforma",
-          "tecnicos-varios",
-          "tls"
+          "plataforma"
         ]
       },
       {
@@ -219,9 +217,7 @@
       {
         "label": "Participan",
         "actors": [
-          "equipo-desarrollo",
-          "qa",
-          "plataforma-operacion"
+          "equipo-desarrollo"
         ]
       },
       {

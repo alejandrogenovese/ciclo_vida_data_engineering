@@ -1,5 +1,6 @@
 {
   "viewBox": "0 0 1500 420",
+  "initialZoom": "-30 -20 700 390",
   "config": {
     "brand": {
       "mark": "Arquitectura",

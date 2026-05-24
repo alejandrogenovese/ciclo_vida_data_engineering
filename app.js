@@ -1040,6 +1040,67 @@ function renderLegend() {
 }
 
 // ============ NAVIGATION ============
+// Desplaza el viewport para centrar el nodo activo, conservando el zoom actual
+function panToActiveNode() {
+  const current = state.current;
+  const nodes = state.diagram.nodes || [];
+  const isPathMode = state.currentDiagram === 'ciclo-vida' && state.currentPath;
+  const nodeSequence = isPathMode ? state.currentPath.nodeSequence : null;
+
+  // Encontrar el nodo que corresponde a la etapa actual
+  let targetNode = null;
+  if (isPathMode && nodeSequence) {
+    const activeNodeId = nodeSequence[current];
+    targetNode = nodes.find(n => n.id === activeNodeId);
+  } else {
+    // architecture-platform: buscar por stageIndex
+    targetNode = nodes.find(n => n.stageIndex === current);
+  }
+
+  if (!targetNode?.geom) return;
+
+  const g = targetNode.geom;
+  // Centro del nodo (funciona con rect y polygon — para polygon usamos el bbox aproximado)
+  let cx, cy;
+  if (g.x !== undefined) {
+    cx = g.x + g.w / 2;
+    cy = g.y + g.h / 2;
+  } else if (g.points) {
+    // polygon: calcular centroide de los puntos
+    const pts = g.points.split(' ').map(p => p.split(',').map(Number));
+    cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
+    cy = pts.reduce((s, p) => s + p[1], 0) / pts.length;
+  } else {
+    return;
+  }
+
+  // Mantener el mismo ancho/alto del viewport (mismo zoom), solo mover x,y
+  const vb = state.zoomVB;
+  const targetX = cx - vb.w / 2;
+  const targetY = cy - vb.h / 2;
+  const newVB = clampVB({ x: targetX, y: targetY, w: vb.w, h: vb.h });
+
+  // Animación suave via requestAnimationFrame
+  const startVB = { ...state.zoomVB };
+  const duration = 380; // ms
+  const startTime = performance.now();
+
+  function animate(now) {
+    const t = Math.min((now - startTime) / duration, 1);
+    // ease-out cubic
+    const ease = 1 - Math.pow(1 - t, 3);
+    state.zoomVB = {
+      x: startVB.x + (newVB.x - startVB.x) * ease,
+      y: startVB.y + (newVB.y - startVB.y) * ease,
+      w: newVB.w,
+      h: newVB.h,
+    };
+    applyVB(state.zoomVB);
+    if (t < 1) requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+}
+
 function goTo(idx) {
   const stagesCount = getActiveStages().length;
   if (idx < 0 || idx >= stagesCount) return;
@@ -1049,6 +1110,7 @@ function goTo(idx) {
   renderNarrative();
   updateDiagram();
   updateControls();
+  panToActiveNode();
 }
 
 function next() {
