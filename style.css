@@ -879,3 +879,325 @@ kbd {
   .narrative { padding: 22px 24px; }
   .stage-title { font-size: 30px; }
 }
+
+/* ============ TABLET (768px - 1100px) ============ */
+@media (max-width: 768px) {
+  html, body { font-size: 13px; }
+  
+  header {
+    padding: 14px 16px;
+    gap: 12px;
+    grid-template-columns: 1fr;
+  }
+  
+  .brand {
+    gap: 10px;
+  }
+  
+  .brand-title {
+    font-size: 18px;
+  }
+  
+  .brand-mark {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+  
+  .header-tabs {
+    gap: 6px;
+    justify-content: flex-start;
+  }
+  
+  .tab-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .header-meta {
+    gap: 12px;
+    font-size: 9px;
+  }
+  
+  main {
+    grid-template-rows: auto auto 1fr;
+  }
+  
+  .flow-selector-bar {
+    padding: 8px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .flow-origins {
+    gap: 4px;
+  }
+  
+  .flow-origin-btn {
+    font-size: 11px;
+    padding: 5px 11px;
+  }
+  
+  .flow-types {
+    gap: 4px;
+  }
+  
+  .flow-type-btn {
+    font-size: 9px;
+    padding: 4px 10px;
+  }
+  
+  .diagram-pane {
+    padding: 12px 14px;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    min-height: 280px;
+  }
+  
+  .narrative {
+    padding: 18px 18px;
+    gap: 16px;
+  }
+  
+  .stage-title {
+    font-size: 24px;
+  }
+  
+  .stage-lead {
+    font-size: 13px;
+  }
+  
+  .stage-section {
+    grid-template-columns: 90px 1fr;
+    gap: 12px;
+  }
+  
+  footer {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  
+  .progress-strip {
+    order: 2;
+    width: 100%;
+  }
+  
+  .controls {
+    order: 3;
+    width: 100%;
+  }
+  
+  .progress-counter {
+    order: 1;
+    text-align: left;
+  }
+}
+
+/* ============ MOBILE (480px - 767px) ============ */
+@media (max-width: 480px) {
+  html, body { font-size: 12px; }
+  
+  header {
+    padding: 10px 12px;
+    gap: 8px;
+    row-gap: 10px;
+  }
+  
+  .brand {
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .brand-title {
+    font-size: 15px;
+  }
+  
+  .brand-mark {
+    font-size: 8px;
+    padding: 2px 6px;
+  }
+  
+  .header-tabs {
+    gap: 4px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  .tab-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+    flex: 1;
+    min-width: 120px;
+  }
+  
+  .header-meta {
+    gap: 8px;
+    font-size: 8px;
+    width: 100%;
+    white-space: normal;
+  }
+  
+  .header-meta .sep {
+    display: none;
+  }
+  
+  main {
+    grid-template-rows: auto auto 1fr auto;
+  }
+  
+  .flow-selector-bar {
+    padding: 6px 8px;
+    gap: 6px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--line);
+  }
+  
+  .flow-sep {
+    display: none;
+  }
+  
+  .flow-origins {
+    gap: 3px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  .flow-origin-btn {
+    font-size: 10px;
+    padding: 4px 9px;
+    flex: 1;
+    min-width: 90px;
+  }
+  
+  .flow-types {
+    gap: 3px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  .flow-type-btn {
+    font-size: 8px;
+    padding: 3px 8px;
+    flex: 1;
+    min-width: 50px;
+  }
+  
+  .diagram-pane {
+    padding: 8px 10px;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    min-height: 200px;
+  }
+  
+  .zoom-controls {
+    bottom: 8px;
+    right: 8px;
+    gap: 3px;
+  }
+  
+  .zoom-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+  
+  .legend-toggle {
+    top: 8px;
+    right: 8px;
+  }
+  
+  .narrative {
+    padding: 12px 12px;
+    gap: 14px;
+  }
+  
+  .stage-title {
+    font-size: 18px;
+    line-height: 1.1;
+  }
+  
+  .stage-lead {
+    font-size: 12px;
+  }
+  
+  .stage-section {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .stage-section-label {
+    font-size: 9px;
+    margin-bottom: 2px;
+  }
+  
+  .stage-section-content {
+    font-size: 12px;
+  }
+  
+  .pill {
+    font-size: 9px;
+    padding: 3px 7px;
+  }
+  
+  .stage-callout {
+    padding: 10px 12px;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  
+  footer {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 8px 10px;
+  }
+  
+  .progress-strip {
+    order: 2;
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .progress-dot {
+    width: 20px;
+    height: 5px;
+    min-width: 20px;
+  }
+  
+  .progress-dot.current {
+    width: 30px;
+  }
+  
+  .controls {
+    order: 3;
+    width: 100%;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    padding: 6px 10px;
+    font-size: 10px;
+    flex: 1;
+    min-width: 70px;
+    justify-content: center;
+  }
+  
+  .progress-counter {
+    order: 1;
+    text-align: left;
+    font-size: 9px;
+  }
+  
+  .legend-panel {
+    width: calc(100vw - 40px);
+    top: auto;
+    bottom: 60px;
+    right: 20px;
+    left: auto;
+  }
+  
+  .ref-modal-box {
+    width: 95vw;
+    height: 80vh;
+  }
+}
