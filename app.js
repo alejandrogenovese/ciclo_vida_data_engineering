@@ -27,41 +27,43 @@ function isAdmin() {
 }
 
 function initLogin() {
-  const screen  = document.getElementById('login-screen');
   const form    = document.getElementById('loginForm');
   const userIn  = document.getElementById('loginUser');
   const passIn  = document.getElementById('loginPass');
   const errDiv  = document.getElementById('loginError');
   const showBtn = document.getElementById('loginShowPass');
+  const cover   = document.getElementById('cover-screen');
 
-  if (!screen) return;
+  if (!form) return;
 
-  // Si ya hay sesión válida, saltar login
+  // Si ya hay sesión válida, saltar el cover/login directamente
   const existing = authGetSession();
   if (existing?.role) {
-    screen.remove();
+    cover?.remove();
     applyRoleUI(existing.role);
     return;
   }
 
+  // Focus automático en el campo usuario
+  setTimeout(() => userIn?.focus(), 100);
+
   // Mostrar/ocultar contraseña
   showBtn?.addEventListener('click', () => {
     const isText = passIn.type === 'text';
-    passIn.type = isText ? 'password' : 'text';
+    passIn.type  = isText ? 'password' : 'text';
     showBtn.textContent = isText ? '👁' : '🙈';
   });
 
-  form?.addEventListener('submit', (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const user = userIn.value.trim().toLowerCase();
-    const pass = passIn.value;
+    const user  = userIn.value.trim().toLowerCase();
+    const pass  = passIn.value;
     const match = AUTH_USERS[user];
 
     if (!match || match.password !== pass) {
       errDiv.textContent = 'Usuario o contraseña incorrectos.';
       passIn.value = '';
       passIn.focus();
-      // Shake input
       form.classList.add('login-shake');
       setTimeout(() => form.classList.remove('login-shake'), 400);
       return;
@@ -70,10 +72,10 @@ function initLogin() {
     errDiv.textContent = '';
     authSetSession(user, match.role);
 
-    // Dismiss con animación
-    screen.classList.add('is-hiding');
+    // Dismiss del cover unificado
+    cover?.classList.add('is-hiding');
     setTimeout(() => {
-      screen.remove();
+      cover?.remove();
       applyRoleUI(match.role);
     }, 500);
   });
@@ -1167,32 +1169,10 @@ function bindEvents() {
 }
 
 // ============ COVER SCREEN ============
-function initCover() {
-  const cover = document.getElementById('cover-screen');
-  const cta   = document.getElementById('coverCta');
-  if (!cover || !cta) return;
-
-  function dismissCover() {
-    cover.classList.add('is-hiding');
-    // Foco en el primer control al descubrir la app
-    setTimeout(() => {
-      cover.remove();
-      const nextBtn = $('nextBtn');
-      if (nextBtn) nextBtn.focus();
-    }, 800);
-  }
-
-  cta.addEventListener('click', dismissCover);
-
-  // También se puede descartar con Escape o Enter desde el botón
-  cover.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' || (e.key === 'Enter' && e.target === cta)) {
-      dismissCover();
-    }
-  });
-
-  // Pre-carga la app en background mientras el cover está visible
-}
+// El cover ahora es la pantalla de login unificada.
+// El dismiss lo maneja initLogin() al autenticar correctamente.
+// Esta función es un no-op mantenida por compatibilidad.
+function initCover() {}
 
 // ============ INIT ============
 async function init() {

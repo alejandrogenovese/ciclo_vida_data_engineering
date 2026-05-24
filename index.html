@@ -144,58 +144,8 @@
   </div>
 </div>
 
-<!-- ============ LOGIN SCREEN ============ -->
-<div id="login-screen" role="dialog" aria-modal="true" aria-label="Acceso al modelo operativo">
-
-  <div class="login-bg" aria-hidden="true">
-    <svg class="login-deco" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="300" cy="300" r="260" stroke="#1F3864" stroke-width="1"/>
-      <circle cx="300" cy="300" r="200" stroke="#1F3864" stroke-width="1" stroke-dasharray="4 6"/>
-      <circle cx="300" cy="300" r="140" stroke="#FF8C00" stroke-width="1"/>
-      <circle cx="300" cy="300" r="80"  stroke="#1F3864" stroke-width="1" stroke-dasharray="2 4"/>
-    </svg>
-  </div>
-
-  <div class="login-inner">
-    <div class="login-org">
-      <span class="login-org-line"></span>
-      Banco Galicia &nbsp;·&nbsp; Data &amp; Analytics IT
-    </div>
-
-    <h1 class="login-title">Ciclo de Vida<br><em>del Desarrollo</em></h1>
-    <p class="login-subtitle">Modelo Operativo Interactivo · v5.0</p>
-
-    <div class="login-divider"></div>
-
-    <form class="login-form" id="loginForm" autocomplete="off">
-      <div class="login-field">
-        <label class="login-label" for="loginUser">Usuario</label>
-        <input class="login-input" id="loginUser" type="text" placeholder="admin · visor" autocomplete="username" spellcheck="false">
-      </div>
-      <div class="login-field">
-        <label class="login-label" for="loginPass">Contraseña</label>
-        <div class="login-pass-wrap">
-          <input class="login-input" id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password">
-          <button type="button" class="login-show-pass" id="loginShowPass" title="Mostrar / ocultar">👁</button>
-        </div>
-      </div>
-      <div class="login-error" id="loginError"></div>
-      <button type="submit" class="login-cta" id="loginBtn">
-        Ingresar <span class="login-arrow">→</span>
-      </button>
-    </form>
-
-    <div class="login-hint">
-      <span class="login-hint-row"><strong>admin</strong> &nbsp;/&nbsp; data2024</span>
-      <span class="login-hint-sep">·</span>
-      <span class="login-hint-row"><strong>visor</strong> &nbsp;/&nbsp; galicia</span>
-    </div>
-  </div>
-
-</div>
-
-<!-- ============ COVER SCREEN ============ -->
-<div id="cover-screen" role="dialog" aria-modal="true" aria-label="Bienvenida al Ciclo de Vida del Desarrollo">
+<!-- ============ COVER + LOGIN (pantalla unificada) ============ -->
+<div id="cover-screen" role="dialog" aria-modal="true" aria-label="Acceso al Ciclo de Vida del Desarrollo">
 
   <!-- Fondo decorativo -->
   <div class="cover-bg" aria-hidden="true">
@@ -236,23 +186,41 @@
 
     <div class="cover-divider"></div>
 
-    <p class="cover-hint">
-      Recorrido guiado etapa por etapa del ciclo operativo de Data Engineering —
-      desde el ingreso de una iniciativa hasta la entrega del producto de datos.
-      Narrativa sincronizada con el diagrama para cada origen y camino de entrega.
-    </p>
-
-    <div class="cover-actions">
-      <button class="cover-cta" id="coverCta">
-        Explorar modelo
+    <!-- Formulario de login integrado — reemplaza al botón "Explorar modelo" -->
+    <form class="cover-login-form" id="loginForm" autocomplete="off">
+      <div class="cover-login-fields">
+        <div class="cover-login-field">
+          <label class="cover-login-label" for="loginUser">Usuario</label>
+          <input class="cover-login-input" id="loginUser" type="text"
+                 placeholder="admin · visor" autocomplete="username" spellcheck="false">
+        </div>
+        <div class="cover-login-field">
+          <label class="cover-login-label" for="loginPass">Contraseña</label>
+          <div class="cover-login-pass-wrap">
+            <input class="cover-login-input" id="loginPass" type="password"
+                   placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="cover-login-show" id="loginShowPass" title="Mostrar / ocultar">👁</button>
+          </div>
+        </div>
+      </div>
+      <div class="cover-login-error" id="loginError"></div>
+      <button type="submit" class="cover-cta" id="coverCta">
+        Ingresar
         <span class="cover-arrow">→</span>
       </button>
-      <div class="cover-paths">
-        <span class="cover-path-tag">Business Solution</span>
-        <span class="cover-path-tag">Triage</span>
-        <span class="cover-path-tag">Arquitectura Data</span>
-        <span class="cover-path-tag">Equipo Externo Data</span>
-      </div>
+    </form>
+
+    <div class="cover-login-hint">
+      <span><strong>admin</strong> / data2024</span>
+      <span class="cover-hint-sep">·</span>
+      <span><strong>visor</strong> / galicia</span>
+    </div>
+
+    <div class="cover-paths">
+      <span class="cover-path-tag">Business Solution</span>
+      <span class="cover-path-tag">Triage</span>
+      <span class="cover-path-tag">Arquitectura Data</span>
+      <span class="cover-path-tag">Equipo Externo Data</span>
     </div>
 
     <div class="cover-meta">
