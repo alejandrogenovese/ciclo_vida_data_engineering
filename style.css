@@ -753,7 +753,6 @@ svg.flow.is-dragging * {
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
   padding: 4px 9px;
   border: 1px solid var(--line);
   border-radius: 3px;
@@ -1902,3 +1901,13 @@ kbd {
 
 /* Shake en error */
 .login-shake { animation: loginShake .4s ease; }
+
+/* ============ CELL PILLS (células de negocio) ============ */
+/* Variante de .pill con color de texto propio y sin depender del actor color */
+.pill.pill-cell {
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border-width: 1.5px;
+}

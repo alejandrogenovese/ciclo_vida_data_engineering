@@ -1,0 +1,607 @@
+{
+  "_comment": "Catálogo de células de negocio. Las combinaciones cubren desde 1 hasta las 6 células. Usado como campo informativo en stages.",
+  "cells": [
+    {
+      "id": "minorista",
+      "label": "Minorista",
+      "color": "#1565C0"
+    },
+    {
+      "id": "mayorista",
+      "label": "Mayorista",
+      "color": "#283593"
+    },
+    {
+      "id": "financiera",
+      "label": "Financiera",
+      "color": "#6A1B9A"
+    },
+    {
+      "id": "riesgos",
+      "label": "Riesgos",
+      "color": "#B71C1C"
+    },
+    {
+      "id": "clientes",
+      "label": "Clientes",
+      "color": "#00695C"
+    },
+    {
+      "id": "digital",
+      "label": "Digital",
+      "color": "#E65100"
+    }
+  ],
+  "combinations": [
+    {
+      "id": "minorista",
+      "cells": [
+        "minorista"
+      ],
+      "label": "Minorista"
+    },
+    {
+      "id": "mayorista",
+      "cells": [
+        "mayorista"
+      ],
+      "label": "Mayorista"
+    },
+    {
+      "id": "financiera",
+      "cells": [
+        "financiera"
+      ],
+      "label": "Financiera"
+    },
+    {
+      "id": "riesgos",
+      "cells": [
+        "riesgos"
+      ],
+      "label": "Riesgos"
+    },
+    {
+      "id": "clientes",
+      "cells": [
+        "clientes"
+      ],
+      "label": "Clientes"
+    },
+    {
+      "id": "digital",
+      "cells": [
+        "digital"
+      ],
+      "label": "Digital"
+    },
+    {
+      "id": "minorista+mayorista",
+      "cells": [
+        "minorista",
+        "mayorista"
+      ],
+      "label": "Minorista · Mayorista"
+    },
+    {
+      "id": "minorista+financiera",
+      "cells": [
+        "minorista",
+        "financiera"
+      ],
+      "label": "Minorista · Financiera"
+    },
+    {
+      "id": "minorista+riesgos",
+      "cells": [
+        "minorista",
+        "riesgos"
+      ],
+      "label": "Minorista · Riesgos"
+    },
+    {
+      "id": "minorista+clientes",
+      "cells": [
+        "minorista",
+        "clientes"
+      ],
+      "label": "Minorista · Clientes"
+    },
+    {
+      "id": "minorista+digital",
+      "cells": [
+        "minorista",
+        "digital"
+      ],
+      "label": "Minorista · Digital"
+    },
+    {
+      "id": "mayorista+financiera",
+      "cells": [
+        "mayorista",
+        "financiera"
+      ],
+      "label": "Mayorista · Financiera"
+    },
+    {
+      "id": "mayorista+riesgos",
+      "cells": [
+        "mayorista",
+        "riesgos"
+      ],
+      "label": "Mayorista · Riesgos"
+    },
+    {
+      "id": "mayorista+clientes",
+      "cells": [
+        "mayorista",
+        "clientes"
+      ],
+      "label": "Mayorista · Clientes"
+    },
+    {
+      "id": "mayorista+digital",
+      "cells": [
+        "mayorista",
+        "digital"
+      ],
+      "label": "Mayorista · Digital"
+    },
+    {
+      "id": "financiera+riesgos",
+      "cells": [
+        "financiera",
+        "riesgos"
+      ],
+      "label": "Financiera · Riesgos"
+    },
+    {
+      "id": "financiera+clientes",
+      "cells": [
+        "financiera",
+        "clientes"
+      ],
+      "label": "Financiera · Clientes"
+    },
+    {
+      "id": "financiera+digital",
+      "cells": [
+        "financiera",
+        "digital"
+      ],
+      "label": "Financiera · Digital"
+    },
+    {
+      "id": "riesgos+clientes",
+      "cells": [
+        "riesgos",
+        "clientes"
+      ],
+      "label": "Riesgos · Clientes"
+    },
+    {
+      "id": "riesgos+digital",
+      "cells": [
+        "riesgos",
+        "digital"
+      ],
+      "label": "Riesgos · Digital"
+    },
+    {
+      "id": "clientes+digital",
+      "cells": [
+        "clientes",
+        "digital"
+      ],
+      "label": "Clientes · Digital"
+    },
+    {
+      "id": "minorista+mayorista+financiera",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "financiera"
+      ],
+      "label": "Minorista · Mayorista · Financiera"
+    },
+    {
+      "id": "minorista+mayorista+riesgos",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "riesgos"
+      ],
+      "label": "Minorista · Mayorista · Riesgos"
+    },
+    {
+      "id": "minorista+mayorista+clientes",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "clientes"
+      ],
+      "label": "Minorista · Mayorista · Clientes"
+    },
+    {
+      "id": "minorista+mayorista+digital",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "digital"
+      ],
+      "label": "Minorista · Mayorista · Digital"
+    },
+    {
+      "id": "minorista+financiera+riesgos",
+      "cells": [
+        "minorista",
+        "financiera",
+        "riesgos"
+      ],
+      "label": "Minorista · Financiera · Riesgos"
+    },
+    {
+      "id": "minorista+financiera+clientes",
+      "cells": [
+        "minorista",
+        "financiera",
+        "clientes"
+      ],
+      "label": "Minorista · Financiera · Clientes"
+    },
+    {
+      "id": "minorista+financiera+digital",
+      "cells": [
+        "minorista",
+        "financiera",
+        "digital"
+      ],
+      "label": "Minorista · Financiera · Digital"
+    },
+    {
+      "id": "minorista+riesgos+clientes",
+      "cells": [
+        "minorista",
+        "riesgos",
+        "clientes"
+      ],
+      "label": "Minorista · Riesgos · Clientes"
+    },
+    {
+      "id": "minorista+riesgos+digital",
+      "cells": [
+        "minorista",
+        "riesgos",
+        "digital"
+      ],
+      "label": "Minorista · Riesgos · Digital"
+    },
+    {
+      "id": "minorista+clientes+digital",
+      "cells": [
+        "minorista",
+        "clientes",
+        "digital"
+      ],
+      "label": "Minorista · Clientes · Digital"
+    },
+    {
+      "id": "mayorista+financiera+riesgos",
+      "cells": [
+        "mayorista",
+        "financiera",
+        "riesgos"
+      ],
+      "label": "Mayorista · Financiera · Riesgos"
+    },
+    {
+      "id": "mayorista+financiera+clientes",
+      "cells": [
+        "mayorista",
+        "financiera",
+        "clientes"
+      ],
+      "label": "Mayorista · Financiera · Clientes"
+    },
+    {
+      "id": "mayorista+financiera+digital",
+      "cells": [
+        "mayorista",
+        "financiera",
+        "digital"
+      ],
+      "label": "Mayorista · Financiera · Digital"
+    },
+    {
+      "id": "mayorista+riesgos+clientes",
+      "cells": [
+        "mayorista",
+        "riesgos",
+        "clientes"
+      ],
+      "label": "Mayorista · Riesgos · Clientes"
+    },
+    {
+      "id": "mayorista+riesgos+digital",
+      "cells": [
+        "mayorista",
+        "riesgos",
+        "digital"
+      ],
+      "label": "Mayorista · Riesgos · Digital"
+    },
+    {
+      "id": "mayorista+clientes+digital",
+      "cells": [
+        "mayorista",
+        "clientes",
+        "digital"
+      ],
+      "label": "Mayorista · Clientes · Digital"
+    },
+    {
+      "id": "financiera+riesgos+clientes",
+      "cells": [
+        "financiera",
+        "riesgos",
+        "clientes"
+      ],
+      "label": "Financiera · Riesgos · Clientes"
+    },
+    {
+      "id": "financiera+riesgos+digital",
+      "cells": [
+        "financiera",
+        "riesgos",
+        "digital"
+      ],
+      "label": "Financiera · Riesgos · Digital"
+    },
+    {
+      "id": "financiera+clientes+digital",
+      "cells": [
+        "financiera",
+        "clientes",
+        "digital"
+      ],
+      "label": "Financiera · Clientes · Digital"
+    },
+    {
+      "id": "riesgos+clientes+digital",
+      "cells": [
+        "riesgos",
+        "clientes",
+        "digital"
+      ],
+      "label": "Riesgos · Clientes · Digital"
+    },
+    {
+      "id": "minorista+mayorista+financiera+riesgos",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "financiera",
+        "riesgos"
+      ],
+      "label": "Minorista · Mayorista · Financiera · Riesgos"
+    },
+    {
+      "id": "minorista+mayorista+financiera+clientes",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "financiera",
+        "clientes"
+      ],
+      "label": "Minorista · Mayorista · Financiera · Clientes"
+    },
+    {
+      "id": "minorista+mayorista+financiera+digital",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "financiera",
+        "digital"
+      ],
+      "label": "Minorista · Mayorista · Financiera · Digital"
+    },
+    {
+      "id": "minorista+mayorista+riesgos+clientes",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "riesgos",
+        "clientes"
+      ],
+      "label": "Minorista · Mayorista · Riesgos · Clientes"
+    },
+    {
+      "id": "minorista+mayorista+riesgos+digital",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "riesgos",
+        "digital"
+      ],
+      "label": "Minorista · Mayorista · Riesgos · Digital"
+    },
+    {
+      "id": "minorista+mayorista+clientes+digital",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "clientes",
+        "digital"
+      ],
+      "label": "Minorista · Mayorista · Clientes · Digital"
+    },
+    {
+      "id": "minorista+financiera+riesgos+clientes",
+      "cells": [
+        "minorista",
+        "financiera",
+        "riesgos",
+        "clientes"
+      ],
+      "label": "Minorista · Financiera · Riesgos · Clientes"
+    },
+    {
+      "id": "minorista+financiera+riesgos+digital",
+      "cells": [
+        "minorista",
+        "financiera",
+        "riesgos",
+        "digital"
+      ],
+      "label": "Minorista · Financiera · Riesgos · Digital"
+    },
+    {
+      "id": "minorista+financiera+clientes+digital",
+      "cells": [
+        "minorista",
+        "financiera",
+        "clientes",
+        "digital"
+      ],
+      "label": "Minorista · Financiera · Clientes · Digital"
+    },
+    {
+      "id": "minorista+riesgos+clientes+digital",
+      "cells": [
+        "minorista",
+        "riesgos",
+        "clientes",
+        "digital"
+      ],
+      "label": "Minorista · Riesgos · Clientes · Digital"
+    },
+    {
+      "id": "mayorista+financiera+riesgos+clientes",
+      "cells": [
+        "mayorista",
+        "financiera",
+        "riesgos",
+        "clientes"
+      ],
+      "label": "Mayorista · Financiera · Riesgos · Clientes"
+    },
+    {
+      "id": "mayorista+financiera+riesgos+digital",
+      "cells": [
+        "mayorista",
+        "financiera",
+        "riesgos",
+        "digital"
+      ],
+      "label": "Mayorista · Financiera · Riesgos · Digital"
+    },
+    {
+      "id": "mayorista+financiera+clientes+digital",
+      "cells": [
+        "mayorista",
+        "financiera",
+        "clientes",
+        "digital"
+      ],
+      "label": "Mayorista · Financiera · Clientes · Digital"
+    },
+    {
+      "id": "mayorista+riesgos+clientes+digital",
+      "cells": [
+        "mayorista",
+        "riesgos",
+        "clientes",
+        "digital"
+      ],
+      "label": "Mayorista · Riesgos · Clientes · Digital"
+    },
+    {
+      "id": "financiera+riesgos+clientes+digital",
+      "cells": [
+        "financiera",
+        "riesgos",
+        "clientes",
+        "digital"
+      ],
+      "label": "Financiera · Riesgos · Clientes · Digital"
+    },
+    {
+      "id": "minorista+mayorista+financiera+riesgos+clientes",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "financiera",
+        "riesgos",
+        "clientes"
+      ],
+      "label": "Minorista · Mayorista · Financiera · Riesgos · Clientes"
+    },
+    {
+      "id": "minorista+mayorista+financiera+riesgos+digital",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "financiera",
+        "riesgos",
+        "digital"
+      ],
+      "label": "Minorista · Mayorista · Financiera · Riesgos · Digital"
+    },
+    {
+      "id": "minorista+mayorista+financiera+clientes+digital",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "financiera",
+        "clientes",
+        "digital"
+      ],
+      "label": "Minorista · Mayorista · Financiera · Clientes · Digital"
+    },
+    {
+      "id": "minorista+mayorista+riesgos+clientes+digital",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "riesgos",
+        "clientes",
+        "digital"
+      ],
+      "label": "Minorista · Mayorista · Riesgos · Clientes · Digital"
+    },
+    {
+      "id": "minorista+financiera+riesgos+clientes+digital",
+      "cells": [
+        "minorista",
+        "financiera",
+        "riesgos",
+        "clientes",
+        "digital"
+      ],
+      "label": "Minorista · Financiera · Riesgos · Clientes · Digital"
+    },
+    {
+      "id": "mayorista+financiera+riesgos+clientes+digital",
+      "cells": [
+        "mayorista",
+        "financiera",
+        "riesgos",
+        "clientes",
+        "digital"
+      ],
+      "label": "Mayorista · Financiera · Riesgos · Clientes · Digital"
+    },
+    {
+      "id": "todas",
+      "cells": [
+        "minorista",
+        "mayorista",
+        "financiera",
+        "riesgos",
+        "clientes",
+        "digital"
+      ],
+      "label": "Todas las células"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "viewBox": "0 0 720 980",
+  "initialZoom": "30 20 480 650",
   "config": {
     "brand": {
       "mark": "Data Engineering",

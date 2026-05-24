@@ -164,11 +164,18 @@
           "nodeId": "dinamica",
           "eyebrow": "Distribución · Grupo 1 — Continuidad Operativa",
           "title": "Grupo 1: <span class=\"italic\">Continuidad Operativa</span>",
-          "lead": "La iniciativa entra al Grupo 1. Un TL de Continuidad Operativa es el nexo central. Las células Minorista-Mayorista, Financiera-Riesgos y Clientes-Digital ejecutan según capacidad.",
+          "lead": "La iniciativa entra al Grupo 1. Un TL de Continuidad Operativa es el nexo central. Las células Minorista, Mayorista, Financiera, Riesgos, Clientes y Digital ejecutan según capacidad.",
           "sections": [
             {
               "label": "Células",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Minorista-Mayorista</span><span class=\"pill\">Financiera-Riesgos</span><span class=\"pill\">Clientes-Digital</span></div>"
+              "cells": [
+                "minorista",
+                "mayorista",
+                "financiera",
+                "riesgos",
+                "clientes",
+                "digital"
+              ]
             },
             {
               "label": "TL nexo",
@@ -665,7 +672,14 @@
           "sections": [
             {
               "label": "Células",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Minorista-Mayorista</span><span class=\"pill\">Financiera-Riesgos</span><span class=\"pill\">Clientes-Digital</span></div>"
+              "cells": [
+                "minorista",
+                "mayorista",
+                "financiera",
+                "riesgos",
+                "clientes",
+                "digital"
+              ]
             },
             {
               "label": "TL nexo",
@@ -1189,7 +1203,14 @@
           "sections": [
             {
               "label": "Células",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Minorista-Mayorista</span><span class=\"pill\">Financiera-Riesgos</span><span class=\"pill\">Clientes-Digital</span></div>"
+              "cells": [
+                "minorista",
+                "mayorista",
+                "financiera",
+                "riesgos",
+                "clientes",
+                "digital"
+              ]
             },
             {
               "label": "Asignación",
@@ -1690,7 +1711,14 @@
           "sections": [
             {
               "label": "Células",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Minorista-Mayorista</span><span class=\"pill\">Financiera-Riesgos</span><span class=\"pill\">Clientes-Digital</span></div>"
+              "cells": [
+                "minorista",
+                "mayorista",
+                "financiera",
+                "riesgos",
+                "clientes",
+                "digital"
+              ]
             },
             {
               "label": "Asignación",

@@ -116,6 +116,9 @@ const state = {
   diagrams: {},
   stages: {},
   actors: {},       // id → { id, label, color }
+  actorsList: [],   // array ordenado para el editor
+  cells: {},        // id → { id, label, color }
+  cellsList: [],    // array ordenado de las 6 células
   editMode: false,  // true cuando el modo edición está activo
   editedStages: {}, // copia profunda de los stages editados: { 'ciclo-vida': {...}, 'architecture-platform': [...] }
   currentDiagram: 'ciclo-vida',
@@ -188,7 +191,9 @@ function zoomAtPoint(factor, svgX, svgY) {
 }
 
 function resetZoom() {
-  state.zoomVB = { ...state.baseVB };
+  // Vuelve al zoom inicial definido en el diagrama, o al viewBox completo si no hay uno
+  const initVBStr = state.diagram?.initialZoom || state.diagram?.viewBox;
+  state.zoomVB = initVBStr ? parseVB(initVBStr) : { ...state.baseVB };
   applyVB(state.zoomVB);
 }
 
@@ -294,10 +299,20 @@ function actorPill(actorId) {
   return `<span class="pill" data-actor-id="${actor.id}" style="border-color:${actor.color}20;background:${actor.color}12">${actor.label}</span>`;
 }
 
-// Convierte content/actors de una sección a HTML
+// Renderiza una pill desde un cell ID
+function cellPill(cellId) {
+  const cell = state.cells[cellId];
+  if (!cell) return `<span class="pill pill-cell">${cellId}</span>`;
+  return `<span class="pill pill-cell" data-cell-id="${cell.id}" style="border-color:${cell.color}30;background:${cell.color}15;color:${cell.color}">${cell.label}</span>`;
+}
+
+// Convierte content/actors/cells de una sección a HTML
 function sectionContentHTML(sec) {
   if (sec.actors && Array.isArray(sec.actors)) {
     return `<div class="pill-grid">${sec.actors.map(actorPill).join('')}</div>`;
+  }
+  if (sec.cells && Array.isArray(sec.cells)) {
+    return `<div class="pill-grid">${sec.cells.map(cellPill).join('')}</div>`;
   }
   return sec.content || '';
 }
@@ -305,14 +320,15 @@ function sectionContentHTML(sec) {
 // ============ LOAD DATA ============
 async function loadData() {
   try {
-    const [diagramRes, stagesRes, archDiagramRes, archStagesRes, actorsRes] = await Promise.all([
+    const [diagramRes, stagesRes, archDiagramRes, archStagesRes, actorsRes, cellsRes] = await Promise.all([
       fetch('data/diagram.json'),
       fetch('data/stages.json'),
       fetch('data/architecture-platform.json'),
       fetch('data/architecture-platform-stages.json'),
       fetch('data/actors.json'),
+      fetch('data/cells.json'),
     ]);
-    if (!diagramRes.ok || !stagesRes.ok || !archDiagramRes.ok || !archStagesRes.ok || !actorsRes.ok) {
+    if (!diagramRes.ok || !stagesRes.ok || !archDiagramRes.ok || !archStagesRes.ok || !actorsRes.ok || !cellsRes.ok) {
       throw new Error('No se pudieron leer los JSON de data/');
     }
     state.diagrams['ciclo-vida'] = await diagramRes.json();
@@ -328,6 +344,14 @@ async function loadData() {
     }
     // Guardar lista ordenada para el editor
     state.actorsList = actorsData.actors || [];
+
+    // Cargar células como mapa id→cell
+    const cellsData = await cellsRes.json();
+    state.cells = {};
+    for (const c of (cellsData.cells || [])) {
+      state.cells[c.id] = c;
+    }
+    state.cellsList = cellsData.cells || [];
 
     // Inicializar copias editables (deep clone)
     state.editedStages['ciclo-vida'] = JSON.parse(JSON.stringify(state.stages['ciclo-vida']));
@@ -489,7 +513,9 @@ function applyBrandConfig() {
 function buildSvg() {
   const svg = $('flowSvg');
   state.baseVB = parseVB(state.diagram.viewBox);
-  state.zoomVB = { ...state.baseVB };
+  // Si el diagrama define un zoom inicial, arranca con ese; si no, usa el viewBox completo
+  const initVBStr = state.diagram.initialZoom || state.diagram.viewBox;
+  state.zoomVB = parseVB(initVBStr);
   applyVB(state.zoomVB);
 
   // Transversal bracket
