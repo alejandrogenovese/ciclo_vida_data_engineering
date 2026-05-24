@@ -4,3 +4,5 @@ services:
     runtime: docker
     plan: free
     healthCheckPath: /
+    ports:
+      - port: 3000

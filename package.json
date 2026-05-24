@@ -1,0 +1,16 @@
+{
+  "name": "ciclo-vida-data",
+  "version": "1.0.0",
+  "description": "Ciclo de Vida del Desarrollo · Data & IA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["data", "engineering", "architecture"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": "18.x"
+  }
+}
