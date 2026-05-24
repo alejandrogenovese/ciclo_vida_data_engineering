@@ -25,7 +25,10 @@
           "sections": [
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Data Managers</span><span class=\"pill\">Negocio</span></div>"
+              "actors": [
+                "data-managers",
+                "negocio"
+              ]
             },
             {
               "label": "Entrada",
@@ -58,7 +61,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Célula de Modelado</span></div>"
+              "actors": [
+                "tls",
+                "celula-modelado"
+              ]
             }
           ],
           "callout": "<strong>Por qué importa:</strong> clasificar antes de estimar evita rework y conflictos de prioridad. Una iniciativa mal clasificada consume recursos del camino equivocado.",
@@ -75,7 +81,12 @@
           "sections": [
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">Sourcing</span></div>"
+              "actors": [
+                "arquitectura",
+                "tls",
+                "dps",
+                "sourcing"
+              ]
             },
             {
               "label": "Evaluación técnica",
@@ -108,7 +119,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>"
+              "actors": [
+                "tls",
+                "dps-modelado"
+              ]
             }
           ],
           "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint, se confirman dependencias y se distribuye el trabajo.",
@@ -133,7 +147,11 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "de"
+              ]
             }
           ],
           "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos recurrentes, dependencias no resueltas. La weekly es el espacio para escalarlo.",
@@ -243,7 +261,10 @@
           "sections": [
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Data Managers</span><span class=\"pill\">Negocio</span></div>"
+              "actors": [
+                "data-managers",
+                "negocio"
+              ]
             },
             {
               "label": "Entrada",
@@ -276,7 +297,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Célula de Modelado</span></div>"
+              "actors": [
+                "tls",
+                "celula-modelado"
+              ]
             }
           ],
           "callout": "<strong>Implica más:</strong> el camino Data Product involucra Arquitectura (RFC/ADR si aplica), Seguridad, Gobierno y publicación en Marketplace. El ciclo es completo y más largo.",
@@ -293,7 +317,12 @@
           "sections": [
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">Sourcing</span></div>"
+              "actors": [
+                "arquitectura",
+                "tls",
+                "dps",
+                "sourcing"
+              ]
             },
             {
               "label": "Evaluación técnica",
@@ -326,7 +355,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>"
+              "actors": [
+                "tls",
+                "dps-modelado"
+              ]
             }
           ],
           "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint, se confirman dependencias y se distribuye el trabajo.",
@@ -351,7 +383,11 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "de"
+              ]
             }
           ],
           "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos recurrentes, dependencias no resueltas. La weekly es el espacio para escalarlo.",
@@ -470,7 +506,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Triage</span><span class=\"pill\">N1 / N2</span></div>"
+              "actors": [
+                "triage",
+                "n1-n2"
+              ]
             }
           ],
           "callout": "<strong>Por qué importa:</strong> Triage protege a los equipos de desarrollo de interrupciones operativas no planificadas. Es el filtro que preserva la capacidad de las células.",
@@ -520,7 +559,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Célula de Modelado</span></div>"
+              "actors": [
+                "tls",
+                "celula-modelado"
+              ]
             }
           ],
           "callout": "<strong>Urgencia preservada:</strong> si el caso viene con prioridad alta de Triage, el Clasificador lo refleja en la planificación del Hub para que entre al sprint inmediato.",
@@ -537,7 +579,11 @@
           "sections": [
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span></div>"
+              "actors": [
+                "arquitectura",
+                "tls",
+                "dps"
+              ]
             },
             {
               "label": "Evaluación técnica",
@@ -570,7 +616,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>"
+              "actors": [
+                "tls",
+                "dps-modelado"
+              ]
             }
           ],
           "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint con el caso de Triage incorporado a la capacidad.",
@@ -595,7 +644,11 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "de"
+              ]
             }
           ],
           "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos recurrentes, dependencias no resueltas. La weekly es el espacio para escalarlo.",
@@ -714,7 +767,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Triage</span><span class=\"pill\">N1 / N2</span></div>"
+              "actors": [
+                "triage",
+                "n1-n2"
+              ]
             }
           ],
           "callout": "<strong>Por qué importa:</strong> Triage protege a los equipos de desarrollo de interrupciones no planificadas. Es el filtro que preserva la capacidad de las células.",
@@ -764,7 +820,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Célula de Modelado</span></div>"
+              "actors": [
+                "tls",
+                "celula-modelado"
+              ]
             }
           ],
           "callout": "<strong>De incidente a producto:</strong> el caso de Triage se transforma en una iniciativa de construcción formal. Requiere el ciclo completo con Arquitectura, Gobierno y Seguridad.",
@@ -781,7 +840,11 @@
           "sections": [
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span></div>"
+              "actors": [
+                "arquitectura",
+                "tls",
+                "dps"
+              ]
             },
             {
               "label": "Evaluación técnica",
@@ -814,7 +877,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>"
+              "actors": [
+                "tls",
+                "dps-modelado"
+              ]
             }
           ],
           "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint con el nuevo Data Product incorporado al Grupo 2.",
@@ -839,7 +905,11 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "de"
+              ]
             }
           ],
           "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos recurrentes, dependencias no resueltas. La weekly es el espacio para escalarlo.",
@@ -975,7 +1045,12 @@
           "sections": [
             {
               "label": "Origen",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">Arquitectura Data</span><span class=\"pill\">Otro actor técnico</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "arquitectura-data",
+                "otro-actor-tecnico"
+              ]
             },
             {
               "label": "Qué incluye",
@@ -1008,7 +1083,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Arquitectura (si aplica)</span></div>"
+              "actors": [
+                "tls",
+                "arquitectura-si-aplica"
+              ]
             }
           ],
           "callout": "<strong>Contexto técnico:</strong> las iniciativas de robustez que entran como BAU tienen su propia prioridad en el Hub. No desplazan la demanda de negocio — coexisten.",
@@ -1025,7 +1103,11 @@
           "sections": [
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span></div>"
+              "actors": [
+                "arquitectura",
+                "tls",
+                "dps"
+              ]
             },
             {
               "label": "Evaluación técnica",
@@ -1058,7 +1140,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>"
+              "actors": [
+                "tls",
+                "dps-modelado"
+              ]
             }
           ],
           "callout": "<strong>Para los líderes:</strong> hacer visible la robustez técnica en el Hub es lo que evita que se acumule indefinidamente. Lo que no entra al sprint, no se hace.",
@@ -1083,7 +1168,11 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "de"
+              ]
             }
           ],
           "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos técnicos recurrentes, dependencias no resueltas.",
@@ -1219,7 +1308,12 @@
           "sections": [
             {
               "label": "Origen",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">Arquitectura Data</span><span class=\"pill\">Otro actor técnico</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "arquitectura-data",
+                "otro-actor-tecnico"
+              ]
             },
             {
               "label": "Qué incluye",
@@ -1252,7 +1346,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Arquitectura Data</span></div>"
+              "actors": [
+                "tls",
+                "arquitectura-data"
+              ]
             }
           ],
           "callout": "<strong>Distinguir robustez BAU de DP:</strong> mejorar algo existente → BAU. Crear algo nuevo que cambia la arquitectura → Data Product. La diferencia es estructural.",
@@ -1269,7 +1366,11 @@
           "sections": [
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span></div>"
+              "actors": [
+                "arquitectura",
+                "tls",
+                "dps"
+              ]
             },
             {
               "label": "Evaluación técnica",
@@ -1302,7 +1403,11 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span><span class=\"pill\">Arquitectura</span></div>"
+              "actors": [
+                "tls",
+                "dps-modelado",
+                "arquitectura"
+              ]
             }
           ],
           "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint con el nuevo componente técnico incorporado al Grupo 2.",
@@ -1327,7 +1432,11 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "de"
+              ]
             }
           ],
           "callout": "<strong>Lo que dispara una alerta:</strong> desviaciones respecto al ADR aprobado, bloqueos técnicos, dependencias con Plataforma no resueltas.",
@@ -1437,7 +1546,12 @@
           "sections": [
             {
               "label": "Origen",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">Arquitectura Data</span><span class=\"pill\">Otro actor técnico</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "arquitectura-data",
+                "otro-actor-tecnico"
+              ]
             },
             {
               "label": "Qué incluye",
@@ -1470,7 +1584,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Arquitectura (si aplica)</span></div>"
+              "actors": [
+                "tls",
+                "arquitectura-si-aplica"
+              ]
             }
           ],
           "callout": "<strong>Contexto técnico:</strong> las iniciativas de robustez que entran como BAU tienen su propia prioridad en el Hub. No desplazan la demanda de negocio — coexisten.",
@@ -1487,7 +1604,11 @@
           "sections": [
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span></div>"
+              "actors": [
+                "arquitectura",
+                "tls",
+                "dps"
+              ]
             },
             {
               "label": "Evaluación técnica",
@@ -1520,7 +1641,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span></div>"
+              "actors": [
+                "tls",
+                "dps-modelado"
+              ]
             }
           ],
           "callout": "<strong>Para los líderes:</strong> hacer visible la robustez técnica en el Hub es lo que evita que se acumule indefinidamente. Lo que no entra al sprint, no se hace.",
@@ -1545,7 +1669,11 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "de"
+              ]
             }
           ],
           "callout": "<strong>Lo que dispara una alerta:</strong> caída en el % de progreso, bloqueos técnicos recurrentes, dependencias no resueltas.",
@@ -1655,7 +1783,12 @@
           "sections": [
             {
               "label": "Origen",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">Arquitectura Data</span><span class=\"pill\">Otro actor técnico</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "arquitectura-data",
+                "otro-actor-tecnico"
+              ]
             },
             {
               "label": "Qué incluye",
@@ -1688,7 +1821,10 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">Arquitectura Data</span></div>"
+              "actors": [
+                "tls",
+                "arquitectura-data"
+              ]
             }
           ],
           "callout": "<strong>Distinguir robustez BAU de DP:</strong> mejorar algo existente → BAU. Crear algo nuevo que cambia la arquitectura → Data Product. La diferencia es estructural.",
@@ -1705,7 +1841,12 @@
           "sections": [
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">Seguridad</span><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span></div>"
+              "actors": [
+                "arquitectura",
+                "seguridad",
+                "tls",
+                "dps"
+              ]
             },
             {
               "label": "Evaluación técnica",
@@ -1738,7 +1879,11 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS (Modelado)</span><span class=\"pill\">Arquitectura</span></div>"
+              "actors": [
+                "tls",
+                "dps-modelado",
+                "arquitectura"
+              ]
             }
           ],
           "callout": "<strong>Para los líderes:</strong> salir del Hub sin acuerdo no es opción. Acá se commit el sprint con el nuevo componente técnico incorporado al Grupo 2.",
@@ -1763,7 +1908,11 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">TLs</span><span class=\"pill\">DPS</span><span class=\"pill\">DE</span></div>"
+              "actors": [
+                "tls",
+                "dps",
+                "de"
+              ]
             }
           ],
           "callout": "<strong>Lo que dispara una alerta:</strong> desviaciones respecto al ADR aprobado, bloqueos técnicos, dependencias con Plataforma no resueltas.",
@@ -1900,8 +2049,9 @@
             },
             {
               "label": "Participan",
-               "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura (owner)</span>"
-
+              "actors": [
+                "arquitectura-owner"
+              ]
             },
             {
               "label": "Contenido del RFC",
@@ -2067,7 +2217,9 @@
             },
             {
               "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura (owner)</span>"
+              "actors": [
+                "arquitectura-owner"
+              ]
             },
             {
               "label": "Contenido del RFC",

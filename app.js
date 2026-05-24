@@ -9,6 +9,9 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 const state = {
   diagrams: {},
   stages: {},
+  actors: {},       // id → { id, label, color }
+  editMode: false,  // true cuando el modo edición está activo
+  editedStages: {}, // copia profunda de los stages editados: { 'ciclo-vida': {...}, 'architecture-platform': [...] }
   currentDiagram: 'ciclo-vida',
   diagram: null,
   current: 0,
@@ -161,28 +164,68 @@ function $(id) { return document.getElementById(id); }
 
 // ============ ACTIVE STAGES ============
 function getActiveStages() {
-  if (state.currentDiagram === 'ciclo-vida' && state.currentPath) {
-    return state.currentPath.stages;
+  // Siempre leer desde la copia editable
+  const edited = state.editedStages[state.currentDiagram];
+  if (state.currentDiagram === 'ciclo-vida' && state.currentPathId) {
+    return edited?.paths?.[state.currentPathId]?.stages || [];
   }
-  return state.stages[state.currentDiagram];
+  return edited || [];
+}
+
+// Devuelve la etapa actual de la copia editable (para editar in-place)
+function getCurrentStageRef() {
+  const edited = state.editedStages[state.currentDiagram];
+  if (state.currentDiagram === 'ciclo-vida' && state.currentPathId) {
+    return edited?.paths?.[state.currentPathId]?.stages?.[state.current];
+  }
+  return edited?.[state.current];
+}
+
+// Renderiza una pill desde un actor ID
+function actorPill(actorId) {
+  const actor = state.actors[actorId];
+  if (!actor) return `<span class="pill">${actorId}</span>`;
+  return `<span class="pill" data-actor-id="${actor.id}" style="border-color:${actor.color}20;background:${actor.color}12">${actor.label}</span>`;
+}
+
+// Convierte content/actors de una sección a HTML
+function sectionContentHTML(sec) {
+  if (sec.actors && Array.isArray(sec.actors)) {
+    return `<div class="pill-grid">${sec.actors.map(actorPill).join('')}</div>`;
+  }
+  return sec.content || '';
 }
 
 // ============ LOAD DATA ============
 async function loadData() {
   try {
-    const [diagramRes, stagesRes, archDiagramRes, archStagesRes] = await Promise.all([
+    const [diagramRes, stagesRes, archDiagramRes, archStagesRes, actorsRes] = await Promise.all([
       fetch('data/diagram.json'),
       fetch('data/stages.json'),
       fetch('data/architecture-platform.json'),
       fetch('data/architecture-platform-stages.json'),
+      fetch('data/actors.json'),
     ]);
-    if (!diagramRes.ok || !stagesRes.ok || !archDiagramRes.ok || !archStagesRes.ok) {
+    if (!diagramRes.ok || !stagesRes.ok || !archDiagramRes.ok || !archStagesRes.ok || !actorsRes.ok) {
       throw new Error('No se pudieron leer los JSON de data/');
     }
     state.diagrams['ciclo-vida'] = await diagramRes.json();
     state.stages['ciclo-vida'] = await stagesRes.json();
     state.diagrams['architecture-platform'] = await archDiagramRes.json();
     state.stages['architecture-platform'] = await archStagesRes.json();
+
+    // Cargar actores como mapa id→actor
+    const actorsData = await actorsRes.json();
+    state.actors = {};
+    for (const a of (actorsData.actors || [])) {
+      state.actors[a.id] = a;
+    }
+    // Guardar lista ordenada para el editor
+    state.actorsList = actorsData.actors || [];
+
+    // Inicializar copias editables (deep clone)
+    state.editedStages['ciclo-vida'] = JSON.parse(JSON.stringify(state.stages['ciclo-vida']));
+    state.editedStages['architecture-platform'] = JSON.parse(JSON.stringify(state.stages['architecture-platform']));
 
     switchDiagram('ciclo-vida');
   } catch (err) {
@@ -235,7 +278,8 @@ function switchDiagram(diagramName) {
 
 // ============ SWITCH PATH (ciclo-vida only) ============
 function switchPath(pathId) {
-  const pathsData = state.stages['ciclo-vida'];
+  // Usar copia editable como fuente de verdad
+  const pathsData = state.editedStages['ciclo-vida'] || state.stages['ciclo-vida'];
   if (!pathsData?.paths?.[pathId]) return;
 
   if (state.playing) togglePlay();
@@ -508,14 +552,20 @@ function renderNarrative() {
   const sectionsHTML = (s.sections || []).map(sec =>
     `<div class="stage-section">
       <div class="stage-section-label">${sec.label}</div>
-      <div class="stage-section-content">${sec.content}</div>
+      <div class="stage-section-content">${sectionContentHTML(sec)}</div>
     </div>`
   ).join('');
+
+  const editBtnHTML = `
+    <button class="btn edit-stage-btn ${state.editMode ? 'edit-active' : ''}" id="editStageBtn" title="Editar esta etapa">
+      ${state.editMode ? '✕ Cerrar editor' : '✎ Editar'}
+    </button>`;
 
   narrative.innerHTML = `
     <div class="narrative-accent-bar"></div>
     <div class="narrative-header">
       ${buildPathCrumb()}
+      ${editBtnHTML}
     </div>
     <div class="narrative-content">
       <div class="stage-eyebrow">
@@ -527,13 +577,223 @@ function renderNarrative() {
       ${sectionsHTML}
       ${s.callout ? `<div class="stage-callout">${s.callout}</div>` : ''}
     </div>
+    ${state.editMode ? buildEditorPanel(s) : ''}
   `;
+
+  // Bind edit button
+  const editBtn = document.getElementById('editStageBtn');
+  if (editBtn) {
+    editBtn.addEventListener('click', () => {
+      state.editMode = !state.editMode;
+      renderNarrative();
+    });
+  }
+
+  // Bind editor si está abierto
+  if (state.editMode) bindEditorEvents();
 
   narrative.querySelectorAll('.narrative-content > *').forEach(el => {
     el.style.animation = 'none';
     el.offsetHeight;
     el.style.animation = '';
   });
+}
+
+// ============ EDITOR PANEL ============
+function buildEditorPanel(s) {
+  const allActors = state.actorsList || [];
+
+  const sectionsEditorHTML = (s.sections || []).map((sec, sIdx) => {
+    let actorsEditorHTML = '';
+    if (sec.actors && Array.isArray(sec.actors)) {
+      // Muestra actores actuales con botón para eliminar
+      const currentActors = sec.actors.map(id => {
+        const a = state.actors[id] || { id, label: id, color: '#888' };
+        return `<span class="editor-pill" data-sec="${sIdx}" data-actor="${id}" style="border-color:${a.color}40;background:${a.color}15">
+          ${a.label}
+          <button class="editor-pill-remove" data-sec="${sIdx}" data-actor="${id}" title="Quitar">×</button>
+        </span>`;
+      }).join('');
+
+      // Dropdown para agregar actores
+      const available = allActors.filter(a => !sec.actors.includes(a.id));
+      const optionsHTML = available.map(a => `<option value="${a.id}">${a.label}</option>`).join('');
+      const addBtn = available.length > 0 ? `
+        <div class="editor-add-actor">
+          <select class="editor-actor-select" data-sec="${sIdx}">
+            <option value="">— Agregar actor —</option>
+            ${optionsHTML}
+          </select>
+          <button class="btn editor-add-btn" data-sec="${sIdx}">+ Agregar</button>
+        </div>` : '';
+
+      actorsEditorHTML = `
+        <div class="editor-actors-list">${currentActors}</div>
+        ${addBtn}`;
+    }
+
+    const contentField = (!sec.actors)
+      ? `<textarea class="editor-textarea" data-field="sec-content" data-sec="${sIdx}" rows="3">${sec.content || ''}</textarea>`
+      : actorsEditorHTML;
+
+    return `
+      <div class="editor-section-block">
+        <label class="editor-label">Sección "${sec.label}" — label</label>
+        <input class="editor-input" type="text" data-field="sec-label" data-sec="${sIdx}" value="${escHtml(sec.label)}">
+        <label class="editor-label">${sec.actors ? 'Actores' : 'Contenido'}</label>
+        ${contentField}
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="editor-panel" id="editorPanel">
+      <div class="editor-panel-header">
+        <span class="editor-panel-title">✎ Editar etapa ${state.current + 1}</span>
+        <button class="btn editor-export-btn" id="exportChangesBtn">⬇ Exportar cambios</button>
+      </div>
+
+      <label class="editor-label">Eyebrow</label>
+      <input class="editor-input" type="text" data-field="eyebrow" value="${escHtml(s.eyebrow)}">
+
+      <label class="editor-label">Título (acepta HTML con &lt;span class="italic"&gt;)</label>
+      <input class="editor-input" type="text" data-field="title" value="${escAttr(s.title)}">
+
+      <label class="editor-label">Lead (párrafo introductorio)</label>
+      <textarea class="editor-textarea" data-field="lead" rows="3">${escHtml(s.lead)}</textarea>
+
+      <div class="editor-sections-header">Secciones</div>
+      ${sectionsEditorHTML}
+
+      <label class="editor-label">Callout (acepta HTML con &lt;strong&gt;)</label>
+      <textarea class="editor-textarea" data-field="callout" rows="2">${escHtml(s.callout || '')}</textarea>
+
+      <div class="editor-actions">
+        <button class="btn btn-primary editor-save-btn" id="editorSaveBtn">✓ Aplicar cambios</button>
+        <button class="btn editor-reset-btn" id="editorResetBtn">↺ Restaurar original</button>
+      </div>
+    </div>`;
+}
+
+function escHtml(str) {
+  return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function escAttr(str) {
+  return (str || '').replace(/"/g, '&quot;');
+}
+
+function bindEditorEvents() {
+  const panel = document.getElementById('editorPanel');
+  if (!panel) return;
+
+  // Quitar actor
+  panel.querySelectorAll('.editor-pill-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const secIdx = parseInt(btn.dataset.sec);
+      const actorId = btn.dataset.actor;
+      const stage = getCurrentStageRef();
+      if (stage?.sections?.[secIdx]?.actors) {
+        stage.sections[secIdx].actors = stage.sections[secIdx].actors.filter(a => a !== actorId);
+        renderNarrative();
+      }
+    });
+  });
+
+  // Agregar actor
+  panel.querySelectorAll('.editor-add-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const secIdx = parseInt(btn.dataset.sec);
+      const select = panel.querySelector(`.editor-actor-select[data-sec="${secIdx}"]`);
+      const actorId = select?.value;
+      if (!actorId) return;
+      const stage = getCurrentStageRef();
+      if (stage?.sections?.[secIdx]) {
+        if (!stage.sections[secIdx].actors) stage.sections[secIdx].actors = [];
+        if (!stage.sections[secIdx].actors.includes(actorId)) {
+          stage.sections[secIdx].actors.push(actorId);
+          renderNarrative();
+        }
+      }
+    });
+  });
+
+  // Guardar cambios al hacer click en "Aplicar"
+  const saveBtn = document.getElementById('editorSaveBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      const stage = getCurrentStageRef();
+      if (!stage) return;
+
+      // Leer todos los campos del formulario
+      panel.querySelectorAll('[data-field]').forEach(input => {
+        const field = input.dataset.field;
+        const secIdx = input.dataset.sec !== undefined ? parseInt(input.dataset.sec) : null;
+        const value = input.value;
+
+        if (field === 'eyebrow')  stage.eyebrow = value;
+        if (field === 'title')    stage.title   = value;
+        if (field === 'lead')     stage.lead    = value;
+        if (field === 'callout')  stage.callout = value;
+        if (field === 'sec-label'   && secIdx !== null && stage.sections?.[secIdx]) stage.sections[secIdx].label   = value;
+        if (field === 'sec-content' && secIdx !== null && stage.sections?.[secIdx]) stage.sections[secIdx].content = value;
+      });
+
+      // Volver al modo lectura y re-renderizar
+      state.editMode = false;
+      renderNarrative();
+    });
+  }
+
+  // Restaurar original
+  const resetBtn = document.getElementById('editorResetBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      const original = getOriginalStageRef();
+      const edited = getCurrentStageRef();
+      if (original && edited) {
+        Object.assign(edited, JSON.parse(JSON.stringify(original)));
+        // Restaurar secciones individualmente
+        edited.sections = JSON.parse(JSON.stringify(original.sections));
+        renderNarrative();
+      }
+    });
+  }
+
+  // Exportar cambios
+  const exportBtn = document.getElementById('exportChangesBtn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', exportChanges);
+  }
+}
+
+function getOriginalStageRef() {
+  // Lee desde los datos originales (no editados)
+  const original = state.stages[state.currentDiagram];
+  if (state.currentDiagram === 'ciclo-vida' && state.currentPathId) {
+    return original?.paths?.[state.currentPathId]?.stages?.[state.current];
+  }
+  return original?.[state.current];
+}
+
+// ============ EXPORT CHANGES ============
+function exportChanges() {
+  const stagesEdited  = state.editedStages['ciclo-vida'];
+  const archEdited    = state.editedStages['architecture-platform'];
+
+  // Crear ZIP simulado: descarga ambos archivos uno por uno
+  downloadJSON(stagesEdited, 'stages.json');
+  setTimeout(() => downloadJSON(archEdited, 'architecture-platform-stages.json'), 300);
+}
+
+function downloadJSON(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 // ============ UPDATE DIAGRAM STATE ============
@@ -651,6 +911,7 @@ function renderLegend() {
 function goTo(idx) {
   const stagesCount = getActiveStages().length;
   if (idx < 0 || idx >= stagesCount) return;
+  state.editMode = false; // cerrar editor al navegar
   state.current = idx;
   renderProgress();
   renderNarrative();

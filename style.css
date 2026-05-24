@@ -1535,3 +1535,213 @@ kbd {
     height: 80vh;
   }
 }
+
+/* ============ EDITOR STYLES ============ */
+.edit-stage-btn {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  background: var(--bg-elev);
+  color: var(--ink-soft);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.edit-stage-btn:hover,
+.edit-stage-btn.edit-active {
+  background: var(--stage-color, #1F3864);
+  color: #fff;
+  border-color: var(--stage-color, #1F3864);
+}
+
+.editor-panel {
+  margin: 24px 36px 28px;
+  border-top: 2px solid var(--stage-color, #1F3864);
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeIn 0.2s ease;
+}
+
+.editor-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.editor-panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--stage-color, #1F3864);
+}
+
+.editor-export-btn {
+  font-size: 11px;
+  padding: 4px 12px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.editor-export-btn:hover { opacity: .85; }
+
+.editor-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ink-mute);
+  margin-bottom: 2px;
+}
+
+.editor-input,
+.editor-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg-elev);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color .15s;
+}
+.editor-input:focus,
+.editor-textarea:focus {
+  outline: none;
+  border-color: var(--stage-color, #1F3864);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--stage-color, #1F3864) 12%, transparent);
+}
+
+.editor-sections-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--line-soft);
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+.editor-section-block {
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editor-actors-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 28px;
+}
+
+.editor-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px 3px 10px;
+  border: 1px solid;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--bg-elev);
+  color: var(--ink);
+}
+
+.editor-pill-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0 0 0 2px;
+  color: var(--ink-mute);
+  transition: color .1s;
+}
+.editor-pill-remove:hover { color: #c0392b; }
+
+.editor-add-actor {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.editor-actor-select {
+  flex: 1;
+  min-width: 120px;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 11px;
+  background: var(--bg-elev);
+  color: var(--ink);
+  font-family: inherit;
+}
+
+.editor-add-btn {
+  font-size: 11px;
+  padding: 5px 12px;
+  background: var(--stage-color, #1F3864);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.editor-add-btn:hover { opacity: .85; }
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.editor-save-btn {
+  background: var(--stage-color, #1F3864);
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.editor-save-btn:hover { opacity: .88; }
+
+.editor-reset-btn {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.editor-reset-btn:hover { background: var(--bg); }
+
+/* Ajustar header de narrativa para alojar el botón editar */
+.narrative-header {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 6px;
+}

@@ -5,12 +5,27 @@
     "title": "Iniciativa desde <span class=\"italic\">Modelado o Ingeniería</span>",
     "lead": "El caso llega de una célula de modelado o de ingeniería. Puede ser una necesidad técnica, una mejora arquitectónica, un nuevo componente de plataforma o una iniciativa de robustez. El punto de partida es siempre un caso concreto que requiere decisión arquitectónica formal.",
     "sections": [
-      { "label": "Origen", "content": "<div class=\"pill-grid\"><span class=\"pill\">Célula Modelado</span><span class=\"pill\">Ingeniería</span></div>" },
-      { "label": "Entrada", "content": "Caso de uso, requerimiento técnico o iniciativa sin decisión arquitectónica definida." },
-      { "label": "Salida", "content": "Necesidad de iniciar un RFC formal. Arquitectura toma propiedad del proceso desde este punto." }
+      {
+        "label": "Origen",
+        "actors": [
+          "celula-modelado-solo",
+          "ingenieria"
+        ]
+      },
+      {
+        "label": "Entrada",
+        "content": "Caso de uso, requerimiento técnico o iniciativa sin decisión arquitectónica definida."
+      },
+      {
+        "label": "Salida",
+        "content": "Necesidad de iniciar un RFC formal. Arquitectura toma propiedad del proceso desde este punto."
+      }
     ],
     "callout": "<strong>Importante:</strong> el caso puede venir de cualquier célula técnica. Lo que lo convierte en un flujo de arquitectura es la ausencia de una decisión previa o la necesidad de revisar una existente.",
-    "color": { "primary": "#1F3864", "soft": "#E8EEF7" }
+    "color": {
+      "primary": "#1F3864",
+      "soft": "#E8EEF7"
+    }
   },
   {
     "nodeId": "rfc",
@@ -18,12 +33,30 @@
     "title": "<span class=\"italic\">RFC</span> — Request for Comments",
     "lead": "Arquitectura inicia y es propietaria del RFC. Es una propuesta abierta que documenta el problema, las opciones técnicas evaluadas, sus trade-offs, costos estimados y riesgos. Queda abierto para que los distintos equipos comenten, cuestionen y propongan mejoras antes de que se formalice la decisión.",
     "sections": [
-      { "label": "Propietario", "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span></div>" },
-      { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Plataforma</span><span class=\"pill\">Técnicos varios</span><span class=\"pill\">TLs</span></div>" },
-      { "label": "Contenido", "content": "Problema, opciones técnicas evaluadas, pros/contras de cada una, costos estimados, riesgos y alternativas." }
+      {
+        "label": "Propietario",
+        "actors": [
+          "arquitectura"
+        ]
+      },
+      {
+        "label": "Participan",
+        "actors": [
+          "plataforma",
+          "tecnicos-varios",
+          "tls"
+        ]
+      },
+      {
+        "label": "Contenido",
+        "content": "Problema, opciones técnicas evaluadas, pros/contras de cada una, costos estimados, riesgos y alternativas."
+      }
     ],
     "callout": "<strong>Por qué importa:</strong> el RFC evita decisiones de caja cerrada. Múltiples voces cuestionan y mejoran la propuesta antes de que se convierta en una decisión formal e inmutable.",
-    "color": { "primary": "#1F3864", "soft": "#E8EEF7" }
+    "color": {
+      "primary": "#1F3864",
+      "soft": "#E8EEF7"
+    }
   },
   {
     "nodeId": "revision-rfc",
@@ -31,12 +64,24 @@
     "title": "Revisión técnica del <span class=\"italic\">RFC con Plataforma</span>",
     "lead": "Arquitectura envía el RFC con comentarios formales. Plataforma evalúa viabilidad operacional, impacto en infraestructura, restricciones y costos reales, y devuelve feedback consolidado. El intercambio es explícito: comentarios entran, feedback sale hacia el ADR.",
     "sections": [
-      { "label": "Recibe", "content": "Comentarios sobre el RFC — preguntas técnicas, observaciones sobre viabilidad, alternativas sugeridas por Plataforma." },
-      { "label": "Devuelve", "content": "Feedback consolidado — validación de viabilidad, restricciones identificadas, recomendaciones para el ADR." },
-      { "label": "Criterios", "content": "¿Es viable en la infraestructura existente? ¿Introduce riesgos operacionales? ¿Está alineado con la plataforma actual?" }
+      {
+        "label": "Recibe",
+        "content": "Comentarios sobre el RFC — preguntas técnicas, observaciones sobre viabilidad, alternativas sugeridas por Plataforma."
+      },
+      {
+        "label": "Devuelve",
+        "content": "Feedback consolidado — validación de viabilidad, restricciones identificadas, recomendaciones para el ADR."
+      },
+      {
+        "label": "Criterios",
+        "content": "¿Es viable en la infraestructura existente? ¿Introduce riesgos operacionales? ¿Está alineado con la plataforma actual?"
+      }
     ],
     "callout": "<strong>Si hay incertidumbre:</strong> cuando el feedback de Plataforma revela un riesgo técnico no cuantificado o una hipótesis no validada, se activa un POC Charter antes de tomar la decisión.",
-    "color": { "primary": "#F0A30A", "soft": "#FFF8E1" }
+    "color": {
+      "primary": "#F0A30A",
+      "soft": "#FFF8E1"
+    }
   },
   {
     "nodeId": "poc-charter",
@@ -44,12 +89,24 @@
     "title": "<span class=\"italic\">POC Charter</span> — validar antes de decidir",
     "lead": "Cuando el feedback de la revisión técnica revela incertidumbre que no puede resolverse con análisis, se activa un POC Charter. Es un charter acotado con hipótesis clara, criterios de éxito y tiempo máximo. Su resultado alimenta directamente el ADR.",
     "sections": [
-      { "label": "Cuándo", "content": "<div class=\"pill-grid\"><span class=\"pill\">Riesgo técnico alto</span><span class=\"pill\">Hipótesis no probada</span><span class=\"pill\">Performance incierta</span></div>" },
-      { "label": "Resultado", "content": "Datos reales que confirman o rechazan la dirección técnica propuesta en el RFC. El resultado es el insumo para el ADR." },
-      { "label": "Duración", "content": "Corta — máximo 2 sprints. Solo lo suficiente para validar la hipótesis puntual, sin escalar a piloto." }
+      {
+        "label": "Cuándo",
+        "content": "<div class=\"pill-grid\"><span class=\"pill\">Riesgo técnico alto</span><span class=\"pill\">Hipótesis no probada</span><span class=\"pill\">Performance incierta</span></div>"
+      },
+      {
+        "label": "Resultado",
+        "content": "Datos reales que confirman o rechazan la dirección técnica propuesta en el RFC. El resultado es el insumo para el ADR."
+      },
+      {
+        "label": "Duración",
+        "content": "Corta — máximo 2 sprints. Solo lo suficiente para validar la hipótesis puntual, sin escalar a piloto."
+      }
     ],
     "callout": "<strong>Importante:</strong> el POC Charter NO es un piloto ni un MVP. Es validación pura de una hipótesis técnica. Su resultado va directamente al ADR junto con el feedback de Plataforma.",
-    "color": { "primary": "#F0A30A", "soft": "#FFF8E1" }
+    "color": {
+      "primary": "#F0A30A",
+      "soft": "#FFF8E1"
+    }
   },
   {
     "nodeId": "adr",
@@ -57,12 +114,24 @@
     "title": "<span class=\"italic\">ADR</span> — Architecture Decision Record",
     "lead": "Con el feedback de Plataforma integrado — y el resultado del POC Charter si lo hubo — Arquitectura formaliza la decisión en un ADR. Es la decisión técnica inmutable: contexto, opciones evaluadas, opción elegida, consecuencias e impacto. Sirve como referencia para todo el proceso siguiente.",
     "sections": [
-      { "label": "Contenido", "content": "Contexto, opciones evaluadas, opción elegida, consecuencias técnicas, impacto en el roadmap." },
-      { "label": "Alimentado por", "content": "<div class=\"pill-grid\"><span class=\"pill\">Feedback revisión RFC</span><span class=\"pill\">Resultado POC (si aplica)</span></div>" },
-      { "label": "Responsabilidad", "content": "Arquitectura redacta y autoriza. Es público para toda la organización y sirve de referencia futura." }
+      {
+        "label": "Contenido",
+        "content": "Contexto, opciones evaluadas, opción elegida, consecuencias técnicas, impacto en el roadmap."
+      },
+      {
+        "label": "Alimentado por",
+        "content": "<div class=\"pill-grid\"><span class=\"pill\">Feedback revisión RFC</span><span class=\"pill\">Resultado POC (si aplica)</span></div>"
+      },
+      {
+        "label": "Responsabilidad",
+        "content": "Arquitectura redacta y autoriza. Es público para toda la organización y sirve de referencia futura."
+      }
     ],
     "callout": "<strong>Importante:</strong> el ADR es la verdad de la arquitectura. Si la dirección cambia, se crea un nuevo ADR que revoca el anterior. La trazabilidad de decisiones es completa.",
-    "color": { "primary": "#1F3864", "soft": "#E8EEF7" }
+    "color": {
+      "primary": "#1F3864",
+      "soft": "#E8EEF7"
+    }
   },
   {
     "nodeId": "hld",
@@ -70,12 +139,24 @@
     "title": "<span class=\"italic\">HLD</span> — High Level Design",
     "lead": "El ADR se convierte en un High Level Design. Es el plano de la arquitectura decidida: componentes, sus interacciones, integraciones, flujos de datos y tecnologías específicas. El HLD es el insumo que habilita a Plataforma a generar la propuesta de diseño físico.",
     "sections": [
-      { "label": "Contenido", "content": "Componentes, conectores, flujos de datos, tecnologías específicas, configuraciones esperadas." },
-      { "label": "Responsabilidad", "content": "Arquitectura redacta. Plataforma lo consume para generar la propuesta de diseño físico que entrará al TSR." },
-      { "label": "Resultado", "content": "Un documento que sirve como brief técnico para que Plataforma operativice la solución." }
+      {
+        "label": "Contenido",
+        "content": "Componentes, conectores, flujos de datos, tecnologías específicas, configuraciones esperadas."
+      },
+      {
+        "label": "Responsabilidad",
+        "content": "Arquitectura redacta. Plataforma lo consume para generar la propuesta de diseño físico que entrará al TSR."
+      },
+      {
+        "label": "Resultado",
+        "content": "Un documento que sirve como brief técnico para que Plataforma operativice la solución."
+      }
     ],
     "callout": "<strong>Transición:</strong> del ADR (decisión abstracta) al HLD (diseño concreto). El HLD es el brief que habilita a Plataforma a generar su propuesta de diseño físico.",
-    "color": { "primary": "#1F3864", "soft": "#E8EEF7" }
+    "color": {
+      "primary": "#1F3864",
+      "soft": "#E8EEF7"
+    }
   },
   {
     "nodeId": "diseno-fisico",
@@ -83,12 +164,26 @@
     "title": "Propuesta de <span class=\"italic\">Diseño Físico</span>",
     "lead": "Plataforma toma el HLD y lo operativiza en una propuesta de diseño físico. Define infraestructura (IAM, SSO, redes, cómputo), microservicios base, patrones de integración y configuraciones específicas. Esta propuesta es el insumo que, junto con el HLD, confluye en el TSR.",
     "sections": [
-      { "label": "Propietario", "content": "<div class=\"pill-grid\"><span class=\"pill\">Plataforma</span></div>" },
-      { "label": "Qué incluye", "content": "<div class=\"pill-grid\"><span class=\"pill\">Infra, IAM, SSO</span><span class=\"pill\">Microservicios base</span><span class=\"pill\">Configuraciones</span><span class=\"pill\">Dependencias</span></div>" },
-      { "label": "Resultado", "content": "Propuesta concreta que especifica cómo se implementa físicamente lo que el HLD diseñó lógicamente. Entra al TSR para co-firma." }
+      {
+        "label": "Propietario",
+        "actors": [
+          "plataforma"
+        ]
+      },
+      {
+        "label": "Qué incluye",
+        "content": "<div class=\"pill-grid\"><span class=\"pill\">Infra, IAM, SSO</span><span class=\"pill\">Microservicios base</span><span class=\"pill\">Configuraciones</span><span class=\"pill\">Dependencias</span></div>"
+      },
+      {
+        "label": "Resultado",
+        "content": "Propuesta concreta que especifica cómo se implementa físicamente lo que el HLD diseñó lógicamente. Entra al TSR para co-firma."
+      }
     ],
     "callout": "<strong>Bajada a piso:</strong> el HLD conceptual se vuelve concreto. Plataforma especifica 'acá va esto, así se configura, estas son las dependencias'. Luego co-firma con Arquitectura en el TSR.",
-    "color": { "primary": "#595959", "soft": "#F5F5F5" }
+    "color": {
+      "primary": "#595959",
+      "soft": "#F5F5F5"
+    }
   },
   {
     "nodeId": "tsr",
@@ -96,12 +191,24 @@
     "title": "<span class=\"italic\">TSR</span> — Technical Solution Review",
     "lead": "El HLD y la propuesta de diseño físico confluyen en el TSR. Arquitectura y Plataforma co-firman este documento que valida que la solución técnica es coherente, viable y alineada con el ADR. El TSR es el gate de calidad antes de comenzar la implementación.",
     "sections": [
-      { "label": "Co-firma", "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">Plataforma</span></div>" },
-      { "label": "Valida", "content": "¿La propuesta física implementa correctamente el HLD? ¿Está alineada con el ADR? ¿Es técnicamente viable y operable?" },
-      { "label": "Resultado", "content": "Sign-off conjunto. La solución está aprobada y documentada para proceder a implementación." }
+      {
+        "label": "Co-firma",
+        "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura</span><span class=\"pill\">Plataforma</span></div>"
+      },
+      {
+        "label": "Valida",
+        "content": "¿La propuesta física implementa correctamente el HLD? ¿Está alineada con el ADR? ¿Es técnicamente viable y operable?"
+      },
+      {
+        "label": "Resultado",
+        "content": "Sign-off conjunto. La solución está aprobada y documentada para proceder a implementación."
+      }
     ],
     "callout": "<strong>Gate de calidad:</strong> el TSR es el último punto de control antes de la implementación. Sin TSR aprobado y co-firmado por ambas partes, no se implementa.",
-    "color": { "primary": "#F0A30A", "soft": "#FFF8E1" }
+    "color": {
+      "primary": "#F0A30A",
+      "soft": "#FFF8E1"
+    }
   },
   {
     "nodeId": "implementacion",
@@ -109,11 +216,27 @@
     "title": "Implementación — <span class=\"italic\">Deploy y rollout</span>",
     "lead": "Con el TSR aprobado, el equipo procede a la implementación. Deployment a ambientes, configuración, testing y rollout gradual o hyperscale según la estrategia definida. Plataforma acompaña la operación. Arquitectura monitorea la fidelidad al diseño. El ADR y TSR quedan como documentación de referencia.",
     "sections": [
-      { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">Equipo de desarrollo</span><span class=\"pill\">QA</span><span class=\"pill\">Plataforma (operación)</span></div>" },
-      { "label": "Etapas", "content": "Desarrollo → Testing → Deploy DEV/TEST → Deploy PROD → Rollout gradual o hyperscale." },
-      { "label": "Documentación", "content": "El ADR, HLD, propuesta de diseño físico y TSR quedan como referencia permanente de la decisión y su implementación." }
+      {
+        "label": "Participan",
+        "actors": [
+          "equipo-desarrollo",
+          "qa",
+          "plataforma-operacion"
+        ]
+      },
+      {
+        "label": "Etapas",
+        "content": "Desarrollo → Testing → Deploy DEV/TEST → Deploy PROD → Rollout gradual o hyperscale."
+      },
+      {
+        "label": "Documentación",
+        "content": "El ADR, HLD, propuesta de diseño físico y TSR quedan como referencia permanente de la decisión y su implementación."
+      }
     ],
     "callout": "<strong>Cierre del ciclo:</strong> la implementación exitosa cierra este ciclo de arquitectura. La solución entra al ciclo de operación normal con trazabilidad completa desde la decisión hasta el deploy.",
-    "color": { "primary": "#595959", "soft": "#F5F5F5" }
+    "color": {
+      "primary": "#595959",
+      "soft": "#F5F5F5"
+    }
   }
 ]

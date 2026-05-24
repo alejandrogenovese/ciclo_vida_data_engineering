@@ -1,0 +1,29 @@
+{
+  "_comment": "Catálogo central de actores. Cada stage referencia actores por ID en lugar de HTML inline.",
+  "actors": [
+    { "id": "data-managers",       "label": "Data Managers",         "color": "#FF8C00" },
+    { "id": "negocio",             "label": "Negocio",               "color": "#FF8C00" },
+    { "id": "tls",                 "label": "TLs",                   "color": "#1A237E" },
+    { "id": "celula-modelado",     "label": "Célula de Modelado",    "color": "#7B1FA2" },
+    { "id": "arquitectura",        "label": "Arquitectura",          "color": "#1F3864" },
+    { "id": "arquitectura-data",   "label": "Arquitectura Data",     "color": "#1F3864" },
+    { "id": "arquitectura-owner",  "label": "Arquitectura (owner)",  "color": "#1F3864" },
+    { "id": "arquitectura-si-aplica", "label": "Arquitectura (si aplica)", "color": "#1F3864" },
+    { "id": "dps",                 "label": "DPS",                   "color": "#7B1FA2" },
+    { "id": "dps-modelado",        "label": "DPS (Modelado)",        "color": "#7B1FA2" },
+    { "id": "sourcing",            "label": "Sourcing",              "color": "#616161" },
+    { "id": "de",                  "label": "DE",                    "color": "#1A237E" },
+    { "id": "triage",              "label": "Triage",                "color": "#2E7D32" },
+    { "id": "n1-n2",               "label": "N1 / N2",               "color": "#2E7D32" },
+    { "id": "seguridad",           "label": "Seguridad",             "color": "#F0A30A" },
+    { "id": "plataforma",          "label": "Plataforma",            "color": "#595959" },
+    { "id": "tecnicos-varios",     "label": "Técnicos varios",       "color": "#616161" },
+    { "id": "otro-actor-tecnico",  "label": "Otro actor técnico",    "color": "#616161" },
+    { "id": "celula-modelado-ingenieria", "label": "Célula Modelado / Ingeniería", "color": "#7B1FA2" },
+    { "id": "celula-modelado-solo","label": "Célula Modelado",       "color": "#7B1FA2" },
+    { "id": "ingenieria",          "label": "Ingeniería",            "color": "#1A237E" },
+    { "id": "equipo-desarrollo",   "label": "Equipo de desarrollo",  "color": "#1A237E" },
+    { "id": "qa",                  "label": "QA",                    "color": "#616161" },
+    { "id": "plataforma-operacion","label": "Plataforma (operación)","color": "#595959" }
+  ]
+}
