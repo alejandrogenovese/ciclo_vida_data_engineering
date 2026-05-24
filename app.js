@@ -24,6 +24,8 @@ const state = {
   currentPath: null,
   currentPathId: null,
   currentOrigin: 'bs',
+  currentArqSub: null,   // 'rt' | 'fact' — solo cuando origin === 'arq'
+  currentSuffix: 'bau',  // 'bau' | 'dp' — último tipo de entrega elegido
 };
 
 // ============ ZOOM / PAN ============
@@ -232,35 +234,70 @@ function switchPath(pathId) {
   updateControls();
 }
 
-// Sync the three-level selector buttons to reflect a given pathId
+// Sync the four-level selector to reflect a given pathId
 // Nivel 1 = header tabs (Ciclo de Vida / Arquitectura ↔ Plataforma)
-// Nivel 2 = equipo solicitante (origin buttons)
-// Nivel 3 = tipo de entrega (BAU / Data Product)
+// Nivel 2 = equipo solicitante (origin buttons): bs | triage | arq | ext
+// Nivel 3 = interacción (solo arq): rt | fact
+// Nivel 4 = tipo de entrega: bau | dp  (oculto para arq-fact)
+//
+// pathId formats:
+//   bs-bau | bs-dp | triage-bau | triage-dp
+//   arq-rt-bau | arq-rt-dp | arq-fact
+//   ext-bau | ext-dp
 function syncFlowSelectorUI(pathId) {
-  let origin, suffix;
-  if (pathId === 'arquitectura') {
-    origin = 'arq';
-    suffix = null;
+  let origin, arqSub, suffix;
+
+  if (pathId.startsWith('arq-rt-')) {
+    origin  = 'arq';
+    arqSub  = 'rt';
+    suffix  = pathId.slice(7);           // 'bau' or 'dp'
+  } else if (pathId.startsWith('arq-fact')) {
+    origin  = 'arq';
+    arqSub  = 'fact';
+    suffix  = null;                      // no BAU/DP for factibilidad interaction
+  } else if (pathId.startsWith('ext-')) {
+    origin  = 'ext';
+    arqSub  = null;
+    suffix  = pathId.slice(4);           // 'bau' or 'dp'
   } else {
-    // pathId format: "bs-bau", "triage-dp", "rt-bau", etc.
+    // bs-bau | triage-dp | etc.
     const parts = pathId.split('-');
-    suffix = parts[parts.length - 1];            // "bau" or "dp"
-    origin = parts.slice(0, -1).join('-');        // "bs", "triage", "rt"
+    suffix = parts[parts.length - 1];
+    origin = parts.slice(0, -1).join('-');
+    arqSub = null;
   }
 
-  state.currentOrigin = origin;
+  state.currentOrigin  = origin;
+  state.currentArqSub  = arqSub;
+  if (suffix) state.currentSuffix = suffix;
 
+  // ── Nivel 2: origin buttons ──────────────────────────────────────────────
   document.querySelectorAll('.flow-origin-btn').forEach(btn =>
     btn.classList.toggle('flow-origin-active', btn.dataset.origin === origin));
 
-  // Nivel 3: solo visible si el origen no es arquitectura
+  // ── Nivel 3: arq sub-row ─────────────────────────────────────────────────
+  const arqSubRow = $('flowArqSubRow');
+  if (arqSubRow) {
+    if (origin === 'arq') {
+      arqSubRow.style.display = 'flex';
+      document.querySelectorAll('.flow-arqsub-btn').forEach(btn =>
+        btn.classList.toggle('flow-arqsub-active', btn.dataset.arqsub === arqSub));
+    } else {
+      arqSubRow.style.display = 'none';
+    }
+  }
+
+  // ── Nivel 4: tipo de entrega ─────────────────────────────────────────────
   const typeRow = $('flowTypeRow');
-  if (origin === 'arq') {
-    typeRow.style.display = 'none';
-  } else {
-    typeRow.style.display = 'flex';
-    document.querySelectorAll('.flow-type-btn').forEach(btn =>
-      btn.classList.toggle('flow-type-active', btn.dataset.suffix === suffix));
+  if (typeRow) {
+    const showType = !(origin === 'arq' && arqSub === 'fact');
+    if (showType) {
+      typeRow.style.display = 'flex';
+      document.querySelectorAll('.flow-type-btn').forEach(btn =>
+        btn.classList.toggle('flow-type-active', btn.dataset.suffix === suffix));
+    } else {
+      typeRow.style.display = 'none';
+    }
   }
 }
 
@@ -658,27 +695,48 @@ function bindEvents() {
     btn.addEventListener('click', () => switchDiagram(btn.dataset.diagram));
   });
 
-  // Flow origin selector (nivel 1)
+  // ── Nivel 2: equipo solicitante ──────────────────────────────────────────
   document.querySelectorAll('.flow-origin-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if (state.currentDiagram !== 'ciclo-vida') return;
       const origin = btn.dataset.origin;
       if (origin === 'arq') {
-        switchPath('arquitectura');
+        // Default: Robustez Técnica + BAU
+        switchPath('arq-rt-bau');
+      } else if (origin === 'ext') {
+        switchPath(`ext-${state.currentSuffix || 'bau'}`);
       } else {
-        // Default to BAU when switching origin
-        switchPath(`${origin}-bau`);
+        switchPath(`${origin}-${state.currentSuffix || 'bau'}`);
       }
     });
   });
 
-  // Flow type selector (nivel 2 — BAU / Data Product)
+  // ── Nivel 3: interacción (solo arq) ──────────────────────────────────────
+  document.querySelectorAll('.flow-arqsub-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (state.currentDiagram !== 'ciclo-vida') return;
+      const sub = btn.dataset.arqsub;
+      if (sub === 'fact') {
+        switchPath('arq-fact');
+      } else {
+        // rt: usa el último suffix elegido
+        switchPath(`arq-rt-${state.currentSuffix || 'bau'}`);
+      }
+    });
+  });
+
+  // ── Nivel 4: tipo de entrega ──────────────────────────────────────────────
   document.querySelectorAll('.flow-type-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if (state.currentDiagram !== 'ciclo-vida') return;
       const suffix = btn.dataset.suffix;
       const origin = state.currentOrigin;
-      if (origin && origin !== 'arq') {
+      const arqSub = state.currentArqSub;
+      if (origin === 'arq' && arqSub === 'rt') {
+        switchPath(`arq-rt-${suffix}`);
+      } else if (origin === 'ext') {
+        switchPath(`ext-${suffix}`);
+      } else if (origin && origin !== 'arq') {
         switchPath(`${origin}-${suffix}`);
       }
     });

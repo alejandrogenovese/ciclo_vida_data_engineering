@@ -11,24 +11,56 @@
   "transverse": {
     "enabled": true,
     "bracket": "M 660 90 L 695 90 L 695 870 L 660 870",
-    "labelPos": { "x": 703, "y": 480, "rotate": 90 },
+    "labelPos": {
+      "x": 703,
+      "y": 480,
+      "rotate": 90
+    },
     "label": "Data Governance · transversal"
   },
   "roles": [
-    { "name": "Gobierno del Dato", "color": "#1B5E20" },
-    { "name": "Arquitectura Data", "color": "#1F3864" },
-    { "name": "Seguridad de Datos", "color": "#F0A30A" },
-    { "name": "Plataforma", "color": "#595959" },
-    { "name": "Cyber-IDM", "color": "#6d8764" }
+    {
+      "name": "Gobierno del Dato",
+      "color": "#1B5E20"
+    },
+    {
+      "name": "Arquitectura Data",
+      "color": "#1F3864"
+    },
+    {
+      "name": "Seguridad de Datos",
+      "color": "#F0A30A"
+    },
+    {
+      "name": "Plataforma",
+      "color": "#595959"
+    },
+    {
+      "name": "Cyber-IDM",
+      "color": "#6d8764"
+    }
   ],
   "nodes": [
     {
       "id": "business-solution",
       "stageIndex": 0,
       "shape": "rect",
-      "geom": { "x": 30, "y": 50, "w": 140, "h": 60, "rx": 4 },
-      "labelPos": { "numY": 71, "labelY": 92 },
-      "pulse": { "cx": 100, "cy": 80, "r": 60 },
+      "geom": {
+        "x": 30,
+        "y": 50,
+        "w": 140,
+        "h": 60,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 71,
+        "labelY": 92
+      },
+      "pulse": {
+        "cx": 100,
+        "cy": 80,
+        "r": 60
+      },
       "num": "01",
       "label": "Business Solution",
       "colorVar": "--c-bs"
@@ -37,9 +69,22 @@
       "id": "triage",
       "stageIndex": 1,
       "shape": "rect",
-      "geom": { "x": 290, "y": 105, "w": 140, "h": 60, "rx": 4 },
-      "labelPos": { "numY": 126, "labelY": 147 },
-      "pulse": { "cx": 360, "cy": 135, "r": 60 },
+      "geom": {
+        "x": 290,
+        "y": 105,
+        "w": 140,
+        "h": 60,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 126,
+        "labelY": 147
+      },
+      "pulse": {
+        "cx": 360,
+        "cy": 135,
+        "r": 60
+      },
       "num": "02",
       "label": "Triage",
       "colorVar": "--c-tr"
@@ -48,9 +93,22 @@
       "id": "robustez-tecnica",
       "stageIndex": 2,
       "shape": "rect",
-      "geom": { "x": 550, "y": 50, "w": 140, "h": 60, "rx": 4 },
-      "labelPos": { "numY": 71, "labelY": 92 },
-      "pulse": { "cx": 620, "cy": 80, "r": 60 },
+      "geom": {
+        "x": 550,
+        "y": 50,
+        "w": 140,
+        "h": 60,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 71,
+        "labelY": 92
+      },
+      "pulse": {
+        "cx": 620,
+        "cy": 80,
+        "r": 60
+      },
       "num": "03",
       "label": "Robustez Técnica",
       "colorVar": "--c-rt"
@@ -59,9 +117,18 @@
       "id": "clasificador",
       "stageIndex": 3,
       "shape": "hexagon",
-      "geom": { "points": "290,285 308,255 412,255 430,285 412,315 308,315" },
-      "labelPos": { "numY": 278, "labelY": 297 },
-      "pulse": { "cx": 360, "cy": 285, "r": 75 },
+      "geom": {
+        "points": "290,285 308,255 412,255 430,285 412,315 308,315"
+      },
+      "labelPos": {
+        "numY": 278,
+        "labelY": 297
+      },
+      "pulse": {
+        "cx": 360,
+        "cy": 285,
+        "r": 75
+      },
       "num": "04",
       "label": "Clasificador",
       "colorVar": "--c-cls"
@@ -70,9 +137,23 @@
       "id": "factibilidad",
       "stageIndex": 4,
       "shape": "rect",
-      "geom": { "x": 270, "y": 365, "w": 180, "h": 70, "rx": 4 },
-      "labelPos": { "numY": 389, "labelY": 408, "sublabelY": 423 },
-      "pulse": { "cx": 360, "cy": 400, "r": 60 },
+      "geom": {
+        "x": 270,
+        "y": 365,
+        "w": 180,
+        "h": 70,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 389,
+        "labelY": 408,
+        "sublabelY": 423
+      },
+      "pulse": {
+        "cx": 360,
+        "cy": 400,
+        "r": 60
+      },
       "num": "05",
       "label": "Factibilidad técnica",
       "sublabel": "+ estimación",
@@ -82,9 +163,23 @@
       "id": "hub",
       "stageIndex": 5,
       "shape": "rect",
-      "geom": { "x": 260, "y": 480, "w": 200, "h": 70, "rx": 4 },
-      "labelPos": { "numY": 504, "labelY": 523, "sublabelY": 538 },
-      "pulse": { "cx": 360, "cy": 515, "r": 60 },
+      "geom": {
+        "x": 260,
+        "y": 480,
+        "w": 200,
+        "h": 70,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 504,
+        "labelY": 523,
+        "sublabelY": 538
+      },
+      "pulse": {
+        "cx": 360,
+        "cy": 515,
+        "r": 60
+      },
       "num": "06",
       "label": "Hub de Convergencia",
       "sublabel": "planificación técnica",
@@ -94,9 +189,23 @@
       "id": "sincronizacion",
       "stageIndex": 6,
       "shape": "rect",
-      "geom": { "x": 260, "y": 595, "w": 200, "h": 70, "rx": 4 },
-      "labelPos": { "numY": 619, "labelY": 638, "sublabelY": 653 },
-      "pulse": { "cx": 360, "cy": 630, "r": 60 },
+      "geom": {
+        "x": 260,
+        "y": 595,
+        "w": 200,
+        "h": 70,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 619,
+        "labelY": 638,
+        "sublabelY": 653
+      },
+      "pulse": {
+        "cx": 360,
+        "cy": 630,
+        "r": 60
+      },
       "num": "07",
       "label": "Sincronización",
       "sublabel": "daily + weekly",
@@ -106,9 +215,23 @@
       "id": "dinamica",
       "stageIndex": 7,
       "shape": "rect",
-      "geom": { "x": 260, "y": 710, "w": 200, "h": 70, "rx": 4 },
-      "labelPos": { "numY": 734, "labelY": 753, "sublabelY": 768 },
-      "pulse": { "cx": 360, "cy": 745, "r": 60 },
+      "geom": {
+        "x": 260,
+        "y": 710,
+        "w": 200,
+        "h": 70,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 734,
+        "labelY": 753,
+        "sublabelY": 768
+      },
+      "pulse": {
+        "cx": 360,
+        "cy": 745,
+        "r": 60
+      },
       "num": "08",
       "label": "Dinámica de trabajo",
       "sublabel": "grupos & células",
@@ -118,9 +241,22 @@
       "id": "camino-bau",
       "stageIndex": 8,
       "shape": "rect",
-      "geom": { "x": 95, "y": 845, "w": 140, "h": 60, "rx": 4 },
-      "labelPos": { "numY": 866, "labelY": 885 },
-      "pulse": { "cx": 165, "cy": 875, "r": 55 },
+      "geom": {
+        "x": 95,
+        "y": 845,
+        "w": 140,
+        "h": 60,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 866,
+        "labelY": 885
+      },
+      "pulse": {
+        "cx": 165,
+        "cy": 875,
+        "r": 55
+      },
       "num": "09a",
       "label": "Camino BAU",
       "colorVar": "--c-bau"
@@ -129,9 +265,22 @@
       "id": "camino-dp",
       "stageIndex": 9,
       "shape": "rect",
-      "geom": { "x": 485, "y": 845, "w": 140, "h": 60, "rx": 4 },
-      "labelPos": { "numY": 866, "labelY": 885 },
-      "pulse": { "cx": 555, "cy": 875, "r": 55 },
+      "geom": {
+        "x": 485,
+        "y": 845,
+        "w": 140,
+        "h": 60,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 866,
+        "labelY": 885
+      },
+      "pulse": {
+        "cx": 555,
+        "cy": 875,
+        "r": 55
+      },
       "num": "09b",
       "label": "Data Product",
       "colorVar": "--c-dp"
@@ -140,9 +289,22 @@
       "id": "producto",
       "stageIndex": 10,
       "shape": "pill",
-      "geom": { "x": 270, "y": 915, "w": 180, "h": 50, "rx": 25 },
-      "labelPos": { "numY": 934, "labelY": 950 },
-      "pulse": { "cx": 360, "cy": 940, "r": 70 },
+      "geom": {
+        "x": 270,
+        "y": 915,
+        "w": 180,
+        "h": 50,
+        "rx": 25
+      },
+      "labelPos": {
+        "numY": 934,
+        "labelY": 950
+      },
+      "pulse": {
+        "cx": 360,
+        "cy": 940,
+        "r": 70
+      },
       "num": "10",
       "label": "Producto en Uso",
       "colorVar": "--c-out",
@@ -152,104 +314,279 @@
       "id": "arquitectura-data",
       "stageIndex": 999,
       "shape": "rect",
-      "geom": { "x": 510, "y": 420, "w": 130, "h": 60, "rx": 4 },
-      "labelPos": { "numY": 440, "labelY": 457, "sublabelY": 470 },
-      "pulse": { "cx": 575, "cy": 450, "r": 55 },
+      "geom": {
+        "x": 510,
+        "y": 420,
+        "w": 130,
+        "h": 60,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 440,
+        "labelY": 457,
+        "sublabelY": 470
+      },
+      "pulse": {
+        "cx": 575,
+        "cy": 450,
+        "r": 55
+      },
       "num": "ARQ",
       "label": "Arquitectura",
       "sublabel": "Data",
       "colorVar": "--c-arq"
+    },
+    {
+      "id": "plataforma",
+      "stageIndex": 999,
+      "shape": "rect",
+      "geom": {
+        "x": 510,
+        "y": 510,
+        "w": 130,
+        "h": 60,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 530,
+        "labelY": 549
+      },
+      "pulse": {
+        "cx": 575,
+        "cy": 540,
+        "r": 50
+      },
+      "num": "PLT",
+      "label": "Plataforma",
+      "colorVar": "--c-plat"
+    },
+    {
+      "id": "gobierno",
+      "stageIndex": 999,
+      "shape": "rect",
+      "geom": {
+        "x": 510,
+        "y": 600,
+        "w": 130,
+        "h": 60,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 620,
+        "labelY": 636,
+        "sublabelY": 649
+      },
+      "pulse": {
+        "cx": 575,
+        "cy": 630,
+        "r": 50
+      },
+      "num": "GOV",
+      "label": "Gobierno",
+      "sublabel": "si aplica",
+      "colorVar": "--c-gov"
     }
   ],
   "edges": [
     {
       "id": "e-bs-cls",
       "d": "M 130 110 C 130 180, 220 220, 280 250",
-      "connects": ["business-solution", "clasificador"],
-      "activeAt": [3],
+      "connects": [
+        "business-solution",
+        "clasificador"
+      ],
+      "activeAt": [
+        3
+      ],
       "pastFrom": 1
     },
     {
       "id": "e-tr-cls",
       "d": "M 360 165 L 360 220",
-      "connects": ["triage", "clasificador"],
-      "activeAt": [3],
+      "connects": [
+        "triage",
+        "clasificador"
+      ],
+      "activeAt": [
+        3
+      ],
       "pastFrom": 3
     },
     {
       "id": "e-rt-cls",
       "d": "M 590 110 C 590 180, 500 220, 440 250",
-      "connects": ["robustez-tecnica", "clasificador"],
-      "activeAt": [3],
+      "connects": [
+        "robustez-tecnica",
+        "clasificador"
+      ],
+      "activeAt": [
+        3
+      ],
       "pastFrom": 2
     },
     {
       "id": "e-cls-fact",
       "d": "M 360 320 L 360 365",
-      "connects": ["clasificador", "factibilidad"],
-      "activeAt": [4],
+      "connects": [
+        "clasificador",
+        "factibilidad"
+      ],
+      "activeAt": [
+        4
+      ],
       "pastFrom": 4
     },
     {
       "id": "e-fact-hub",
       "d": "M 360 435 L 360 480",
-      "connects": ["factibilidad", "hub"],
-      "activeAt": [5],
+      "connects": [
+        "factibilidad",
+        "hub"
+      ],
+      "activeAt": [
+        5
+      ],
       "pastFrom": 5
     },
     {
       "id": "e-hub-sync",
       "d": "M 360 550 L 360 595",
-      "connects": ["hub", "sincronizacion"],
-      "activeAt": [6],
+      "connects": [
+        "hub",
+        "sincronizacion"
+      ],
+      "activeAt": [
+        6
+      ],
       "pastFrom": 6
     },
     {
       "id": "e-sync-din",
       "d": "M 360 665 L 360 710",
-      "connects": ["sincronizacion", "dinamica"],
-      "activeAt": [7],
+      "connects": [
+        "sincronizacion",
+        "dinamica"
+      ],
+      "activeAt": [
+        7
+      ],
       "pastFrom": 7
     },
     {
       "id": "e-din-bau",
       "d": "M 290 780 C 220 810, 180 820, 165 845",
-      "connects": ["dinamica", "camino-bau"],
-      "activeAt": [8],
+      "connects": [
+        "dinamica",
+        "camino-bau"
+      ],
+      "activeAt": [
+        8
+      ],
       "pastFrom": 8
     },
     {
       "id": "e-din-dp",
       "d": "M 430 780 C 500 810, 540 820, 555 845",
-      "connects": ["dinamica", "camino-dp"],
-      "activeAt": [9],
+      "connects": [
+        "dinamica",
+        "camino-dp"
+      ],
+      "activeAt": [
+        9
+      ],
       "pastFrom": 9
     },
     {
       "id": "e-bau-out",
       "d": "M 165 910 C 165 935, 250 940, 320 940",
-      "connects": ["camino-bau", "producto"],
-      "activeAt": [10],
+      "connects": [
+        "camino-bau",
+        "producto"
+      ],
+      "activeAt": [
+        10
+      ],
       "pastFrom": 10
     },
     {
       "id": "e-dp-out",
       "d": "M 555 910 C 555 935, 470 940, 400 940",
-      "connects": ["camino-dp", "producto"],
-      "activeAt": [10],
+      "connects": [
+        "camino-dp",
+        "producto"
+      ],
+      "activeAt": [
+        10
+      ],
       "pastFrom": 10
     },
     {
       "id": "e-fact-arq",
       "d": "M 450 398 C 480 398, 510 428, 510 445",
-      "connects": ["factibilidad", "arquitectura-data"],
+      "connects": [
+        "factibilidad",
+        "arquitectura-data"
+      ],
       "activeAt": [],
       "pastFrom": 999
     },
     {
       "id": "e-arq-fact",
       "d": "M 510 460 C 490 475, 460 460, 450 445",
-      "connects": ["arquitectura-data", "factibilidad"],
+      "connects": [
+        "arquitectura-data",
+        "factibilidad"
+      ],
+      "activeAt": [],
+      "pastFrom": 999
+    },
+    {
+      "id": "e-arq-plat",
+      "d": "M 555 480 L 555 510",
+      "connects": [
+        "arquitectura-data",
+        "plataforma"
+      ],
+      "activeAt": [],
+      "pastFrom": 999
+    },
+    {
+      "id": "e-plat-arq",
+      "d": "M 595 510 L 595 480",
+      "connects": [
+        "plataforma",
+        "arquitectura-data"
+      ],
+      "activeAt": [],
+      "pastFrom": 999
+    },
+    {
+      "id": "e-arq-gov",
+      "d": "M 640 450 C 653 450, 653 630, 640 630",
+      "connects": [
+        "arquitectura-data",
+        "gobierno"
+      ],
+      "activeAt": [],
+      "pastFrom": 999
+    },
+    {
+      "id": "e-gov-fact",
+      "d": "M 510 630 C 478 630, 450 470, 450 400",
+      "connects": [
+        "gobierno",
+        "factibilidad"
+      ],
+      "activeAt": [],
+      "pastFrom": 999
+    },
+    {
+      "id": "e-arq-rt",
+      "d": "M 640 435 C 652 320, 652 160, 625 110",
+      "connects": [
+        "arquitectura-data",
+        "robustez-tecnica"
+      ],
       "activeAt": [],
       "pastFrom": 999
     }

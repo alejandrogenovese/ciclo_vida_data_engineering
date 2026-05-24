@@ -32,7 +32,11 @@
 </header>
 
 <main>
-  <!-- Flow selector: tres niveles — diagrama (header) → equipo solicitante → tipo de entrega -->
+  <!-- Flow selector: cuatro niveles
+       Nivel 1: diagrama (header tabs)
+       Nivel 2: equipo solicitante
+       Nivel 3: interacción (solo para Arquitectura Data)
+       Nivel 4: tipo de entrega (BAU / Data Product) -->
   <div class="flow-selector-bar" id="flowSelectorBar">
     <!-- Nivel 2: equipo solicitante -->
     <div class="flow-level flow-level-origins">
@@ -40,11 +44,19 @@
       <div class="flow-origins">
         <button class="flow-origin-btn flow-origin-active" data-origin="bs">Business Solution</button>
         <button class="flow-origin-btn" data-origin="triage">Triage</button>
-        <button class="flow-origin-btn" data-origin="rt">Robustez Técnica</button>
         <button class="flow-origin-btn" data-origin="arq">Arquitectura Data</button>
+        <button class="flow-origin-btn" data-origin="ext">Equipo Externo Data</button>
       </div>
     </div>
-    <!-- Nivel 3: tipo de entrega -->
+    <!-- Nivel 3: interacción (solo visible cuando origen = Arquitectura Data) -->
+    <div class="flow-level flow-level-arqsub" id="flowArqSubRow" style="display:none">
+      <span class="flow-level-label">Interacción</span>
+      <div class="flow-arqsub">
+        <button class="flow-arqsub-btn flow-arqsub-active" data-arqsub="rt">Robustez Técnica</button>
+        <button class="flow-arqsub-btn" data-arqsub="fact">Factibilidad</button>
+      </div>
+    </div>
+    <!-- Nivel 4: tipo de entrega -->
     <div class="flow-level flow-level-types" id="flowTypeRow">
       <span class="flow-level-label">Tipo de entrega</span>
       <div class="flow-types">
@@ -181,8 +193,8 @@
       <div class="cover-paths">
         <span class="cover-path-tag">Business Solution</span>
         <span class="cover-path-tag">Triage</span>
-        <span class="cover-path-tag">Robustez Técnica</span>
         <span class="cover-path-tag">Arquitectura Data</span>
+        <span class="cover-path-tag">Equipo Externo Data</span>
       </div>
     </div>
 

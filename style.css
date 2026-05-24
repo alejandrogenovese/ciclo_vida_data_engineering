@@ -221,7 +221,39 @@ main {
   border-color: var(--ink);
 }
 
-/* Nivel 3: tipo de camino */
+/* Nivel 3 (arq): sub-interacción */
+.flow-arqsub {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.flow-arqsub-btn {
+  font-family: 'Geist', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.flow-arqsub-btn:hover {
+  border-color: var(--ink-mute);
+  color: var(--ink);
+}
+
+.flow-arqsub-btn.flow-arqsub-active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* Nivel 4: tipo de camino */
 .flow-types {
   display: flex;
   gap: 5px;
@@ -1234,6 +1266,9 @@ kbd {
     padding: 5px 11px;
   }
 
+  .flow-arqsub { gap: 4px; }
+  .flow-arqsub-btn { font-size: 10px; padding: 4px 10px; }
+
   .flow-types {
     gap: 4px;
   }
@@ -1242,7 +1277,7 @@ kbd {
     font-size: 9px;
     padding: 4px 10px;
   }
-  
+
   .diagram-pane {
     padding: 12px 14px;
     border-right: none;
