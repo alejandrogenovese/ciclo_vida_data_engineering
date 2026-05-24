@@ -251,10 +251,10 @@ function syncFlowSelectorUI(pathId) {
     origin  = 'arq';
     arqSub  = 'rt';
     suffix  = pathId.slice(7);           // 'bau' or 'dp'
-  } else if (pathId.startsWith('arq-fact')) {
+  } else if (pathId.startsWith('arq-fact-')) {
     origin  = 'arq';
     arqSub  = 'fact';
-    suffix  = null;                      // no BAU/DP for factibilidad interaction
+    suffix  = pathId.slice(9);           // 'bau' or 'dp'
   } else if (pathId.startsWith('ext-')) {
     origin  = 'ext';
     arqSub  = null;
@@ -287,17 +287,12 @@ function syncFlowSelectorUI(pathId) {
     }
   }
 
-  // ── Nivel 4: tipo de entrega ─────────────────────────────────────────────
+  // ── Nivel 4: tipo de entrega (visible para todos los paths) ─────────────
   const typeRow = $('flowTypeRow');
   if (typeRow) {
-    const showType = !(origin === 'arq' && arqSub === 'fact');
-    if (showType) {
-      typeRow.style.display = 'flex';
-      document.querySelectorAll('.flow-type-btn').forEach(btn =>
-        btn.classList.toggle('flow-type-active', btn.dataset.suffix === suffix));
-    } else {
-      typeRow.style.display = 'none';
-    }
+    typeRow.style.display = 'flex';
+    document.querySelectorAll('.flow-type-btn').forEach(btn =>
+      btn.classList.toggle('flow-type-active', btn.dataset.suffix === suffix));
   }
 }
 
@@ -716,11 +711,11 @@ function bindEvents() {
     btn.addEventListener('click', () => {
       if (state.currentDiagram !== 'ciclo-vida') return;
       const sub = btn.dataset.arqsub;
+      const suffix = state.currentSuffix || 'bau';
       if (sub === 'fact') {
-        switchPath('arq-fact');
+        switchPath(`arq-fact-${suffix}`);
       } else {
-        // rt: usa el último suffix elegido
-        switchPath(`arq-rt-${state.currentSuffix || 'bau'}`);
+        switchPath(`arq-rt-${suffix}`);
       }
     });
   });
@@ -732,8 +727,8 @@ function bindEvents() {
       const suffix = btn.dataset.suffix;
       const origin = state.currentOrigin;
       const arqSub = state.currentArqSub;
-      if (origin === 'arq' && arqSub === 'rt') {
-        switchPath(`arq-rt-${suffix}`);
+      if (origin === 'arq') {
+        switchPath(`arq-${arqSub || 'rt'}-${suffix}`);
       } else if (origin === 'ext') {
         switchPath(`ext-${suffix}`);
       } else if (origin && origin !== 'arq') {

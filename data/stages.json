@@ -1413,172 +1413,6 @@
         }
       ]
     },
-    "arq-fact": {
-      "label": "Arquitectura Data",
-      "sublabel": "Interacción Factibilidad",
-      "color": "#1F3864",
-      "group": "arq-fact",
-      "nodeSequence": [
-        "factibilidad",
-        "arquitectura-data",
-        "plataforma",
-        "arquitectura-data",
-        "gobierno",
-        "factibilidad"
-      ],
-      "stages": [
-        {
-          "nodeId": "factibilidad",
-          "eyebrow": "Arquitectura Data · Punto de entrada",
-          "title": "Arquitectura Data recibe el <span class=\"italic\">pedido</span>",
-          "lead": "Durante la Evaluación de Factibilidad Técnica, Arquitectura Data identifica las iniciativas que requieren decisión arquitectónica formal. Evalúa, toma propiedad e inicia el ciclo formal de decisión.",
-          "sections": [
-            {
-              "label": "Qué identifica",
-              "content": "Iniciativas que requieren nueva arquitectura, cambio estructural, evaluación de herramientas o decisiones que afectan múltiples productos."
-            },
-            {
-              "label": "Cómo llega",
-              "content": "Puede venir de cualquier célula técnica, de Business Solution o de Triage. Lo que lo convierte en flujo de Arquitectura es la ausencia de una decisión previa o la necesidad de revisar una existente."
-            },
-            {
-              "label": "Toma de propiedad",
-              "content": "Arquitectura Data es propietaria del proceso desde este punto. Inicia el ciclo: RFC → ADR → HLD → TSR."
-            }
-          ],
-          "callout": "<strong>Para todos:</strong> cuando una iniciativa toca arquitectura nueva, Arquitectura Data toma el volante. No se avanza a implementación sin una decisión formal.",
-          "color": {
-            "primary": "#616161",
-            "soft": "#F0F0F0"
-          }
-        },
-        {
-          "nodeId": "arquitectura-data",
-          "eyebrow": "Arquitectura Data · RFC y toma de pedidos",
-          "title": "<span class=\"italic\">Arquitectura Data</span> abre el RFC",
-          "lead": "Arquitectura Data toma el pedido y abre un RFC (Request for Comments). Documenta el problema, las opciones técnicas, sus trade-offs, costos estimados y riesgos. Convoca a Plataforma para el ciclo de revisión conjunta.",
-          "sections": [
-            {
-              "label": "RFC",
-              "content": "Propuesta abierta. Arquitectura expone el problema, las opciones y los trade-offs. Equipos técnicos comentan, cuestionan y proponen mejoras."
-            },
-            {
-              "label": "Participan",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura (owner)</span><span class=\"pill\">Plataforma</span><span class=\"pill\">TLs</span><span class=\"pill\">Técnicos varios</span></div>"
-            },
-            {
-              "label": "Contenido del RFC",
-              "content": "Problema, opciones técnicas evaluadas, pros/contras de cada una, costos estimados, riesgos y alternativas."
-            }
-          ],
-          "callout": "<strong>Siguiente paso:</strong> Arquitectura lleva el RFC a Plataforma para revisión técnica, validación operacional y definición del diseño físico.",
-          "color": {
-            "primary": "#1F3864",
-            "soft": "#E8EEF7"
-          }
-        },
-        {
-          "nodeId": "plataforma",
-          "eyebrow": "Arquitectura Data · Ciclo con Plataforma",
-          "title": "Revisión conjunta con <span class=\"italic\">Plataforma</span>",
-          "lead": "Arquitectura lleva el RFC a Plataforma. Plataforma evalúa viabilidad operacional, restricciones de infraestructura y costos reales. Devuelve feedback consolidado. Si hay incertidumbre técnica alta, se lanza un POC Charter antes de decidir.",
-          "sections": [
-            {
-              "label": "Rol de Plataforma",
-              "content": "Evalúa el RFC desde la perspectiva operacional: disponibilidad, escalabilidad, costos reales de infraestructura y restricciones de la plataforma. Su feedback es vinculante."
-            },
-            {
-              "label": "POC Charter (si aplica)",
-              "content": "Cuando la incertidumbre técnica es alta, Arquitectura y Plataforma co-diseñan un POC Charter. El POC reduce riesgos antes de formalizar la decisión en el ADR."
-            },
-            {
-              "label": "Artefactos que produce",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Feedback RFC</span><span class=\"pill\">Diseño físico (Plataforma)</span><span class=\"pill\">POC Charter (si aplica)</span></div>"
-            }
-          ],
-          "callout": "<strong>Tab dedicado:</strong> el ciclo completo Arquitectura ↔ Plataforma está detallado paso a paso en «Arquitectura ↔ Plataforma». Navegá allí para ver RFC, ADR, HLD y TSR.",
-          "color": {
-            "primary": "#595959",
-            "soft": "#F2F2F2"
-          }
-        },
-        {
-          "nodeId": "arquitectura-data",
-          "eyebrow": "Arquitectura Data · Consolidación de la decisión",
-          "title": "<span class=\"italic\">Arquitectura</span> formaliza ADR · HLD · TSR",
-          "lead": "Con el feedback de Plataforma incorporado, Arquitectura formaliza la decisión técnica. El ADR es inmutable — documenta la decisión y su contexto para siempre. El HLD es el plano arquitectónico. El TSR co-firmado entre Arquitectura y Plataforma es el gate de calidad.",
-          "sections": [
-            {
-              "label": "ADR",
-              "content": "Architecture Decision Record. Decisión inmutable: problem statement, opciones evaluadas, decisión tomada, consecuencias esperadas. Queda como referencia permanente."
-            },
-            {
-              "label": "HLD + TSR",
-              "content": "High Level Design: el plano de la arquitectura decidida. Technical Solution Review: co-firma entre Arquitectura y Plataforma. Gate de calidad formal antes de continuar."
-            },
-            {
-              "label": "Resultado",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR firmado</span><span class=\"pill\">HLD aprobado</span><span class=\"pill\">TSR co-firmado</span></div>"
-            }
-          ],
-          "callout": "<strong>Si hay implicancias de gobierno:</strong> la decisión pasa por validación de Data Governance antes de cerrar el ciclo y devolver el resultado a Factibilidad.",
-          "color": {
-            "primary": "#1F3864",
-            "soft": "#E8EEF7"
-          }
-        },
-        {
-          "nodeId": "gobierno",
-          "eyebrow": "Arquitectura Data · Gobierno del Dato",
-          "title": "Validación con <span class=\"italic\">Data Governance</span> — si aplica",
-          "lead": "Cuando la decisión arquitectónica involucra datos sensibles, contratos de datos, políticas de PII, catálogo o retención, Data Governance valida antes de cerrar el ciclo. Es un paso condicional que garantiza coherencia con las políticas del banco.",
-          "sections": [
-            {
-              "label": "Cuándo aplica",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Datos sensibles / PII</span><span class=\"pill\">Contratos de datos</span><span class=\"pill\">Catálogo y metadatos</span><span class=\"pill\">Políticas de retención</span></div>"
-            },
-            {
-              "label": "Qué valida",
-              "content": "Estándares de calidad de datos · compliance · trazabilidad y lineage end-to-end · catálogo y metadatos · monitoreo de métricas de gobierno."
-            },
-            {
-              "label": "Resultado",
-              "content": "Aval de Gobierno para proceder. Sin este aval, cuando aplica, el ciclo no se cierra y la decisión no puede implementarse."
-            }
-          ],
-          "callout": "<strong>Transversal y siempre presente:</strong> Data Governance acompaña todo el ciclo. Este paso es el momento formal de validación cuando la arquitectura decidida impacta políticas de datos.",
-          "color": {
-            "primary": "#1B5E20",
-            "soft": "#E8F5E9"
-          }
-        },
-        {
-          "nodeId": "factibilidad",
-          "eyebrow": "Arquitectura Data · Cierre del ciclo",
-          "title": "Arquitectura devuelve el <span class=\"italic\">resultado</span>",
-          "lead": "Con ADR aprobado, TSR co-firmado y Gobierno validado (si aplicó), Arquitectura Data devuelve el resultado a Factibilidad Técnica. La iniciativa puede continuar con certeza arquitectónica completa.",
-          "sections": [
-            {
-              "label": "Qué devuelve",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR</span><span class=\"pill\">HLD</span><span class=\"pill\">TSR</span><span class=\"pill\">Aval Gobierno</span></div>"
-            },
-            {
-              "label": "Impacto",
-              "content": "La iniciativa tiene una decisión técnica documentada, aprobada y trazable. Puede proceder al Hub con certeza arquitectónica."
-            },
-            {
-              "label": "Trazabilidad",
-              "content": "Todos los artefactos quedan como referencia permanente. Si la dirección cambia, se crea un nuevo ADR que revoca el anterior."
-            }
-          ],
-          "callout": "<strong>El ciclo se cierra:</strong> la iniciativa vuelve al flujo principal con base técnica sólida. Desde acá puede avanzar al Hub y al sprint planning.",
-          "color": {
-            "primary": "#616161",
-            "soft": "#F0F0F0"
-          }
-        }
-      ]
-    },
     "ext-bau": {
       "label": "Equipo Externo Data",
       "sublabel": "BAU",
@@ -2011,6 +1845,338 @@
           "color": {
             "primary": "#FF6F00",
             "soft": "#FFE9D6"
+          }
+        }
+      ]
+    },
+    "arq-fact-bau": {
+      "label": "Arquitectura Data",
+      "sublabel": "Factibilidad · BAU",
+      "color": "#1F3864",
+      "group": "arq-fact",
+      "nodeSequence": [
+        "factibilidad",
+        "arquitectura-data",
+        "plataforma",
+        "arquitectura-data",
+        "gobierno",
+        "factibilidad"
+      ],
+      "stages": [
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Arquitectura Data · Punto de entrada",
+          "title": "Arquitectura Data recibe el <span class=\"italic\">pedido</span>",
+          "lead": "Durante la Evaluación de Factibilidad Técnica, Arquitectura Data identifica las iniciativas que requieren decisión arquitectónica formal. Evalúa, toma propiedad e inicia el ciclo formal de decisión.",
+          "sections": [
+            {
+              "label": "Qué identifica",
+              "content": "Iniciativas que requieren nueva arquitectura, cambio estructural, evaluación de herramientas o decisiones que afectan múltiples productos."
+            },
+            {
+              "label": "Cómo llega",
+              "content": "Puede venir de cualquier célula técnica, de Business Solution o de Triage. Lo que lo convierte en flujo de Arquitectura es la ausencia de una decisión previa o la necesidad de revisar una existente."
+            },
+            {
+              "label": "Toma de propiedad",
+              "content": "Arquitectura Data es propietaria del proceso desde este punto. Inicia el ciclo: RFC → ADR → HLD → TSR."
+            }
+          ],
+          "callout": "<strong>Para todos:</strong> cuando una iniciativa toca arquitectura nueva, Arquitectura Data toma el volante. No se avanza a implementación sin una decisión formal.",
+          "color": {
+            "primary": "#616161",
+            "soft": "#F0F0F0"
+          }
+        },
+        {
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · RFC y toma de pedidos",
+          "title": "<span class=\"italic\">Arquitectura Data</span> abre el RFC",
+          "lead": "Arquitectura Data toma el pedido y abre un RFC (Request for Comments). Documenta el problema, las opciones técnicas, sus trade-offs, costos estimados y riesgos. Convoca a Plataforma para el ciclo de revisión conjunta.",
+          "sections": [
+            {
+              "label": "RFC",
+              "content": "Propuesta abierta. Arquitectura expone el problema, las opciones y los trade-offs. Equipos técnicos comentan, cuestionan y proponen mejoras."
+            },
+            {
+              "label": "Participan",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura (owner)</span><span class=\"pill\">Plataforma</span><span class=\"pill\">TLs</span><span class=\"pill\">Técnicos varios</span></div>"
+            },
+            {
+              "label": "Contenido del RFC",
+              "content": "Problema, opciones técnicas evaluadas, pros/contras de cada una, costos estimados, riesgos y alternativas."
+            }
+          ],
+          "callout": "<strong>Siguiente paso:</strong> Arquitectura lleva el RFC a Plataforma para revisión técnica, validación operacional y definición del diseño físico.",
+          "color": {
+            "primary": "#1F3864",
+            "soft": "#E8EEF7"
+          }
+        },
+        {
+          "nodeId": "plataforma",
+          "eyebrow": "Arquitectura Data · Ciclo con Plataforma",
+          "title": "Revisión conjunta con <span class=\"italic\">Plataforma</span>",
+          "lead": "Arquitectura lleva el RFC a Plataforma. Plataforma evalúa viabilidad operacional, restricciones de infraestructura y costos reales. Devuelve feedback consolidado. Si hay incertidumbre técnica alta, se lanza un POC Charter antes de decidir.",
+          "sections": [
+            {
+              "label": "Rol de Plataforma",
+              "content": "Evalúa el RFC desde la perspectiva operacional: disponibilidad, escalabilidad, costos reales de infraestructura y restricciones de la plataforma. Su feedback es vinculante."
+            },
+            {
+              "label": "POC Charter (si aplica)",
+              "content": "Cuando la incertidumbre técnica es alta, Arquitectura y Plataforma co-diseñan un POC Charter. El POC reduce riesgos antes de formalizar la decisión en el ADR."
+            },
+            {
+              "label": "Artefactos que produce",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">Feedback RFC</span><span class=\"pill\">Diseño físico (Plataforma)</span><span class=\"pill\">POC Charter (si aplica)</span></div>"
+            }
+          ],
+          "callout": "<strong>Tab dedicado:</strong> el ciclo completo Arquitectura ↔ Plataforma está detallado paso a paso en «Arquitectura ↔ Plataforma». Navegá allí para ver RFC, ADR, HLD y TSR.",
+          "color": {
+            "primary": "#595959",
+            "soft": "#F2F2F2"
+          }
+        },
+        {
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · Consolidación de la decisión",
+          "title": "<span class=\"italic\">Arquitectura</span> formaliza ADR · HLD · TSR",
+          "lead": "Con el feedback de Plataforma incorporado, Arquitectura formaliza la decisión técnica. El ADR es inmutable — documenta la decisión y su contexto para siempre. El HLD es el plano arquitectónico. El TSR co-firmado entre Arquitectura y Plataforma es el gate de calidad.",
+          "sections": [
+            {
+              "label": "ADR",
+              "content": "Architecture Decision Record. Decisión inmutable: problem statement, opciones evaluadas, decisión tomada, consecuencias esperadas. Queda como referencia permanente."
+            },
+            {
+              "label": "HLD + TSR",
+              "content": "High Level Design: el plano de la arquitectura decidida. Technical Solution Review: co-firma entre Arquitectura y Plataforma. Gate de calidad formal antes de continuar."
+            },
+            {
+              "label": "Resultado",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR firmado</span><span class=\"pill\">HLD aprobado</span><span class=\"pill\">TSR co-firmado</span></div>"
+            }
+          ],
+          "callout": "<strong>Si hay implicancias de gobierno:</strong> la decisión pasa por validación de Data Governance antes de cerrar el ciclo y devolver el resultado a Factibilidad.",
+          "color": {
+            "primary": "#1F3864",
+            "soft": "#E8EEF7"
+          }
+        },
+        {
+          "nodeId": "gobierno",
+          "eyebrow": "Arquitectura Data · Gobierno del Dato",
+          "title": "Validación con <span class=\"italic\">Data Governance</span> — si aplica",
+          "lead": "Cuando la decisión arquitectónica involucra datos sensibles, contratos de datos, políticas de PII, catálogo o retención, Data Governance valida antes de cerrar el ciclo. Es un paso condicional que garantiza coherencia con las políticas del banco.",
+          "sections": [
+            {
+              "label": "Cuándo aplica",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">Datos sensibles / PII</span><span class=\"pill\">Contratos de datos</span><span class=\"pill\">Catálogo y metadatos</span><span class=\"pill\">Políticas de retención</span></div>"
+            },
+            {
+              "label": "Qué valida",
+              "content": "Estándares de calidad de datos · compliance · trazabilidad y lineage end-to-end · catálogo y metadatos · monitoreo de métricas de gobierno."
+            },
+            {
+              "label": "Resultado",
+              "content": "Aval de Gobierno para proceder. Sin este aval, cuando aplica, el ciclo no se cierra y la decisión no puede implementarse."
+            }
+          ],
+          "callout": "<strong>Transversal y siempre presente:</strong> Data Governance acompaña todo el ciclo. Este paso es el momento formal de validación cuando la arquitectura decidida impacta políticas de datos.",
+          "color": {
+            "primary": "#1B5E20",
+            "soft": "#E8F5E9"
+          }
+        },
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Arquitectura Data · Cierre del ciclo",
+          "title": "Arquitectura devuelve el <span class=\"italic\">resultado</span>",
+          "lead": "Con ADR aprobado, TSR co-firmado y Gobierno validado (si aplicó), Arquitectura Data devuelve el resultado a Factibilidad Técnica. La iniciativa puede continuar con certeza arquitectónica completa.",
+          "sections": [
+            {
+              "label": "Qué devuelve",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR</span><span class=\"pill\">HLD</span><span class=\"pill\">TSR</span><span class=\"pill\">Aval Gobierno</span></div>"
+            },
+            {
+              "label": "Impacto",
+              "content": "La iniciativa tiene una decisión técnica documentada, aprobada y trazable. Puede proceder al Hub con certeza arquitectónica."
+            },
+            {
+              "label": "Trazabilidad",
+              "content": "Todos los artefactos quedan como referencia permanente. Si la dirección cambia, se crea un nuevo ADR que revoca el anterior."
+            }
+          ],
+          "callout": "<strong>El ciclo se cierra:</strong> la iniciativa vuelve al flujo principal con base técnica sólida. Desde acá puede avanzar al Hub y al sprint planning.",
+          "color": {
+            "primary": "#616161",
+            "soft": "#F0F0F0"
+          }
+        }
+      ]
+    },
+    "arq-fact-dp": {
+      "label": "Arquitectura Data",
+      "sublabel": "Factibilidad · Data Product",
+      "color": "#1F3864",
+      "group": "arq-fact",
+      "nodeSequence": [
+        "factibilidad",
+        "arquitectura-data",
+        "plataforma",
+        "arquitectura-data",
+        "gobierno",
+        "factibilidad"
+      ],
+      "stages": [
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Arquitectura Data · Punto de entrada",
+          "title": "Arquitectura Data recibe el <span class=\"italic\">pedido</span>",
+          "lead": "Durante la Evaluación de Factibilidad Técnica, Arquitectura Data identifica las iniciativas que requieren decisión arquitectónica formal. Evalúa, toma propiedad e inicia el ciclo formal de decisión.",
+          "sections": [
+            {
+              "label": "Qué identifica",
+              "content": "Iniciativas que requieren nueva arquitectura, cambio estructural, evaluación de herramientas o decisiones que afectan múltiples productos."
+            },
+            {
+              "label": "Cómo llega",
+              "content": "Puede venir de cualquier célula técnica, de Business Solution o de Triage. Lo que lo convierte en flujo de Arquitectura es la ausencia de una decisión previa o la necesidad de revisar una existente."
+            },
+            {
+              "label": "Toma de propiedad",
+              "content": "Arquitectura Data es propietaria del proceso desde este punto. Inicia el ciclo: RFC → ADR → HLD → TSR."
+            }
+          ],
+          "callout": "<strong>Para todos:</strong> cuando una iniciativa toca arquitectura nueva, Arquitectura Data toma el volante. No se avanza a implementación sin una decisión formal.",
+          "color": {
+            "primary": "#616161",
+            "soft": "#F0F0F0"
+          }
+        },
+        {
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · RFC y toma de pedidos",
+          "title": "<span class=\"italic\">Arquitectura Data</span> abre el RFC",
+          "lead": "Arquitectura Data toma el pedido y abre un RFC (Request for Comments). Documenta el problema, las opciones técnicas, sus trade-offs, costos estimados y riesgos. Convoca a Plataforma para el ciclo de revisión conjunta.",
+          "sections": [
+            {
+              "label": "RFC",
+              "content": "Propuesta abierta. Arquitectura expone el problema, las opciones y los trade-offs. Equipos técnicos comentan, cuestionan y proponen mejoras."
+            },
+            {
+              "label": "Participan",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">Arquitectura (owner)</span><span class=\"pill\">Plataforma</span><span class=\"pill\">TLs</span><span class=\"pill\">Técnicos varios</span></div>"
+            },
+            {
+              "label": "Contenido del RFC",
+              "content": "Problema, opciones técnicas evaluadas, pros/contras de cada una, costos estimados, riesgos y alternativas."
+            }
+          ],
+          "callout": "<strong>Siguiente paso:</strong> Arquitectura lleva el RFC a Plataforma para revisión técnica, validación operacional y definición del diseño físico.",
+          "color": {
+            "primary": "#1F3864",
+            "soft": "#E8EEF7"
+          }
+        },
+        {
+          "nodeId": "plataforma",
+          "eyebrow": "Arquitectura Data · Ciclo con Plataforma",
+          "title": "Revisión conjunta con <span class=\"italic\">Plataforma</span>",
+          "lead": "Arquitectura lleva el RFC a Plataforma. Plataforma evalúa viabilidad operacional, restricciones de infraestructura y costos reales. Devuelve feedback consolidado. Si hay incertidumbre técnica alta, se lanza un POC Charter antes de decidir.",
+          "sections": [
+            {
+              "label": "Rol de Plataforma",
+              "content": "Evalúa el RFC desde la perspectiva operacional: disponibilidad, escalabilidad, costos reales de infraestructura y restricciones de la plataforma. Su feedback es vinculante."
+            },
+            {
+              "label": "POC Charter (si aplica)",
+              "content": "Cuando la incertidumbre técnica es alta, Arquitectura y Plataforma co-diseñan un POC Charter. El POC reduce riesgos antes de formalizar la decisión en el ADR."
+            },
+            {
+              "label": "Artefactos que produce",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">Feedback RFC</span><span class=\"pill\">Diseño físico (Plataforma)</span><span class=\"pill\">POC Charter (si aplica)</span></div>"
+            }
+          ],
+          "callout": "<strong>Tab dedicado:</strong> el ciclo completo Arquitectura ↔ Plataforma está detallado paso a paso en «Arquitectura ↔ Plataforma». Navegá allí para ver RFC, ADR, HLD y TSR.",
+          "color": {
+            "primary": "#595959",
+            "soft": "#F2F2F2"
+          }
+        },
+        {
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · Consolidación de la decisión",
+          "title": "<span class=\"italic\">Arquitectura</span> formaliza ADR · HLD · TSR",
+          "lead": "Con el feedback de Plataforma incorporado, Arquitectura formaliza la decisión técnica. El ADR es inmutable — documenta la decisión y su contexto para siempre. El HLD es el plano arquitectónico. El TSR co-firmado entre Arquitectura y Plataforma es el gate de calidad.",
+          "sections": [
+            {
+              "label": "ADR",
+              "content": "Architecture Decision Record. Decisión inmutable: problem statement, opciones evaluadas, decisión tomada, consecuencias esperadas. Queda como referencia permanente."
+            },
+            {
+              "label": "HLD + TSR",
+              "content": "High Level Design: el plano de la arquitectura decidida. Technical Solution Review: co-firma entre Arquitectura y Plataforma. Gate de calidad formal antes de continuar."
+            },
+            {
+              "label": "Resultado",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR firmado</span><span class=\"pill\">HLD aprobado</span><span class=\"pill\">TSR co-firmado</span></div>"
+            }
+          ],
+          "callout": "<strong>Si hay implicancias de gobierno:</strong> la decisión pasa por validación de Data Governance antes de cerrar el ciclo y devolver el resultado a Factibilidad.",
+          "color": {
+            "primary": "#1F3864",
+            "soft": "#E8EEF7"
+          }
+        },
+        {
+          "nodeId": "gobierno",
+          "eyebrow": "Arquitectura Data · Gobierno del Dato",
+          "title": "Validación con <span class=\"italic\">Data Governance</span> — si aplica",
+          "lead": "Cuando la decisión arquitectónica involucra datos sensibles, contratos de datos, políticas de PII, catálogo o retención, Data Governance valida antes de cerrar el ciclo. Es un paso condicional que garantiza coherencia con las políticas del banco.",
+          "sections": [
+            {
+              "label": "Cuándo aplica",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">Datos sensibles / PII</span><span class=\"pill\">Contratos de datos</span><span class=\"pill\">Catálogo y metadatos</span><span class=\"pill\">Políticas de retención</span></div>"
+            },
+            {
+              "label": "Qué valida",
+              "content": "Estándares de calidad de datos · compliance · trazabilidad y lineage end-to-end · catálogo y metadatos · monitoreo de métricas de gobierno."
+            },
+            {
+              "label": "Resultado",
+              "content": "Aval de Gobierno para proceder. Sin este aval, cuando aplica, el ciclo no se cierra y la decisión no puede implementarse."
+            }
+          ],
+          "callout": "<strong>Transversal y siempre presente:</strong> Data Governance acompaña todo el ciclo. Este paso es el momento formal de validación cuando la arquitectura decidida impacta políticas de datos.",
+          "color": {
+            "primary": "#1B5E20",
+            "soft": "#E8F5E9"
+          }
+        },
+        {
+          "nodeId": "factibilidad",
+          "eyebrow": "Arquitectura Data · Cierre del ciclo",
+          "title": "Arquitectura devuelve el <span class=\"italic\">resultado</span>",
+          "lead": "Con ADR aprobado, TSR co-firmado y Gobierno validado (si aplicó), Arquitectura Data devuelve el resultado a Factibilidad Técnica. La iniciativa puede continuar con certeza arquitectónica completa.",
+          "sections": [
+            {
+              "label": "Qué devuelve",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR</span><span class=\"pill\">HLD</span><span class=\"pill\">TSR</span><span class=\"pill\">Aval Gobierno</span></div>"
+            },
+            {
+              "label": "Impacto",
+              "content": "La iniciativa tiene una decisión técnica documentada, aprobada y trazable. Puede proceder al Hub con certeza arquitectónica."
+            },
+            {
+              "label": "Trazabilidad",
+              "content": "Todos los artefactos quedan como referencia permanente. Si la dirección cambia, se crea un nuevo ADR que revoca el anterior."
+            }
+          ],
+          "callout": "<strong>El ciclo se cierra:</strong> la iniciativa vuelve al flujo principal con base técnica sólida. Desde acá puede avanzar al Hub y al sprint planning.",
+          "color": {
+            "primary": "#616161",
+            "soft": "#F0F0F0"
           }
         }
       ]
