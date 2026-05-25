@@ -2037,6 +2037,7 @@
         "plataforma",
         "arquitectura-data",
         "gobierno",
+        "seguridad-dato",
         "factibilidad"
       ],
       "stages": [
@@ -2168,14 +2169,39 @@
           }
         },
         {
+          "nodeId": "seguridad-dato",
+          "eyebrow": "Arquitectura Data · Seguridad del Dato",
+          "title": "Validación con <span class=\"italic\">Seguridad del Dato</span> — nexo con Cyber-IDM",
+          "lead": "Cuando la decisión arquitectónica requiere acceso a nuevas fuentes, creación de perfiles GI o habilitación de privilegios, Arquitectura Data debe cerrar con Seguridad del Dato. Este actor coordina con Cyber-IDM (Fabi) para modelar los privilegios antes de que puedan materializarse en los Perfiles GI.",
+          "sections": [
+            {
+              "label": "Cuándo aplica",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">Nueva fuente / conexión</span><span class=\"pill\">Perfil GI nuevo o modificado</span><span class=\"pill\">Acceso privilegiado</span><span class=\"pill\">Fuentes externas (ej. HSBC)</span></div>"
+            },
+            {
+              "label": "Cómo funciona",
+              "content": "Arq detecta la necesidad → Seguridad del Dato negocia con Gobierno del Dato (Lucas) si el Perfil GI lo acepta y con Cyber-IDM (Fabi) para modelar los privilegios. Ambos avales son necesarios para proceder."
+            },
+            {
+              "label": "Resultado",
+              "content": "Aval de Seguridad del Dato + diseño de privilegios acordado con Cyber-IDM. Sin este aval, el acceso no puede habilitarse y el Perfil GI no se publica."
+            }
+          ],
+          "callout": "<strong>Nexo estructural:</strong> Seguridad del Dato es el puente entre Arquitectura Data y Cyber-IDM. No es un trámite — es donde se modela cómo se van a dar los accesos antes de ir a producción.",
+          "color": {
+            "primary": "#F0A30A",
+            "soft": "#FFF8E1"
+          }
+        },
+        {
           "nodeId": "factibilidad",
           "eyebrow": "Arquitectura Data · Cierre del ciclo",
           "title": "Arquitectura devuelve el <span class=\"italic\">resultado</span>",
-          "lead": "Con ADR aprobado, TSR co-firmado y Gobierno validado (si aplicó), Arquitectura Data devuelve el resultado a Factibilidad Técnica. La iniciativa puede continuar con certeza arquitectónica completa.",
+          "lead": "Con ADR aprobado, TSR co-firmado, Gobierno validado y Seguridad del Dato cerrado (si aplicó), Arquitectura Data devuelve el resultado a Factibilidad Técnica. La iniciativa puede continuar con certeza arquitectónica completa.",
           "sections": [
             {
               "label": "Qué devuelve",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR</span><span class=\"pill\">HLD</span><span class=\"pill\">TSR</span><span class=\"pill\">Aval Gobierno</span></div>"
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR</span><span class=\"pill\">HLD</span><span class=\"pill\">TSR</span><span class=\"pill\">Aval Gobierno</span><span class=\"pill\">Aval Seguridad del Dato</span></div>"
             },
             {
               "label": "Impacto",
@@ -2205,6 +2231,7 @@
         "plataforma",
         "arquitectura-data",
         "gobierno",
+        "seguridad-dato",
         "factibilidad"
       ],
       "stages": [
@@ -2336,14 +2363,39 @@
           }
         },
         {
+          "nodeId": "seguridad-dato",
+          "eyebrow": "Arquitectura Data · Seguridad del Dato",
+          "title": "Validación con <span class=\"italic\">Seguridad del Dato</span> — nexo con Cyber-IDM",
+          "lead": "Cuando la decisión arquitectónica requiere acceso a nuevas fuentes, creación de perfiles GI o habilitación de privilegios, Arquitectura Data debe cerrar con Seguridad del Dato. Este actor coordina con Cyber-IDM (Fabi) para modelar los privilegios antes de que puedan materializarse en los Perfiles GI.",
+          "sections": [
+            {
+              "label": "Cuándo aplica",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">Nueva fuente / conexión</span><span class=\"pill\">Perfil GI nuevo o modificado</span><span class=\"pill\">Acceso privilegiado</span><span class=\"pill\">Fuentes externas (ej. HSBC)</span></div>"
+            },
+            {
+              "label": "Cómo funciona",
+              "content": "Arq detecta la necesidad → Seguridad del Dato negocia con Gobierno del Dato (Lucas) si el Perfil GI lo acepta y con Cyber-IDM (Fabi) para modelar los privilegios. Ambos avales son necesarios para proceder."
+            },
+            {
+              "label": "Resultado",
+              "content": "Aval de Seguridad del Dato + diseño de privilegios acordado con Cyber-IDM. Sin este aval, el acceso no puede habilitarse y el Perfil GI no se publica."
+            }
+          ],
+          "callout": "<strong>Nexo estructural:</strong> Seguridad del Dato es el puente entre Arquitectura Data y Cyber-IDM. No es un trámite — es donde se modela cómo se van a dar los accesos antes de ir a producción.",
+          "color": {
+            "primary": "#F0A30A",
+            "soft": "#FFF8E1"
+          }
+        },
+        {
           "nodeId": "factibilidad",
           "eyebrow": "Arquitectura Data · Cierre del ciclo",
           "title": "Arquitectura devuelve el <span class=\"italic\">resultado</span>",
-          "lead": "Con ADR aprobado, TSR co-firmado y Gobierno validado (si aplicó), Arquitectura Data devuelve el resultado a Factibilidad Técnica. La iniciativa puede continuar con certeza arquitectónica completa.",
+          "lead": "Con ADR aprobado, TSR co-firmado, Gobierno validado y Seguridad del Dato cerrado (si aplicó), Arquitectura Data devuelve el resultado a Factibilidad Técnica. La iniciativa puede continuar con certeza arquitectónica completa.",
           "sections": [
             {
               "label": "Qué devuelve",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR</span><span class=\"pill\">HLD</span><span class=\"pill\">TSR</span><span class=\"pill\">Aval Gobierno</span></div>"
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR</span><span class=\"pill\">HLD</span><span class=\"pill\">TSR</span><span class=\"pill\">Aval Gobierno</span><span class=\"pill\">Aval Seguridad del Dato</span></div>"
             },
             {
               "label": "Impacto",

@@ -386,6 +386,58 @@
       "label": "Gobierno",
       "sublabel": "si aplica",
       "colorVar": "--c-gov"
+    },
+    {
+      "id": "seguridad-dato",
+      "stageIndex": 999,
+      "shape": "rect",
+      "geom": {
+        "x": 510,
+        "y": 690,
+        "w": 130,
+        "h": 60,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 710,
+        "labelY": 726,
+        "sublabelY": 739
+      },
+      "pulse": {
+        "cx": 575,
+        "cy": 720,
+        "r": 50
+      },
+      "num": "SEC",
+      "label": "Seguridad",
+      "sublabel": "del Dato",
+      "colorVar": "--c-sec"
+    },
+    {
+      "id": "cyber-idm",
+      "stageIndex": 999,
+      "shape": "rect",
+      "geom": {
+        "x": 510,
+        "y": 775,
+        "w": 130,
+        "h": 60,
+        "rx": 4
+      },
+      "labelPos": {
+        "numY": 795,
+        "labelY": 811,
+        "sublabelY": 824
+      },
+      "pulse": {
+        "cx": 575,
+        "cy": 805,
+        "r": 50
+      },
+      "num": "IDM",
+      "label": "Cyber",
+      "sublabel": "IDM",
+      "colorVar": "--c-cyber"
     }
   ],
   "edges": [
@@ -587,6 +639,46 @@
       "connects": [
         "arquitectura-data",
         "robustez-tecnica"
+      ],
+      "activeAt": [],
+      "pastFrom": 999
+    },
+    {
+      "id": "e-arq-sec",
+      "d": "M 640 465 C 658 465, 658 720, 640 720",
+      "connects": [
+        "arquitectura-data",
+        "seguridad-dato"
+      ],
+      "activeAt": [],
+      "pastFrom": 999
+    },
+    {
+      "id": "e-sec-arq",
+      "d": "M 640 710 C 660 710, 660 460, 642 458",
+      "connects": [
+        "seguridad-dato",
+        "arquitectura-data"
+      ],
+      "activeAt": [],
+      "pastFrom": 999
+    },
+    {
+      "id": "e-sec-idm",
+      "d": "M 555 750 L 555 775",
+      "connects": [
+        "seguridad-dato",
+        "cyber-idm"
+      ],
+      "activeAt": [],
+      "pastFrom": 999
+    },
+    {
+      "id": "e-idm-sec",
+      "d": "M 595 775 L 595 750",
+      "connects": [
+        "cyber-idm",
+        "seguridad-dato"
       ],
       "activeAt": [],
       "pastFrom": 999
