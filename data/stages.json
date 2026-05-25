@@ -2037,7 +2037,11 @@
         "plataforma",
         "arquitectura-data",
         "gobierno",
+        "arquitectura-data",
         "seguridad-dato",
+        "cyber-idm",
+        "seguridad-dato",
+        "arquitectura-data",
         "factibilidad"
       ],
       "stages": [
@@ -2169,35 +2173,123 @@
           }
         },
         {
-          "nodeId": "seguridad-dato",
-          "eyebrow": "Arquitectura Data · Seguridad del Dato",
-          "title": "Validación con <span class=\"italic\">Seguridad del Dato</span> — nexo con Cyber-IDM",
-          "lead": "Cuando la decisión arquitectónica requiere acceso a nuevas fuentes, creación de perfiles GI o habilitación de privilegios, Arquitectura Data debe cerrar con Seguridad del Dato. Este actor coordina con Cyber-IDM (Fabi) para modelar los privilegios antes de que puedan materializarse en los Perfiles GI.",
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · Post-Gobierno",
+          "title": "<span class=\"italic\">Arquitectura</span> recibe el aval de Gobierno y evalúa accesos",
+          "lead": "Con el aval de Gobierno del Dato obtenido, Arquitectura Data evalúa si la decisión también requiere gestión de accesos o nuevos privilegios. Si la fuente es nueva, si se necesita un perfil GI modificado o si hay acceso a datos externos, se activa el circuito de Seguridad del Dato.",
           "sections": [
             {
-              "label": "Cuándo aplica",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Nueva fuente / conexión</span><span class=\"pill\">Perfil GI nuevo o modificado</span><span class=\"pill\">Acceso privilegiado</span><span class=\"pill\">Fuentes externas (ej. HSBC)</span></div>"
+              "label": "Bifurcación",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">¿Nueva fuente?</span><span class=\"pill\">¿Perfil GI nuevo/modificado?</span><span class=\"pill\">¿Fuente externa?</span></div>"
             },
             {
-              "label": "Cómo funciona",
-              "content": "Arq detecta la necesidad → Seguridad del Dato negocia con Gobierno del Dato (Lucas) si el Perfil GI lo acepta y con Cyber-IDM (Fabi) para modelar los privilegios. Ambos avales son necesarios para proceder."
+              "label": "Si aplica",
+              "content": "Arquitectura Data abre el pedido hacia Seguridad del Dato. Le traslada el contexto: qué se necesita, por qué, y qué impacto tiene en los Perfiles GI."
             },
             {
-              "label": "Resultado",
-              "content": "Aval de Seguridad del Dato + diseño de privilegios acordado con Cyber-IDM. Sin este aval, el acceso no puede habilitarse y el Perfil GI no se publica."
+              "label": "Si no aplica",
+              "content": "El ciclo de seguridad se omite y Arquitectura devuelve directamente el resultado a Factibilidad."
             }
           ],
-          "callout": "<strong>Nexo estructural:</strong> Seguridad del Dato es el puente entre Arquitectura Data y Cyber-IDM. No es un trámite — es donde se modela cómo se van a dar los accesos antes de ir a producción.",
+          "callout": "<strong>Gate de seguridad:</strong> ningún acceso nuevo entra a los Perfiles GI sin pasar primero por Seguridad del Dato y Cyber-IDM.",
+          "color": {
+            "primary": "#1F3864",
+            "soft": "#E8EEF7"
+          }
+        },
+        {
+          "nodeId": "seguridad-dato",
+          "eyebrow": "Seguridad del Dato · Propuesta de acceso",
+          "title": "<span class=\"italic\">Seguridad del Dato</span> recibe el pedido y arma la propuesta",
+          "lead": "Seguridad del Dato recibe de Arquitectura Data el contexto del acceso requerido. Analiza qué privilegios se necesitan, cómo deben estructurarse y qué impacto tienen en el modelo de seguridad del banco. Arma la propuesta para llevar a Cyber-IDM.",
+          "sections": [
+            {
+              "label": "Qué analiza",
+              "content": "Tipo de acceso requerido · sensibilidad del dato · impacto en Perfiles GI existentes · modelo de privilegios mínimos necesarios."
+            },
+            {
+              "label": "Qué lleva a Cyber-IDM",
+              "content": "Propuesta de diseño de privilegios: quién accede, a qué, con qué scope y bajo qué condiciones."
+            }
+          ],
+          "callout": "<strong>Nexo estructural:</strong> Seguridad del Dato no solo traslada el pedido — lo estructura. Llega a Cyber-IDM con una propuesta, no con una consulta abierta.",
           "color": {
             "primary": "#F0A30A",
             "soft": "#FFF8E1"
           }
         },
         {
+          "nodeId": "cyber-idm",
+          "eyebrow": "Cyber-IDM · Negociación de privilegios",
+          "title": "<span class=\"italic\">Cyber-IDM</span> negocia y valida el diseño de privilegios",
+          "lead": "Cyber-IDM (Fabi) recibe la propuesta de Seguridad del Dato y la evalúa contra las políticas de ciberseguridad del banco. Negocia el modelo de acceso: puede aprobar, ajustar o rechazar la propuesta. El resultado es el diseño de privilegios definitivo que podrá implementarse en los Perfiles GI.",
+          "sections": [
+            {
+              "label": "Qué evalúa",
+              "content": "Políticas de cyberseguridad · modelo de privilegios mínimos · segregación de funciones · auditabilidad del acceso."
+            },
+            {
+              "label": "Resultado posible",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">Aprobado tal cual</span><span class=\"pill\">Aprobado con ajustes</span><span class=\"pill\">Rechazado — rediseñar</span></div>"
+            },
+            {
+              "label": "Ejemplo",
+              "content": "HSBC como nueva fuente: Cyber-IDM define cómo se dan los privilegios de acceso y qué forma toman antes de ir al Perfil GI."
+            }
+          ],
+          "callout": "<strong>Sin el OK de Cyber-IDM no hay Perfil GI.</strong> Este es el punto donde ciberseguridad tiene la última palabra sobre el modelo de acceso.",
+          "color": {
+            "primary": "#6d8764",
+            "soft": "#EEF2EA"
+          }
+        },
+        {
+          "nodeId": "seguridad-dato",
+          "eyebrow": "Seguridad del Dato · Cierre del circuito",
+          "title": "<span class=\"italic\">Seguridad del Dato</span> vuelve con el diseño cerrado",
+          "lead": "Seguridad del Dato recibe el diseño de privilegios validado por Cyber-IDM y lo consolida. Notifica a Arquitectura Data que el circuito de accesos está cerrado y que el Perfil GI puede avanzar.",
+          "sections": [
+            {
+              "label": "Qué entrega",
+              "content": "Diseño de privilegios aprobado por Cyber-IDM · confirmación de que el Perfil GI puede publicarse · documentación del modelo de acceso acordado."
+            },
+            {
+              "label": "Si hubo ajustes",
+              "content": "Seguridad del Dato reconcilia los ajustes de Cyber-IDM con el pedido original de Arquitectura antes de notificar el cierre."
+            }
+          ],
+          "callout": "<strong>El circuito se cierra en Seguridad del Dato:</strong> es quien integra el resultado de Cyber-IDM y devuelve el aval consolidado a Arquitectura.",
+          "color": {
+            "primary": "#F0A30A",
+            "soft": "#FFF8E1"
+          }
+        },
+        {
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · Consolidación final",
+          "title": "<span class=\"italic\">Arquitectura</span> consolida todos los avales",
+          "lead": "Con el aval de Gobierno del Dato y el diseño de privilegios cerrado por Seguridad del Dato, Arquitectura Data tiene todo lo necesario para devolver el resultado completo a Factibilidad Técnica.",
+          "sections": [
+            {
+              "label": "Avales obtenidos",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR firmado</span><span class=\"pill\">TSR co-firmado</span><span class=\"pill\">Aval Gobierno del Dato</span><span class=\"pill\">Aval Seguridad del Dato</span></div>"
+            },
+            {
+              "label": "Qué documenta",
+              "content": "El HLD refleja el modelo de acceso acordado. El ADR registra las decisiones de acceso como parte de la decisión arquitectónica total."
+            }
+          ],
+          "callout": "<strong>Arquitectura es el integrador:</strong> recibe todos los avales, los consolida en los artefactos formales y devuelve la decisión completa al flujo principal.",
+          "color": {
+            "primary": "#1F3864",
+            "soft": "#E8EEF7"
+          }
+        },
+        {
           "nodeId": "factibilidad",
           "eyebrow": "Arquitectura Data · Cierre del ciclo",
           "title": "Arquitectura devuelve el <span class=\"italic\">resultado</span>",
-          "lead": "Con ADR aprobado, TSR co-firmado, Gobierno validado y Seguridad del Dato cerrado (si aplicó), Arquitectura Data devuelve el resultado a Factibilidad Técnica. La iniciativa puede continuar con certeza arquitectónica completa.",
+          "lead": "Con ADR aprobado, TSR co-firmado, aval de Gobierno del Dato y diseño de accesos cerrado con Seguridad del Dato y Cyber-IDM, Arquitectura Data devuelve el resultado completo a Factibilidad Técnica.",
           "sections": [
             {
               "label": "Qué devuelve",
@@ -2205,14 +2297,14 @@
             },
             {
               "label": "Impacto",
-              "content": "La iniciativa tiene una decisión técnica documentada, aprobada y trazable. Puede proceder al Hub con certeza arquitectónica."
+              "content": "La iniciativa tiene una decisión técnica documentada, aprobada y trazable. Puede proceder al Hub con certeza arquitectónica y de accesos."
             },
             {
               "label": "Trazabilidad",
               "content": "Todos los artefactos quedan como referencia permanente. Si la dirección cambia, se crea un nuevo ADR que revoca el anterior."
             }
           ],
-          "callout": "<strong>El ciclo se cierra:</strong> la iniciativa vuelve al flujo principal con base técnica sólida. Desde acá puede avanzar al Hub y al sprint planning.",
+          "callout": "<strong>El ciclo se cierra:</strong> la iniciativa vuelve al flujo principal con base técnica sólida y accesos modelados. Desde acá puede avanzar al Hub y al sprint planning.",
           "color": {
             "primary": "#616161",
             "soft": "#F0F0F0"
@@ -2231,7 +2323,11 @@
         "plataforma",
         "arquitectura-data",
         "gobierno",
+        "arquitectura-data",
         "seguridad-dato",
+        "cyber-idm",
+        "seguridad-dato",
+        "arquitectura-data",
         "factibilidad"
       ],
       "stages": [
@@ -2363,35 +2459,123 @@
           }
         },
         {
-          "nodeId": "seguridad-dato",
-          "eyebrow": "Arquitectura Data · Seguridad del Dato",
-          "title": "Validación con <span class=\"italic\">Seguridad del Dato</span> — nexo con Cyber-IDM",
-          "lead": "Cuando la decisión arquitectónica requiere acceso a nuevas fuentes, creación de perfiles GI o habilitación de privilegios, Arquitectura Data debe cerrar con Seguridad del Dato. Este actor coordina con Cyber-IDM (Fabi) para modelar los privilegios antes de que puedan materializarse en los Perfiles GI.",
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · Post-Gobierno",
+          "title": "<span class=\"italic\">Arquitectura</span> recibe el aval de Gobierno y evalúa accesos",
+          "lead": "Con el aval de Gobierno del Dato obtenido, Arquitectura Data evalúa si la decisión también requiere gestión de accesos o nuevos privilegios. Si la fuente es nueva, si se necesita un perfil GI modificado o si hay acceso a datos externos, se activa el circuito de Seguridad del Dato.",
           "sections": [
             {
-              "label": "Cuándo aplica",
-              "content": "<div class=\"pill-grid\"><span class=\"pill\">Nueva fuente / conexión</span><span class=\"pill\">Perfil GI nuevo o modificado</span><span class=\"pill\">Acceso privilegiado</span><span class=\"pill\">Fuentes externas (ej. HSBC)</span></div>"
+              "label": "Bifurcación",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">¿Nueva fuente?</span><span class=\"pill\">¿Perfil GI nuevo/modificado?</span><span class=\"pill\">¿Fuente externa?</span></div>"
             },
             {
-              "label": "Cómo funciona",
-              "content": "Arq detecta la necesidad → Seguridad del Dato negocia con Gobierno del Dato (Lucas) si el Perfil GI lo acepta y con Cyber-IDM (Fabi) para modelar los privilegios. Ambos avales son necesarios para proceder."
+              "label": "Si aplica",
+              "content": "Arquitectura Data abre el pedido hacia Seguridad del Dato. Le traslada el contexto: qué se necesita, por qué, y qué impacto tiene en los Perfiles GI."
             },
             {
-              "label": "Resultado",
-              "content": "Aval de Seguridad del Dato + diseño de privilegios acordado con Cyber-IDM. Sin este aval, el acceso no puede habilitarse y el Perfil GI no se publica."
+              "label": "Si no aplica",
+              "content": "El ciclo de seguridad se omite y Arquitectura devuelve directamente el resultado a Factibilidad."
             }
           ],
-          "callout": "<strong>Nexo estructural:</strong> Seguridad del Dato es el puente entre Arquitectura Data y Cyber-IDM. No es un trámite — es donde se modela cómo se van a dar los accesos antes de ir a producción.",
+          "callout": "<strong>Gate de seguridad:</strong> ningún acceso nuevo entra a los Perfiles GI sin pasar primero por Seguridad del Dato y Cyber-IDM.",
+          "color": {
+            "primary": "#1F3864",
+            "soft": "#E8EEF7"
+          }
+        },
+        {
+          "nodeId": "seguridad-dato",
+          "eyebrow": "Seguridad del Dato · Propuesta de acceso",
+          "title": "<span class=\"italic\">Seguridad del Dato</span> recibe el pedido y arma la propuesta",
+          "lead": "Seguridad del Dato recibe de Arquitectura Data el contexto del acceso requerido. Analiza qué privilegios se necesitan, cómo deben estructurarse y qué impacto tienen en el modelo de seguridad del banco. Arma la propuesta para llevar a Cyber-IDM.",
+          "sections": [
+            {
+              "label": "Qué analiza",
+              "content": "Tipo de acceso requerido · sensibilidad del dato · impacto en Perfiles GI existentes · modelo de privilegios mínimos necesarios."
+            },
+            {
+              "label": "Qué lleva a Cyber-IDM",
+              "content": "Propuesta de diseño de privilegios: quién accede, a qué, con qué scope y bajo qué condiciones."
+            }
+          ],
+          "callout": "<strong>Nexo estructural:</strong> Seguridad del Dato no solo traslada el pedido — lo estructura. Llega a Cyber-IDM con una propuesta, no con una consulta abierta.",
           "color": {
             "primary": "#F0A30A",
             "soft": "#FFF8E1"
           }
         },
         {
+          "nodeId": "cyber-idm",
+          "eyebrow": "Cyber-IDM · Negociación de privilegios",
+          "title": "<span class=\"italic\">Cyber-IDM</span> negocia y valida el diseño de privilegios",
+          "lead": "Cyber-IDM (Fabi) recibe la propuesta de Seguridad del Dato y la evalúa contra las políticas de ciberseguridad del banco. Negocia el modelo de acceso: puede aprobar, ajustar o rechazar la propuesta. El resultado es el diseño de privilegios definitivo que podrá implementarse en los Perfiles GI.",
+          "sections": [
+            {
+              "label": "Qué evalúa",
+              "content": "Políticas de cyberseguridad · modelo de privilegios mínimos · segregación de funciones · auditabilidad del acceso."
+            },
+            {
+              "label": "Resultado posible",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">Aprobado tal cual</span><span class=\"pill\">Aprobado con ajustes</span><span class=\"pill\">Rechazado — rediseñar</span></div>"
+            },
+            {
+              "label": "Ejemplo",
+              "content": "HSBC como nueva fuente: Cyber-IDM define cómo se dan los privilegios de acceso y qué forma toman antes de ir al Perfil GI."
+            }
+          ],
+          "callout": "<strong>Sin el OK de Cyber-IDM no hay Perfil GI.</strong> Este es el punto donde ciberseguridad tiene la última palabra sobre el modelo de acceso.",
+          "color": {
+            "primary": "#6d8764",
+            "soft": "#EEF2EA"
+          }
+        },
+        {
+          "nodeId": "seguridad-dato",
+          "eyebrow": "Seguridad del Dato · Cierre del circuito",
+          "title": "<span class=\"italic\">Seguridad del Dato</span> vuelve con el diseño cerrado",
+          "lead": "Seguridad del Dato recibe el diseño de privilegios validado por Cyber-IDM y lo consolida. Notifica a Arquitectura Data que el circuito de accesos está cerrado y que el Perfil GI puede avanzar.",
+          "sections": [
+            {
+              "label": "Qué entrega",
+              "content": "Diseño de privilegios aprobado por Cyber-IDM · confirmación de que el Perfil GI puede publicarse · documentación del modelo de acceso acordado."
+            },
+            {
+              "label": "Si hubo ajustes",
+              "content": "Seguridad del Dato reconcilia los ajustes de Cyber-IDM con el pedido original de Arquitectura antes de notificar el cierre."
+            }
+          ],
+          "callout": "<strong>El circuito se cierra en Seguridad del Dato:</strong> es quien integra el resultado de Cyber-IDM y devuelve el aval consolidado a Arquitectura.",
+          "color": {
+            "primary": "#F0A30A",
+            "soft": "#FFF8E1"
+          }
+        },
+        {
+          "nodeId": "arquitectura-data",
+          "eyebrow": "Arquitectura Data · Consolidación final",
+          "title": "<span class=\"italic\">Arquitectura</span> consolida todos los avales",
+          "lead": "Con el aval de Gobierno del Dato y el diseño de privilegios cerrado por Seguridad del Dato, Arquitectura Data tiene todo lo necesario para devolver el resultado completo a Factibilidad Técnica.",
+          "sections": [
+            {
+              "label": "Avales obtenidos",
+              "content": "<div class=\"pill-grid\"><span class=\"pill\">ADR firmado</span><span class=\"pill\">TSR co-firmado</span><span class=\"pill\">Aval Gobierno del Dato</span><span class=\"pill\">Aval Seguridad del Dato</span></div>"
+            },
+            {
+              "label": "Qué documenta",
+              "content": "El HLD refleja el modelo de acceso acordado. El ADR registra las decisiones de acceso como parte de la decisión arquitectónica total."
+            }
+          ],
+          "callout": "<strong>Arquitectura es el integrador:</strong> recibe todos los avales, los consolida en los artefactos formales y devuelve la decisión completa al flujo principal.",
+          "color": {
+            "primary": "#1F3864",
+            "soft": "#E8EEF7"
+          }
+        },
+        {
           "nodeId": "factibilidad",
           "eyebrow": "Arquitectura Data · Cierre del ciclo",
           "title": "Arquitectura devuelve el <span class=\"italic\">resultado</span>",
-          "lead": "Con ADR aprobado, TSR co-firmado, Gobierno validado y Seguridad del Dato cerrado (si aplicó), Arquitectura Data devuelve el resultado a Factibilidad Técnica. La iniciativa puede continuar con certeza arquitectónica completa.",
+          "lead": "Con ADR aprobado, TSR co-firmado, aval de Gobierno del Dato y diseño de accesos cerrado con Seguridad del Dato y Cyber-IDM, Arquitectura Data devuelve el resultado completo a Factibilidad Técnica.",
           "sections": [
             {
               "label": "Qué devuelve",
@@ -2399,14 +2583,14 @@
             },
             {
               "label": "Impacto",
-              "content": "La iniciativa tiene una decisión técnica documentada, aprobada y trazable. Puede proceder al Hub con certeza arquitectónica."
+              "content": "La iniciativa tiene una decisión técnica documentada, aprobada y trazable. Puede proceder al Hub con certeza arquitectónica y de accesos."
             },
             {
               "label": "Trazabilidad",
               "content": "Todos los artefactos quedan como referencia permanente. Si la dirección cambia, se crea un nuevo ADR que revoca el anterior."
             }
           ],
-          "callout": "<strong>El ciclo se cierra:</strong> la iniciativa vuelve al flujo principal con base técnica sólida. Desde acá puede avanzar al Hub y al sprint planning.",
+          "callout": "<strong>El ciclo se cierra:</strong> la iniciativa vuelve al flujo principal con base técnica sólida y accesos modelados. Desde acá puede avanzar al Hub y al sprint planning.",
           "color": {
             "primary": "#616161",
             "soft": "#F0F0F0"
