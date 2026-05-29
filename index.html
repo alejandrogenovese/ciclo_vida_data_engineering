@@ -23,6 +23,12 @@
     <button class="tab-btn" data-diagram="architecture-platform" id="tab-architecture-platform">
       Arquitectura ↔ Plataforma
     </button>
+    <button class="tab-btn" data-diagram="seguimiento" id="tab-seguimiento">
+      Seguimiento
+    </button>
+    <button class="tab-btn tab-admin-only" data-diagram="admin-usuarios" id="tab-admin-usuarios" style="display:none">
+      ⚙ Usuarios
+    </button>
   </div>
   <div class="header-meta">
     <span id="brand-org">Banco Galicia</span>
@@ -113,6 +119,116 @@
   <aside class="narrative" id="narrative">
     <div class="narrative-loading">Cargando…</div>
   </aside>
+
+  <!-- ============ PANEL SEGUIMIENTO ============ -->
+  <section class="full-panel" id="panel-seguimiento" style="display:none">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <h2 class="panel-title">Seguimiento de Data Products</h2>
+        <p class="panel-subtitle">Visualizá el estadio actual de cada data product y su vinculación con ServiceNow</p>
+      </div>
+      <div class="panel-header-actions">
+        <div class="seguimiento-search-wrap">
+          <input class="seguimiento-search" id="seguimientoSearch" type="text" placeholder="Buscar data product…">
+        </div>
+        <button class="btn btn-primary" id="nuevoDataProductBtn">+ Nuevo</button>
+      </div>
+    </div>
+
+    <!-- Kanban de estadios -->
+    <div class="estadios-kanban" id="estadiosKanban">
+      <!-- Columnas generadas por JS -->
+    </div>
+
+    <!-- Modal detalle -->
+    <div class="dp-modal-backdrop" id="dpModalBackdrop" style="display:none">
+      <div class="dp-modal" id="dpModal">
+        <div class="dp-modal-header">
+          <h3 class="dp-modal-title" id="dpModalTitle">Data Product</h3>
+          <button class="dp-modal-close" id="dpModalClose">✕</button>
+        </div>
+        <div class="dp-modal-body" id="dpModalBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PANEL ADMIN USUARIOS ============ -->
+  <section class="full-panel" id="panel-admin-usuarios" style="display:none">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <h2 class="panel-title">Administración de Usuarios</h2>
+        <p class="panel-subtitle">Gestión local de usuarios (integración AD pendiente)</p>
+      </div>
+      <div class="panel-header-actions">
+        <button class="btn btn-primary" id="nuevoUsuarioBtn">+ Nuevo usuario</button>
+      </div>
+    </div>
+
+    <div class="usuarios-table-wrap">
+      <table class="usuarios-table" id="usuariosTable">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Creado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="usuariosTbody">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Formulario usuario (modal) -->
+    <div class="dp-modal-backdrop" id="usuarioModalBackdrop" style="display:none">
+      <div class="dp-modal" id="usuarioModal">
+        <div class="dp-modal-header">
+          <h3 class="dp-modal-title" id="usuarioModalTitle">Nuevo usuario</h3>
+          <button class="dp-modal-close" id="usuarioModalClose">✕</button>
+        </div>
+        <div class="dp-modal-body">
+          <form id="usuarioForm" autocomplete="off">
+            <input type="hidden" id="usuarioFormId">
+            <div class="form-field">
+              <label class="form-label">Usuario *</label>
+              <input class="form-input" id="usuarioFormUsername" type="text" placeholder="jgarcia" autocomplete="off">
+            </div>
+            <div class="form-field">
+              <label class="form-label">Nombre completo *</label>
+              <input class="form-input" id="usuarioFormNombre" type="text" placeholder="Juan García">
+            </div>
+            <div class="form-field">
+              <label class="form-label">Contraseña *</label>
+              <input class="form-input" id="usuarioFormPassword" type="password" placeholder="••••••••" autocomplete="new-password">
+            </div>
+            <div class="form-field">
+              <label class="form-label">Rol</label>
+              <select class="form-input" id="usuarioFormRol">
+                <option value="visor">Visor</option>
+                <option value="editor">Editor</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Estado</label>
+              <select class="form-input" id="usuarioFormEstado">
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
+              </select>
+            </div>
+            <div class="form-error" id="usuarioFormError"></div>
+            <div class="form-actions">
+              <button type="button" class="btn" id="usuarioFormCancel">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>

@@ -1903,7 +1903,6 @@ kbd {
 .login-shake { animation: loginShake .4s ease; }
 
 /* ============ CELL PILLS (células de negocio) ============ */
-/* Variante de .pill con color de texto propio y sin depender del actor color */
 .pill.pill-cell {
   font-weight: 600;
   font-size: 10px;
@@ -1911,3 +1910,479 @@ kbd {
   text-transform: uppercase;
   border-width: 1.5px;
 }
+
+/* ============================================================
+   FULL PANELS (Seguimiento / Admin)
+   ============================================================ */
+
+/* El panel ocupa todo el espacio del <main> */
+.full-panel {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ── Panel header ── */
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 32px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-elev);
+  flex-shrink: 0;
+}
+
+.panel-header-left { display: flex; flex-direction: column; gap: 4px; }
+
+.panel-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+
+.panel-subtitle {
+  font-size: 12px;
+  color: var(--ink-mute);
+}
+
+.panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   SEGUIMIENTO — KANBAN
+   ============================================================ */
+
+.estadios-kanban {
+  display: flex;
+  gap: 0;
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0;
+}
+
+.estadio-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  flex: 1;
+  border-right: 1px solid var(--line);
+  overflow: hidden;
+}
+.estadio-col:last-child { border-right: none; }
+
+.estadio-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--est-color, var(--accent));
+  background: var(--bg-elev);
+  flex-shrink: 0;
+}
+
+.estadio-col-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--est-color, var(--ink));
+}
+
+.estadio-col-count {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--est-color, var(--ink));
+  background: color-mix(in srgb, var(--est-color, var(--accent)) 12%, transparent);
+  border-radius: 99px;
+  padding: 1px 8px;
+}
+
+.estadio-col-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.estadio-empty {
+  font-size: 11px;
+  color: var(--ink-mute);
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* ── DP Card ── */
+.dp-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid var(--est-color, var(--accent));
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: box-shadow .15s, border-color .15s;
+}
+
+.dp-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,.07);
+  border-left-width: 4px;
+}
+
+.dp-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dp-card-nombre {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.dp-snow-badge {
+  font-family: 'Geist Mono', monospace;
+  font-size: 9px;
+  background: color-mix(in srgb, var(--c-hub) 10%, transparent);
+  color: var(--c-hub);
+  border: 1px solid color-mix(in srgb, var(--c-hub) 25%, transparent);
+  border-radius: 3px;
+  padding: 2px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dp-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dp-card-equipo, .dp-card-resp {
+  font-size: 10px;
+  color: var(--ink-mute);
+}
+
+.dp-card-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+/* ── Botones pequeños en las tarjetas ── */
+.dp-btn {
+  font-family: 'Geist', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.dp-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+.dp-btn-delete:hover { background: #c0392b; border-color: #c0392b; color: #fff; }
+.dp-btn-move-left, .dp-btn-move-right { font-size: 11px; padding: 3px 6px; }
+.dp-btn-add-col { font-size: 11px; text-align: center; }
+
+/* ── Search ── */
+.seguimiento-search-wrap { position: relative; }
+.seguimiento-search {
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg-elev);
+  color: var(--ink);
+  font-family: 'Geist', sans-serif;
+  font-size: 13px;
+  width: 220px;
+  transition: border-color .15s;
+}
+.seguimiento-search:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* ============================================================
+   DP MODAL / USUARIO MODAL
+   ============================================================ */
+
+.dp-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(13,27,42,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  backdrop-filter: blur(2px);
+}
+
+.dp-modal {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  width: min(560px, 92vw);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 60px rgba(0,0,0,.18);
+  overflow: hidden;
+}
+
+.dp-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+.dp-modal-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 19px;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.dp-modal-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--ink-mute);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all .15s;
+}
+.dp-modal-close:hover { background: var(--line-soft); color: var(--ink); }
+
+.dp-modal-body {
+  padding: 20px 22px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Detalle data product ── */
+.dp-detail-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.dp-detail-row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.dp-detail-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.dp-detail-val {
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.dp-detail-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.dp-snow-link {
+  color: var(--c-hub);
+  text-decoration: none;
+  font-weight: 500;
+}
+.dp-snow-link:hover { text-decoration: underline; }
+
+.dp-muted { color: var(--ink-mute); font-size: 12px; }
+
+.dp-divider {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 4px 0;
+}
+
+.dp-edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ============================================================
+   FORMULARIOS GENÉRICOS (nuevo DP, usuario)
+   ============================================================ */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.form-input {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Geist', sans-serif;
+  font-size: 13px;
+  transition: border-color .15s, box-shadow .15s;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.form-error {
+  min-height: 16px;
+  font-size: 11px;
+  color: #c0392b;
+  font-weight: 500;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line-soft);
+}
+
+/* ============================================================
+   ADMIN — TABLA DE USUARIOS
+   ============================================================ */
+
+.usuarios-table-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: 24px 32px;
+}
+
+.usuarios-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.usuarios-table th {
+  font-family: 'Geist Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--line);
+  white-space: nowrap;
+}
+
+.usuarios-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--ink);
+  vertical-align: middle;
+}
+
+.usuarios-table tbody tr:hover td {
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
+}
+
+.usuarios-table code {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  background: var(--bg);
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+/* ── Badges de rol ── */
+.rol-badge {
+  display: inline-block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 3px;
+}
+
+.rol-admin  { background: color-mix(in srgb,var(--accent) 12%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb,var(--accent) 25%,transparent); }
+.rol-editor { background: color-mix(in srgb,var(--c-tr) 12%, transparent);   color: var(--c-tr);   border: 1px solid color-mix(in srgb,var(--c-tr) 25%,transparent); }
+.rol-visor  { background: color-mix(in srgb,var(--ink-mute) 12%, transparent); color: var(--ink-mute); border: 1px solid var(--line); }
+
+/* ── Badges de estado ── */
+.estado-badge {
+  display: inline-block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.estado-activo   { background: color-mix(in srgb,var(--c-tr) 12%,transparent); color: var(--c-tr); border: 1px solid color-mix(in srgb,var(--c-tr) 25%,transparent); }
+.estado-inactivo { background: color-mix(in srgb,var(--c-fact) 10%,transparent); color: var(--c-fact); border: 1px solid var(--line); }

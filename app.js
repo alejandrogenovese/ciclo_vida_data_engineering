@@ -109,6 +109,10 @@ function applyRoleUI(role) {
       location.reload();
     });
   }
+
+  // Tab admin — solo para rol admin
+  const adminTab = document.getElementById('tab-admin-usuarios');
+  if (adminTab) adminTab.style.display = role === 'admin' ? '' : 'none';
 }
 
 // ============ STATE ============
@@ -1257,10 +1261,523 @@ function bindEvents() {
 }
 
 // ============ COVER SCREEN ============
-// El cover ahora es la pantalla de login unificada.
-// El dismiss lo maneja initLogin() al autenticar correctamente.
-// Esta función es un no-op mantenida por compatibilidad.
 function initCover() {}
+
+// ============================================================
+// GESTIÓN DE VISTAS (diagrama / seguimiento / admin)
+// ============================================================
+const DIAGRAM_PANELS = ['ciclo-vida', 'architecture-platform'];
+const SPECIAL_PANELS = {
+  'seguimiento':    'panel-seguimiento',
+  'admin-usuarios': 'panel-admin-usuarios',
+};
+
+function showPanel(diagramName) {
+  // Ocultar main content (SVG + narrative + flowbar)
+  const diagramPane  = document.querySelector('.diagram-pane');
+  const narrativeEl  = document.getElementById('narrative');
+  const flowBar      = document.getElementById('flowSelectorBar');
+  const footer       = document.querySelector('footer');
+
+  const isSpecial = diagramName in SPECIAL_PANELS;
+
+  if (diagramPane)  diagramPane.style.display  = isSpecial ? 'none' : '';
+  if (narrativeEl)  narrativeEl.style.display   = isSpecial ? 'none' : '';
+  if (flowBar)      flowBar.style.display       = isSpecial ? 'none' : (diagramName === 'ciclo-vida' ? 'flex' : 'none');
+  if (footer)       footer.style.display        = isSpecial ? 'none' : '';
+
+  // Ocultar todos los paneles especiales
+  Object.values(SPECIAL_PANELS).forEach(panelId => {
+    const el = document.getElementById(panelId);
+    if (el) el.style.display = 'none';
+  });
+
+  // Mostrar el panel correcto
+  if (isSpecial) {
+    const panelId = SPECIAL_PANELS[diagramName];
+    const panel = document.getElementById(panelId);
+    if (panel) panel.style.display = 'flex';
+  }
+
+  // Actualizar tabs activos
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('tab-active', btn.dataset.diagram === diagramName);
+  });
+}
+
+// Override de switchDiagram para interceptar los paneles especiales
+const _originalSwitchDiagram = switchDiagram;
+function switchDiagramWithPanels(diagramName) {
+  if (diagramName in SPECIAL_PANELS) {
+    showPanel(diagramName);
+    if (diagramName === 'seguimiento') renderSeguimiento();
+    if (diagramName === 'admin-usuarios') renderUsuarios();
+    return;
+  }
+  showPanel(diagramName);
+  _originalSwitchDiagram(diagramName);
+}
+
+// ============================================================
+// MÓDULO: SEGUIMIENTO DE DATA PRODUCTS
+// ============================================================
+
+const ESTADIOS = [
+  { id: 'ideacion',      label: 'Ideación',       color: '#FF8C00' },
+  { id: 'factibilidad',  label: 'Factibilidad',    color: '#1565C0' },
+  { id: 'diseno',        label: 'Diseño',          color: '#7B1FA2' },
+  { id: 'desarrollo',    label: 'Desarrollo',      color: '#2E7D32' },
+  { id: 'qa',            label: 'QA / Testing',    color: '#D32F2F' },
+  { id: 'produccion',    label: 'Producción',      color: '#1B5E20' },
+];
+
+const SEG_STORAGE_KEY = 'cvd_seguimiento';
+
+function segLoad() {
+  try {
+    const raw = localStorage.getItem(SEG_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : getDefaultDataProducts();
+  } catch { return getDefaultDataProducts(); }
+}
+
+function segSave(data) {
+  localStorage.setItem(SEG_STORAGE_KEY, JSON.stringify(data));
+}
+
+function getDefaultDataProducts() {
+  return [
+    {
+      id: 'dp-001',
+      nombre: 'Flujo de créditos hipotecarios',
+      descripcion: 'Data product para analítica del ciclo de vida de créditos hipotecarios.',
+      estadio: 'desarrollo',
+      equipo: 'Ingeniería de Datos',
+      responsable: 'Diego Martínez',
+      snowTicket: '',
+      fechaCreacion: '2026-03-10',
+      notas: '',
+    },
+    {
+      id: 'dp-002',
+      nombre: 'Segmentación de clientes retail',
+      descripcion: 'Modelos de segmentación para campañas retail.',
+      estadio: 'qa',
+      equipo: 'Modelado',
+      responsable: 'Walter López',
+      snowTicket: 'CHG0012345',
+      fechaCreacion: '2026-02-20',
+      notas: 'Vinculado a release Q2.',
+    },
+    {
+      id: 'dp-003',
+      nombre: 'Dashboard ejecutivo de rentabilidad',
+      descripcion: 'Vista agregada de rentabilidad por segmento.',
+      estadio: 'ideacion',
+      equipo: 'Arquitectura',
+      responsable: 'Alejandro Genovese',
+      snowTicket: '',
+      fechaCreacion: '2026-05-01',
+      notas: '',
+    },
+  ];
+}
+
+let segState = { data: [], search: '' };
+
+function renderSeguimiento() {
+  segState.data = segLoad();
+  const kanban = document.getElementById('estadiosKanban');
+  if (!kanban) return;
+  _buildKanban();
+}
+
+function _buildKanban() {
+  const kanban = document.getElementById('estadiosKanban');
+  const search = segState.search.toLowerCase();
+
+  kanban.innerHTML = ESTADIOS.map(est => {
+    const items = segState.data.filter(dp =>
+      dp.estadio === est.id &&
+      (!search || dp.nombre.toLowerCase().includes(search) || (dp.responsable || '').toLowerCase().includes(search))
+    );
+
+    const cardsHTML = items.map(dp => `
+      <div class="dp-card" data-id="${dp.id}" style="--est-color:${est.color}">
+        <div class="dp-card-top">
+          <span class="dp-card-nombre">${escHtml(dp.nombre)}</span>
+          ${dp.snowTicket ? `<span class="dp-snow-badge" title="ServiceNow">${escHtml(dp.snowTicket)}</span>` : ''}
+        </div>
+        <div class="dp-card-meta">
+          <span class="dp-card-equipo">${escHtml(dp.equipo)}</span>
+          <span class="dp-card-resp">${escHtml(dp.responsable)}</span>
+        </div>
+        <div class="dp-card-actions">
+          <button class="dp-btn dp-btn-detail" data-id="${dp.id}" title="Ver detalle">Ver</button>
+          ${isAdmin() ? `<button class="dp-btn dp-btn-move-left" data-id="${dp.id}" title="Estadio anterior">←</button>
+          <button class="dp-btn dp-btn-move-right" data-id="${dp.id}" title="Estadio siguiente">→</button>
+          <button class="dp-btn dp-btn-delete" data-id="${dp.id}" title="Eliminar">✕</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+
+    return `
+      <div class="estadio-col" data-estadio="${est.id}">
+        <div class="estadio-col-header" style="--est-color:${est.color}">
+          <span class="estadio-col-label">${est.label}</span>
+          <span class="estadio-col-count">${items.length}</span>
+        </div>
+        <div class="estadio-col-body">
+          ${cardsHTML || '<p class="estadio-empty">Sin items</p>'}
+          ${isAdmin() ? `<button class="dp-btn dp-btn-add-col" data-estadio="${est.id}" style="margin-top:8px;width:100%">+ Agregar aquí</button>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Bind events
+  kanban.querySelectorAll('.dp-btn-detail').forEach(btn => {
+    btn.addEventListener('click', () => openDpModal(btn.dataset.id));
+  });
+  kanban.querySelectorAll('.dp-btn-move-left').forEach(btn => {
+    btn.addEventListener('click', () => moveDp(btn.dataset.id, -1));
+  });
+  kanban.querySelectorAll('.dp-btn-move-right').forEach(btn => {
+    btn.addEventListener('click', () => moveDp(btn.dataset.id, 1));
+  });
+  kanban.querySelectorAll('.dp-btn-delete').forEach(btn => {
+    btn.addEventListener('click', () => deleteDp(btn.dataset.id));
+  });
+  kanban.querySelectorAll('.dp-btn-add-col').forEach(btn => {
+    btn.addEventListener('click', () => openNewDpModal(btn.dataset.estadio));
+  });
+}
+
+function moveDp(id, dir) {
+  const dp = segState.data.find(d => d.id === id);
+  if (!dp) return;
+  const idx = ESTADIOS.findIndex(e => e.id === dp.estadio);
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= ESTADIOS.length) return;
+  dp.estadio = ESTADIOS[newIdx].id;
+  segSave(segState.data);
+  _buildKanban();
+}
+
+function deleteDp(id) {
+  if (!confirm('¿Eliminar este data product?')) return;
+  segState.data = segState.data.filter(d => d.id !== id);
+  segSave(segState.data);
+  _buildKanban();
+}
+
+function openDpModal(id) {
+  const dp = segState.data.find(d => d.id === id);
+  if (!dp) return;
+  const est = ESTADIOS.find(e => e.id === dp.estadio);
+  const backdrop = document.getElementById('dpModalBackdrop');
+  const title    = document.getElementById('dpModalTitle');
+  const body     = document.getElementById('dpModalBody');
+
+  title.textContent = dp.nombre;
+
+  const snowLink = dp.snowTicket
+    ? `<a class="dp-snow-link" href="https://bancogalicia.service-now.com/nav_to.do?uri=change_request.do?sysparm_query=number=${dp.snowTicket}" target="_blank" rel="noopener">${dp.snowTicket} ↗</a>`
+    : '<span class="dp-muted">Sin ticket asociado</span>';
+
+  body.innerHTML = `
+    <div class="dp-detail-grid">
+      <div class="dp-detail-row">
+        <span class="dp-detail-label">Estadio actual</span>
+        <span class="dp-detail-val" style="color:${est?.color}">${est?.label || dp.estadio}</span>
+      </div>
+      <div class="dp-detail-row">
+        <span class="dp-detail-label">Equipo</span>
+        <span class="dp-detail-val">${escHtml(dp.equipo)}</span>
+      </div>
+      <div class="dp-detail-row">
+        <span class="dp-detail-label">Responsable</span>
+        <span class="dp-detail-val">${escHtml(dp.responsable)}</span>
+      </div>
+      <div class="dp-detail-row">
+        <span class="dp-detail-label">Ticket ServiceNow</span>
+        <span class="dp-detail-val">${snowLink}</span>
+      </div>
+      <div class="dp-detail-row">
+        <span class="dp-detail-label">Fecha creación</span>
+        <span class="dp-detail-val">${dp.fechaCreacion || '—'}</span>
+      </div>
+    </div>
+    <div class="dp-detail-desc">
+      <div class="dp-detail-label">Descripción</div>
+      <p>${escHtml(dp.descripcion)}</p>
+    </div>
+    ${dp.notas ? `<div class="dp-detail-desc"><div class="dp-detail-label">Notas</div><p>${escHtml(dp.notas)}</p></div>` : ''}
+    ${isAdmin() ? `
+    <hr class="dp-divider">
+    <form id="dpEditForm" data-id="${id}">
+      <div class="dp-edit-row">
+        <div class="form-field">
+          <label class="form-label">Ticket ServiceNow</label>
+          <input class="form-input" id="dpEditSnow" type="text" value="${escAttr(dp.snowTicket)}" placeholder="CHG0012345">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Notas</label>
+          <textarea class="form-input" id="dpEditNotas" rows="2">${escHtml(dp.notas)}</textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      </div>
+    </form>` : ''}
+  `;
+
+  if (isAdmin()) {
+    document.getElementById('dpEditForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      dp.snowTicket = document.getElementById('dpEditSnow').value.trim();
+      dp.notas = document.getElementById('dpEditNotas').value.trim();
+      segSave(segState.data);
+      closeDpModal();
+      _buildKanban();
+    });
+  }
+
+  backdrop.style.display = 'flex';
+}
+
+function openNewDpModal(estadioId) {
+  const backdrop = document.getElementById('dpModalBackdrop');
+  const title    = document.getElementById('dpModalTitle');
+  const body     = document.getElementById('dpModalBody');
+  const est      = ESTADIOS.find(e => e.id === estadioId);
+
+  title.textContent = `Nuevo Data Product — ${est?.label || estadioId}`;
+  body.innerHTML = `
+    <form id="dpNewForm">
+      <div class="form-field">
+        <label class="form-label">Nombre *</label>
+        <input class="form-input" id="dpNewNombre" type="text" placeholder="Nombre del data product">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-input" id="dpNewDesc" rows="2" placeholder="Breve descripción del objetivo…"></textarea>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Equipo</label>
+        <input class="form-input" id="dpNewEquipo" type="text" placeholder="Ingeniería de Datos">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Responsable</label>
+        <input class="form-input" id="dpNewResp" type="text" placeholder="Nombre y apellido">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Ticket ServiceNow</label>
+        <input class="form-input" id="dpNewSnow" type="text" placeholder="CHG0012345 (opcional)">
+      </div>
+      <div class="form-error" id="dpNewError"></div>
+      <div class="form-actions">
+        <button type="button" class="btn" id="dpNewCancel">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Crear</button>
+      </div>
+    </form>
+  `;
+
+  document.getElementById('dpNewCancel').addEventListener('click', closeDpModal);
+  document.getElementById('dpNewForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nombre = document.getElementById('dpNewNombre').value.trim();
+    if (!nombre) { document.getElementById('dpNewError').textContent = 'El nombre es obligatorio.'; return; }
+    const newDp = {
+      id: 'dp-' + Date.now(),
+      nombre,
+      descripcion: document.getElementById('dpNewDesc').value.trim(),
+      estadio: estadioId,
+      equipo: document.getElementById('dpNewEquipo').value.trim(),
+      responsable: document.getElementById('dpNewResp').value.trim(),
+      snowTicket: document.getElementById('dpNewSnow').value.trim(),
+      fechaCreacion: new Date().toISOString().slice(0, 10),
+      notas: '',
+    };
+    segState.data.push(newDp);
+    segSave(segState.data);
+    closeDpModal();
+    _buildKanban();
+  });
+
+  backdrop.style.display = 'flex';
+}
+
+function closeDpModal() {
+  const backdrop = document.getElementById('dpModalBackdrop');
+  if (backdrop) backdrop.style.display = 'none';
+}
+
+function initSeguimiento() {
+  // Botón nuevo (header del panel)
+  document.getElementById('nuevoDataProductBtn')?.addEventListener('click', () => {
+    openNewDpModal('ideacion');
+  });
+
+  // Búsqueda
+  document.getElementById('seguimientoSearch')?.addEventListener('input', (e) => {
+    segState.search = e.target.value;
+    _buildKanban();
+  });
+
+  // Close modal
+  document.getElementById('dpModalClose')?.addEventListener('click', closeDpModal);
+  document.getElementById('dpModalBackdrop')?.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeDpModal();
+  });
+}
+
+// ============================================================
+// MÓDULO: ADMINISTRACIÓN DE USUARIOS
+// ============================================================
+
+const USERS_STORAGE_KEY = 'cvd_users';
+
+// Usuarios de arranque (admin y visor de AUTH_USERS más los que se agreguen)
+function usersLoad() {
+  try {
+    const raw = localStorage.getItem(USERS_STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+    // Seed inicial
+    const seed = [
+      { id: 'u-admin', username: 'admin', nombre: 'Administrador', password: 'data2024', rol: 'admin', estado: 'activo', fechaCreacion: '2026-01-01' },
+      { id: 'u-visor', username: 'visor', nombre: 'Usuario Visor',  password: 'galicia',  rol: 'visor', estado: 'activo', fechaCreacion: '2026-01-01' },
+    ];
+    usersSave(seed);
+    return seed;
+  } catch { return []; }
+}
+
+function usersSave(data) {
+  localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(data));
+  // Sincronizar AUTH_USERS en memoria para que el login funcione con usuarios nuevos
+  data.forEach(u => {
+    if (u.estado === 'activo') {
+      AUTH_USERS[u.username] = { password: u.password, role: u.rol };
+    } else {
+      delete AUTH_USERS[u.username];
+    }
+  });
+}
+
+let usersState = { data: [] };
+
+function renderUsuarios() {
+  usersState.data = usersLoad();
+  _buildUsuariosTable();
+}
+
+function _buildUsuariosTable() {
+  const tbody = document.getElementById('usuariosTbody');
+  if (!tbody) return;
+
+  tbody.innerHTML = usersState.data.map(u => `
+    <tr>
+      <td><code>${escHtml(u.username)}</code></td>
+      <td>${escHtml(u.nombre)}</td>
+      <td><span class="rol-badge rol-${u.rol}">${u.rol}</span></td>
+      <td><span class="estado-badge estado-${u.estado}">${u.estado}</span></td>
+      <td>${u.fechaCreacion}</td>
+      <td>
+        <button class="dp-btn dp-btn-detail" data-uid="${u.id}" title="Editar">Editar</button>
+        ${u.username !== 'admin' ? `<button class="dp-btn dp-btn-delete" data-uid="${u.id}" title="Eliminar">✕</button>` : ''}
+      </td>
+    </tr>
+  `).join('');
+
+  tbody.querySelectorAll('.dp-btn-detail').forEach(btn => {
+    btn.addEventListener('click', () => openUsuarioModal(btn.dataset.uid));
+  });
+  tbody.querySelectorAll('.dp-btn-delete').forEach(btn => {
+    btn.addEventListener('click', () => deleteUsuario(btn.dataset.uid));
+  });
+}
+
+function openUsuarioModal(uid) {
+  const u = uid ? usersState.data.find(x => x.id === uid) : null;
+  const isEdit = !!u;
+
+  document.getElementById('usuarioModalTitle').textContent = isEdit ? `Editar: ${u.username}` : 'Nuevo usuario';
+  document.getElementById('usuarioFormId').value       = u?.id || '';
+  document.getElementById('usuarioFormUsername').value = u?.username || '';
+  document.getElementById('usuarioFormNombre').value   = u?.nombre || '';
+  document.getElementById('usuarioFormPassword').value = '';
+  document.getElementById('usuarioFormRol').value      = u?.rol || 'visor';
+  document.getElementById('usuarioFormEstado').value   = u?.estado || 'activo';
+  document.getElementById('usuarioFormError').textContent = '';
+
+  // El campo password es requerido solo en creación
+  document.getElementById('usuarioFormPassword').placeholder = isEdit ? '(dejar vacío para no cambiar)' : '••••••••';
+
+  document.getElementById('usuarioModalBackdrop').style.display = 'flex';
+  document.getElementById('usuarioFormUsername').focus();
+}
+
+function closeUsuarioModal() {
+  document.getElementById('usuarioModalBackdrop').style.display = 'none';
+}
+
+function deleteUsuario(uid) {
+  const u = usersState.data.find(x => x.id === uid);
+  if (!u) return;
+  if (!confirm(`¿Eliminar el usuario "${u.username}"?`)) return;
+  usersState.data = usersState.data.filter(x => x.id !== uid);
+  usersSave(usersState.data);
+  _buildUsuariosTable();
+}
+
+function initAdminUsuarios() {
+  document.getElementById('nuevoUsuarioBtn')?.addEventListener('click', () => openUsuarioModal(null));
+  document.getElementById('usuarioModalClose')?.addEventListener('click', closeUsuarioModal);
+  document.getElementById('usuarioFormCancel')?.addEventListener('click', closeUsuarioModal);
+  document.getElementById('usuarioModalBackdrop')?.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeUsuarioModal();
+  });
+
+  document.getElementById('usuarioForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const errEl    = document.getElementById('usuarioFormError');
+    const id       = document.getElementById('usuarioFormId').value;
+    const username = document.getElementById('usuarioFormUsername').value.trim().toLowerCase();
+    const nombre   = document.getElementById('usuarioFormNombre').value.trim();
+    const password = document.getElementById('usuarioFormPassword').value;
+    const rol      = document.getElementById('usuarioFormRol').value;
+    const estado   = document.getElementById('usuarioFormEstado').value;
+
+    if (!username || !nombre) { errEl.textContent = 'Usuario y nombre son obligatorios.'; return; }
+
+    const existente = usersState.data.find(u => u.username === username && u.id !== id);
+    if (existente) { errEl.textContent = 'Ese nombre de usuario ya existe.'; return; }
+
+    if (id) {
+      // Edición
+      const u = usersState.data.find(x => x.id === id);
+      if (u) {
+        u.username = username;
+        u.nombre   = nombre;
+        u.rol      = rol;
+        u.estado   = estado;
+        if (password) u.password = password;
+      }
+    } else {
+      // Creación
+      if (!password) { errEl.textContent = 'La contraseña es obligatoria para usuarios nuevos.'; return; }
+      usersState.data.push({
+        id: 'u-' + Date.now(),
+        username, nombre, password, rol, estado,
+        fechaCreacion: new Date().toISOString().slice(0, 10),
+      });
+    }
+
+    usersSave(usersState.data);
+    closeUsuarioModal();
+    _buildUsuariosTable();
+  });
+}
 
 // ============ INIT ============
 async function init() {
@@ -1269,6 +1786,28 @@ async function init() {
     await loadData();
     bindEvents();
     initCover();
+
+    // Reemplazar listeners de tabs con la versión extendida (soporta paneles especiales)
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      const clone = btn.cloneNode(true);
+      btn.parentNode.replaceChild(clone, btn);
+      clone.addEventListener('click', () => switchDiagramWithPanels(clone.dataset.diagram));
+    });
+
+    showPanel('ciclo-vida');
+
+    initSeguimiento();
+    initAdminUsuarios();
+
+    // Sync usuarios en memoria para que el login funcione con cuentas guardadas
+    usersSave(usersLoad());
+
+    // Mostrar tab admin si la sesión actual es admin
+    const session = authGetSession();
+    if (session?.role === 'admin') {
+      const adminTab = document.getElementById('tab-admin-usuarios');
+      if (adminTab) adminTab.style.display = '';
+    }
   } catch (err) {
     console.error('Init falló:', err);
   }
