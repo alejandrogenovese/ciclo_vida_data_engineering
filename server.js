@@ -147,6 +147,60 @@ function aggregateByStage(cards) {
   return stages;
 }
 
+// Resumen global + cortes (por etapa, por célula) para la vista Status general
+function buildSummary(cards) {
+  let open = 0, done = 0, total = 0;
+  const leadTimes = [];
+  const byCell = {};       // cell → { open, done, total }
+  const byStageCount = {}; // nodeId → { open, done, total }
+  const recent = [];
+
+  for (const c of cards) {
+    total += 1;
+    const isOpen = OPEN_STATES.includes(String(c.state));
+    const isDone = DONE_STATES.includes(String(c.state));
+    if (isOpen) open += 1;
+    if (isDone) {
+      done += 1;
+      if (c.opened_at && c.updated_at) leadTimes.push(daysBetween(c.opened_at, c.updated_at));
+    }
+    // por célula
+    const cell = c.cell || 'sin-celula';
+    if (!byCell[cell]) byCell[cell] = { open: 0, done: 0, total: 0 };
+    byCell[cell].total += 1;
+    if (isOpen) byCell[cell].open += 1;
+    if (isDone) byCell[cell].done += 1;
+    // por etapa (conteo simple)
+    if (c.stage) {
+      if (!byStageCount[c.stage]) byStageCount[c.stage] = { open: 0, done: 0, total: 0 };
+      byStageCount[c.stage].total += 1;
+      if (isOpen) byStageCount[c.stage].open += 1;
+      if (isDone) byStageCount[c.stage].done += 1;
+    }
+    recent.push({
+      number: c.number,
+      title: c.short_description,
+      state: c.state,
+      stateLabel: STATE_LABELS[String(c.state)] || c.state,
+      stage: c.stage,
+      cell: c.cell,
+      updated_at: c.updated_at,
+      ageDays: c.opened_at ? daysBetween(c.opened_at, new Date().toISOString()) : null,
+    });
+  }
+
+  const avgLead = leadTimes.length
+    ? Math.round(leadTimes.reduce((a, b) => a + b, 0) / leadTimes.length)
+    : null;
+
+  return {
+    totals: { open, done, total, avgLeadTimeDays: avgLead },
+    byCell,
+    byStage: byStageCount,
+    recent: recent.sort((a, b) => String(b.updated_at).localeCompare(String(a.updated_at))).slice(0, 10),
+  };
+}
+
 // ---------- Cliente ServiceNow (Table API) ----------
 function fetchServiceNow() {
   return new Promise((resolve, reject) => {
@@ -229,6 +283,7 @@ async function handleSlo(res) {
   }
 
   const stages = aggregateByStage(cards);
+  const summary = buildSummary(cards);
   const payload = {
     meta: {
       source,                 // 'servicenow' | 'mock' | 'mock-fallback'
@@ -237,7 +292,8 @@ async function handleSlo(res) {
       generatedAt: new Date().toISOString(),
       totalCards: cards.length,
     },
-    stages,
+    summary,                  // { totals, byCell, byStage, recent } — para la vista Status general
+    stages,                   // detalle por etapa (se mantiene por compatibilidad)
   };
   sendJson(res, 200, payload);
 }

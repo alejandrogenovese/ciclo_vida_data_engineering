@@ -29,6 +29,9 @@
     <button class="tab-btn" data-diagram="modelo-operativo" id="tab-modelo-operativo">
       Modelo Operativo
     </button>
+    <button class="tab-btn" data-diagram="status-general" id="tab-status-general">
+      Status general
+    </button>
     <button class="tab-btn tab-admin-only" data-diagram="admin-usuarios" id="tab-admin-usuarios" style="display:none">
       ⚙ Usuarios
     </button>
@@ -197,6 +200,22 @@
     </div>
     <div class="mo-body" id="moBody">
       <!-- generado por JS desde data/modelo-operativo.json -->
+    </div>
+  </section>
+
+  <!-- ============ PANEL STATUS GENERAL (tablero ServiceNow) ============ -->
+  <section class="full-panel sg-layout" id="panel-status-general" style="display:none">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <h2 class="panel-title">Status general</h2>
+        <p class="panel-subtitle" id="sgSubtitle">Tablero de iniciativas · ServiceNow</p>
+      </div>
+      <div class="panel-header-actions">
+        <span id="sgSrcBadge"></span>
+      </div>
+    </div>
+    <div class="sg-body" id="sgBody">
+      <!-- generado por JS desde /api/slo -->
     </div>
   </section>
 

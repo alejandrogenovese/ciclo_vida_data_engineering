@@ -15,10 +15,11 @@ La app tiene cuatro vistas, accesibles desde los tabs del header:
 
 | Tab | Qué muestra |
 |-----|-------------|
-| **Ciclo de Vida** | El recorrido etapa por etapa, filtrable por equipo solicitante, interacción y tipo de entrega (BAU / Data Product). Cada etapa muestra su narrativa + métricas de ServiceNow. |
+| **Ciclo de Vida** | El recorrido etapa por etapa, filtrable por equipo solicitante, interacción y tipo de entrega (BAU / Data Product). |
 | **Arquitectura ↔ Plataforma** | El ciclo de artefactos entre Arquitectura y Plataforma. |
 | **Seguimiento** | Kanban de data products posicionados sobre el SVG del ciclo de vida. |
 | **Modelo Operativo** | Modelo operativo de Arquitectura Data: capacidades transversales + cómo interactúa con cada rol de la vertical. |
+| **Status general** | Tablero consolidado de ServiceNow: KPIs globales, corte por etapa, corte por célula y tarjetas recientes. |
 | **⚙ Usuarios** (solo admin) | Gestión local de usuarios. |
 
 ---
@@ -28,27 +29,14 @@ La app tiene cuatro vistas, accesibles desde los tabs del header:
 Al entrar se pide login. Hay dos roles, con credenciales definidas en `app.js`
 (`AUTH_USERS`):
 
-| Usuario | Contraseña | Rol | Vista por defecto |
-|---------|-----------|-----|-------------------|
-| `admin` | `data2024` | admin | Operativa |
-| `visor` | `galicia` | visor | Ejecutiva |
+| Usuario | Contraseña | Rol |
+|---------|-----------|-----|
+| `admin` | `data2024` | admin (ve el tab Usuarios y el editor de etapas) |
+| `visor` | `galicia` | visor |
 
 > ⚠️ Las credenciales están hardcodeadas en el front (`AUTH_USERS` en `app.js`).
 > Es un control de presentación, **no** de seguridad real. Para producción real
 > conviene integrar AD/SSO server-side. La integración AD está marcada como pendiente.
-
-### Vista Ejecutiva vs Operativa
-
-El rol determina la vista inicial, y se puede alternar con el botón del header
-(👔 Ejecutiva / 🛠 Operativa):
-
-- **Ejecutiva** (default `visor`) — resumen para management. Muestra etapas, estado y
-  las métricas clave de cada etapa. Colapsa el detalle: secciones, callouts, sub-pasos,
-  items de capacidades, flujos entra/sale del modelo operativo.
-- **Operativa** (default `admin`/`editor`) — todo el detalle, para operar el modelo.
-
-Implementado con las clases `body.view-ejecutiva` / `body.view-operativa` (en `style.css`)
-y las clases `.mo-detail-only` / `.slo-detail-only` sobre lo que se oculta en ejecutiva.
 
 ---
 
@@ -87,12 +75,18 @@ Para iterar **contenido** solo se tocan los JSON de `data/`. El código no cambi
 | `GET /api/health` | Healthcheck. Indica si ServiceNow está configurado o en modo mock. |
 | `GET /api/slo` | Métricas/SLOs por etapa. En prod consulta ServiceNow; sin credenciales devuelve datos **mock** con la misma forma. |
 
-### Métricas por etapa (ServiceNow)
+### Métricas (ServiceNow) — solapa Status general
 
 La idea: replicar un kanban en ServiceNow donde cada tarjeta (iniciativa) se asocia a
-una etapa del ciclo. El endpoint `/api/slo` consulta la tabla, agrupa por etapa y
-devuelve por cada `nodeId`: tarjetas **en curso**, **cerradas**, **total** y **lead time**
-promedio. El front lo renderiza dentro del panel de narrativa de cada etapa.
+una etapa del ciclo. El endpoint `/api/slo` consulta la tabla y devuelve:
+
+- `summary.totals` — KPIs globales: **en curso**, **cerradas**, **total**, **lead time** promedio.
+- `summary.byStage` — conteo por etapa (`nodeId`).
+- `summary.byCell` — conteo por célula de negocio.
+- `summary.recent` — últimas tarjetas actualizadas.
+- `stages` — detalle por etapa (se mantiene para usos futuros).
+
+Todo esto se muestra consolidado en la solapa **Status general** (no embebido en cada etapa).
 
 **Modo mock (default).** Sin variables de entorno, `/api/slo` responde con tarjetas de
 ejemplo realistas. El front funciona al 100% y muestra un badge `mock`. Cuando se conecta
@@ -217,4 +211,5 @@ destino. Pendiente hasta definir dónde se hostea.
 - **Mock con la misma forma que prod**: el front no distingue mock de real salvo por un
   badge; conectar ServiceNow no requiere tocar el front.
 - **Colores espejados del drawio original**: quien vio el .drawio reconoce el mapa.
-- **Vista por rol**: una sola app sirve para operar (operativa) y comunicar (ejecutiva).
+- **Tablero consolidado**: las métricas de ServiceNow viven en una solapa propia
+  (Status general), no dispersas por cada etapa.

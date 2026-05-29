@@ -113,20 +113,6 @@ function applyRoleUI(role) {
   // Tab admin — solo para rol admin
   const adminTab = document.getElementById('tab-admin-usuarios');
   if (adminTab) adminTab.style.display = role === 'admin' ? '' : 'none';
-
-  // --- Vista ejecutiva / operativa según rol ---
-  state.role = role;
-  state.viewMode = defaultViewForRole(role);
-
-  // Botón toggle de vista (insertado antes del badge de rol)
-  if (meta && !document.getElementById('viewModeToggle')) {
-    const toggle = document.createElement('button');
-    toggle.id = 'viewModeToggle';
-    toggle.className = 'btn view-mode-toggle';
-    toggle.addEventListener('click', toggleViewMode);
-    meta.insertBefore(toggle, meta.firstChild);
-  }
-  applyViewModeClass();
 }
 
 // ============ STATE ============
@@ -156,89 +142,30 @@ const state = {
   currentOrigin: 'bs',
   currentArqSub: null,   // 'rt' | 'fact' — solo cuando origin === 'arq'
   currentSuffix: 'bau',  // 'bau' | 'dp' — último tipo de entrega elegido
-  // --- SLOs / métricas por etapa (ServiceNow vía /api/slo) ---
-  slo: null,             // { nodeId: {open,done,total,avgLeadTimeDays,cards} }
+  // --- Tablero ServiceNow (vía /api/slo) → vista Status general ---
+  slo: null,             // { nodeId: {open,done,total,avgLeadTimeDays,cards} } (detalle por etapa)
+  sloSummary: null,      // { totals, byCell, byStage, recent }
   sloMeta: null,         // { source, mapBy, table, generatedAt, totalCards }
-  // --- Vista ejecutiva vs operativa ---
-  viewMode: 'operativa', // 'ejecutiva' | 'operativa' — se setea según rol en applyRoleUI
-  role: null,
   // --- Modelo operativo Arq Data (vista propia) ---
   modeloOperativo: null,
 };
 
-// ============ VISTA EJECUTIVA / OPERATIVA ============
-// Ejecutiva: management/visor — resumen, etapas + estado + SLO clave, sin detalle.
-// Operativa: editor/admin — todo (flujos, actores, sub-pasos, editor).
-function defaultViewForRole(role) {
-  return role === 'visor' ? 'ejecutiva' : 'operativa';
-}
-function isEjecutiva() { return state.viewMode === 'ejecutiva'; }
-function applyViewModeClass() {
-  document.body.classList.toggle('view-ejecutiva', state.viewMode === 'ejecutiva');
-  document.body.classList.toggle('view-operativa', state.viewMode === 'operativa');
-  const btn = document.getElementById('viewModeToggle');
-  if (btn) {
-    btn.textContent = state.viewMode === 'ejecutiva' ? '👔 Ejecutiva' : '🛠 Operativa';
-    btn.title = `Vista actual: ${state.viewMode}. Click para alternar.`;
-  }
-}
-function setViewMode(mode) {
-  state.viewMode = mode;
-  applyViewModeClass();
-  if (state.currentDiagram === 'ciclo-vida' || state.currentDiagram === 'architecture-platform') {
-    try { renderNarrative(); } catch (e) {}
-  }
-}
-function toggleViewMode() {
-  setViewMode(state.viewMode === 'ejecutiva' ? 'operativa' : 'ejecutiva');
-}
-
-// ============ SLOs ============
+// ============ TABLERO SERVICENOW (SLOs) ============
 async function loadSlo() {
   try {
     const res = await fetch('api/slo');
     if (!res.ok) throw new Error('slo http ' + res.status);
     const data = await res.json();
     state.slo = data.stages || {};
+    state.sloSummary = data.summary || null;
     state.sloMeta = data.meta || null;
   } catch (e) {
-    // Sin backend (ej. corriendo sobre nginx puro o file://) no hay SLOs: se omiten.
+    // Sin backend (ej. file://) no hay tablero: la solapa muestra aviso.
     state.slo = null;
+    state.sloSummary = null;
     state.sloMeta = null;
     console.warn('[slo] no disponible:', e.message);
   }
-}
-
-// HTML del bloque de métricas para una etapa (o '' si no hay datos)
-function sloBlockHTML(nodeId) {
-  if (!state.slo || !nodeId) return '';
-  const m = state.slo[nodeId];
-  if (!m) return '';
-  const lead = m.avgLeadTimeDays != null ? `${m.avgLeadTimeDays}d` : '—';
-  const cardsHTML = (m.cards || []).slice(0, 5).map(c => `
-    <li class="slo-card slo-state-${String(c.state)}">
-      <span class="slo-card-num">${c.number}</span>
-      <span class="slo-card-title">${c.title}</span>
-      <span class="slo-card-state">${c.stateLabel}</span>
-    </li>`).join('');
-  const src = state.sloMeta?.source || '';
-  const srcBadge = src && src.startsWith('mock')
-    ? `<span class="slo-src slo-src-mock" title="Datos de ejemplo — falta conectar ServiceNow">mock</span>`
-    : `<span class="slo-src slo-src-live" title="ServiceNow en vivo">SNow</span>`;
-  return `
-    <div class="stage-slo">
-      <div class="slo-head">
-        <span class="slo-head-title">Tablero · ServiceNow</span>
-        ${srcBadge}
-      </div>
-      <div class="slo-metrics">
-        <div class="slo-metric"><span class="slo-num">${m.open}</span><span class="slo-lbl">En curso</span></div>
-        <div class="slo-metric"><span class="slo-num">${m.done}</span><span class="slo-lbl">Cerradas</span></div>
-        <div class="slo-metric"><span class="slo-num">${m.total}</span><span class="slo-lbl">Total</span></div>
-        <div class="slo-metric"><span class="slo-num">${lead}</span><span class="slo-lbl">Lead time</span></div>
-      </div>
-      ${cardsHTML ? `<ul class="slo-cards slo-detail-only">${cardsHTML}</ul>` : ''}
-    </div>`;
 }
 
 // ============ ZOOM / PAN ============
@@ -816,7 +743,6 @@ function renderNarrative() {
       </div>
       <h2 class="stage-title">${s.title}</h2>
       <p class="stage-lead">${s.lead}</p>
-      ${sloBlockHTML(s.nodeId)}
       ${sectionsHTML}
       ${s.callout ? `<div class="stage-callout">${s.callout}</div>` : ''}
     </div>
@@ -1377,6 +1303,7 @@ const DIAGRAM_PANELS = ['ciclo-vida', 'architecture-platform'];
 const SPECIAL_PANELS = {
   'seguimiento':      'panel-seguimiento',
   'modelo-operativo': 'panel-modelo-operativo',
+  'status-general':   'panel-status-general',
   'admin-usuarios':   'panel-admin-usuarios',
 };
 
@@ -1420,11 +1347,130 @@ function switchDiagramWithPanels(diagramName) {
     showPanel(diagramName);
     if (diagramName === 'seguimiento') renderSeguimiento();
     if (diagramName === 'modelo-operativo') renderModeloOperativo();
+    if (diagramName === 'status-general') renderStatusGeneral();
     if (diagramName === 'admin-usuarios') renderUsuarios();
     return;
   }
   showPanel(diagramName);
   _originalSwitchDiagram(diagramName);
+}
+
+// ============================================================
+// MÓDULO: STATUS GENERAL (tablero ServiceNow consolidado)
+// KPIs globales + corte por etapa + corte por célula + tarjetas recientes.
+// ============================================================
+
+// Mapa nodeId → label legible, derivado de los stages cargados.
+function buildStageLabelMap() {
+  const map = {};
+  const data = state.stages['ciclo-vida'];
+  if (data && data.paths) {
+    for (const p of Object.values(data.paths)) {
+      for (const s of (p.stages || [])) {
+        if (s.nodeId && !map[s.nodeId]) {
+          // título sin HTML
+          const tmp = document.createElement('div');
+          tmp.innerHTML = s.title || s.nodeId;
+          map[s.nodeId] = (tmp.textContent || s.nodeId).trim();
+        }
+      }
+    }
+  }
+  return map;
+}
+
+function renderStatusGeneral() {
+  const body = document.getElementById('sgBody');
+  const srcBadgeEl = document.getElementById('sgSrcBadge');
+  const subEl = document.getElementById('sgSubtitle');
+  if (!body) return;
+
+  if (!state.sloSummary) {
+    body.innerHTML = '<div class="error-banner">El tablero no está disponible. Requiere el backend (/api/slo) corriendo. Probá con <code>npm start</code>.</div>';
+    if (srcBadgeEl) srcBadgeEl.innerHTML = '';
+    return;
+  }
+
+  const sum = state.sloSummary;
+  const t = sum.totals || { open: 0, done: 0, total: 0, avgLeadTimeDays: null };
+  const lead = t.avgLeadTimeDays != null ? `${t.avgLeadTimeDays}d` : '—';
+  const src = state.sloMeta?.source || '';
+  const isMock = src.startsWith('mock');
+
+  // Badge de fuente
+  if (srcBadgeEl) {
+    srcBadgeEl.innerHTML = isMock
+      ? `<span class="slo-src slo-src-mock" title="Datos de ejemplo — falta conectar ServiceNow">mock</span>`
+      : `<span class="slo-src slo-src-live" title="ServiceNow en vivo">SNow</span>`;
+  }
+  if (subEl && state.sloMeta?.generatedAt) {
+    const dt = new Date(state.sloMeta.generatedAt);
+    subEl.textContent = `Tablero de iniciativas · ServiceNow · ${state.sloMeta.totalCards} tarjetas · actualizado ${dt.toLocaleString('es-AR')}`;
+  }
+
+  // KPIs grandes
+  const kpisHTML = `
+    <div class="sg-kpis">
+      <div class="sg-kpi"><span class="sg-kpi-num">${t.open}</span><span class="sg-kpi-lbl">En curso</span></div>
+      <div class="sg-kpi"><span class="sg-kpi-num">${t.done}</span><span class="sg-kpi-lbl">Cerradas</span></div>
+      <div class="sg-kpi"><span class="sg-kpi-num">${t.total}</span><span class="sg-kpi-lbl">Total en el ciclo</span></div>
+      <div class="sg-kpi"><span class="sg-kpi-num">${lead}</span><span class="sg-kpi-lbl">Lead time prom.</span></div>
+    </div>`;
+
+  // Barras por etapa
+  const labelMap = buildStageLabelMap();
+  const stageEntries = Object.entries(sum.byStage || {});
+  const maxStage = Math.max(1, ...stageEntries.map(([, v]) => v.total));
+  const stageBarsHTML = stageEntries.map(([nodeId, v]) => {
+    const label = labelMap[nodeId] || nodeId;
+    const pct = Math.round((v.total / maxStage) * 100);
+    const isDoneStage = v.done > 0 && v.open === 0;
+    return `
+      <div class="sg-bar-row">
+        <span class="sg-bar-label" title="${label}">${label}</span>
+        <div class="sg-bar-track"><div class="sg-bar-fill ${isDoneStage ? 'sg-bar-done' : ''}" style="width:${pct}%"></div></div>
+        <span class="sg-bar-val">${v.total}</span>
+      </div>`;
+  }).join('');
+
+  // Chips por célula
+  const cellEntries = Object.entries(sum.byCell || {});
+  const cellChipsHTML = cellEntries.map(([cellId, v]) => {
+    const cell = state.cells[cellId];
+    const label = cell?.label || cellId;
+    const color = cell?.color || '#888780';
+    return `<span class="sg-cell-chip" style="--chip:${color}">${label} · ${v.total}</span>`;
+  }).join('');
+
+  // Tarjetas recientes
+  const recentHTML = (sum.recent || []).slice(0, 8).map(c => {
+    const stageLabel = labelMap[c.stage] || c.stage || '';
+    return `
+      <li class="sg-card slo-state-${String(c.state)}">
+        <span class="sg-card-num">${c.number}</span>
+        <span class="sg-card-title">${c.title}</span>
+        <span class="sg-card-stage">${stageLabel}</span>
+        <span class="sg-card-state">${c.stateLabel}</span>
+      </li>`;
+  }).join('');
+
+  body.innerHTML = `
+    ${kpisHTML}
+    <div class="sg-grid">
+      <div class="sg-block">
+        <div class="sg-block-title">Por etapa del ciclo</div>
+        <div class="sg-bars">${stageBarsHTML || '<p class="sg-empty">Sin datos</p>'}</div>
+      </div>
+      <div class="sg-block">
+        <div class="sg-block-title">Por célula de negocio</div>
+        <div class="sg-cells">${cellChipsHTML || '<p class="sg-empty">Sin datos</p>'}</div>
+      </div>
+    </div>
+    <div class="sg-block">
+      <div class="sg-block-title">Tarjetas recientes</div>
+      <ul class="sg-cards">${recentHTML || '<p class="sg-empty">Sin tarjetas</p>'}</ul>
+    </div>
+  `;
 }
 
 // ============================================================
@@ -1453,7 +1499,7 @@ function renderModeloOperativo() {
         <h3 class="mo-cap-title">${c.label}</h3>
       </div>
       <p class="mo-cap-summary">${c.summary || ''}</p>
-      <ul class="mo-cap-items mo-detail-only">
+      <ul class="mo-cap-items">
         ${(c.items || []).map(i => `<li>${i}</li>`).join('')}
       </ul>
     </article>`).join('');
@@ -1465,7 +1511,7 @@ function renderModeloOperativo() {
         <h4 class="mo-iface-title">${f.label}</h4>
         <span class="mo-iface-role">${f.role || ''}</span>
       </div>
-      <div class="mo-iface-flow mo-detail-only">
+      <div class="mo-iface-flow">
         <div class="mo-iface-col">
           <span class="mo-iface-lbl mo-in">▸ Entra</span>
           <p>${f.in || ''}</p>
