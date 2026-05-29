@@ -7,3 +7,13 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
+      # --- ServiceNow (opcional) ---
+      # Sin estas variables el endpoint /api/slo corre en modo MOCK.
+      # Al setearlas, /api/slo consulta la API real de ServiceNow.
+      # - SNOW_INSTANCE=https://galicia.service-now.com
+      # - SNOW_USER=integracion_data
+      # - SNOW_PASS=********
+      # - SNOW_TOKEN=                 # alternativa a user/pass (Bearer OAuth)
+      # - SNOW_TABLE=sn_kanban_task   # tabla del kanban replicado
+      # - SNOW_MAP_BY=tag             # 'tag' | 'id' — cómo asociar tarjeta→etapa
+      # - SNOW_QUERY=                 # encoded query opcional (sysparm_query)

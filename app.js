@@ -113,6 +113,20 @@ function applyRoleUI(role) {
   // Tab admin — solo para rol admin
   const adminTab = document.getElementById('tab-admin-usuarios');
   if (adminTab) adminTab.style.display = role === 'admin' ? '' : 'none';
+
+  // --- Vista ejecutiva / operativa según rol ---
+  state.role = role;
+  state.viewMode = defaultViewForRole(role);
+
+  // Botón toggle de vista (insertado antes del badge de rol)
+  if (meta && !document.getElementById('viewModeToggle')) {
+    const toggle = document.createElement('button');
+    toggle.id = 'viewModeToggle';
+    toggle.className = 'btn view-mode-toggle';
+    toggle.addEventListener('click', toggleViewMode);
+    meta.insertBefore(toggle, meta.firstChild);
+  }
+  applyViewModeClass();
 }
 
 // ============ STATE ============
@@ -142,7 +156,90 @@ const state = {
   currentOrigin: 'bs',
   currentArqSub: null,   // 'rt' | 'fact' — solo cuando origin === 'arq'
   currentSuffix: 'bau',  // 'bau' | 'dp' — último tipo de entrega elegido
+  // --- SLOs / métricas por etapa (ServiceNow vía /api/slo) ---
+  slo: null,             // { nodeId: {open,done,total,avgLeadTimeDays,cards} }
+  sloMeta: null,         // { source, mapBy, table, generatedAt, totalCards }
+  // --- Vista ejecutiva vs operativa ---
+  viewMode: 'operativa', // 'ejecutiva' | 'operativa' — se setea según rol en applyRoleUI
+  role: null,
+  // --- Modelo operativo Arq Data (vista propia) ---
+  modeloOperativo: null,
 };
+
+// ============ VISTA EJECUTIVA / OPERATIVA ============
+// Ejecutiva: management/visor — resumen, etapas + estado + SLO clave, sin detalle.
+// Operativa: editor/admin — todo (flujos, actores, sub-pasos, editor).
+function defaultViewForRole(role) {
+  return role === 'visor' ? 'ejecutiva' : 'operativa';
+}
+function isEjecutiva() { return state.viewMode === 'ejecutiva'; }
+function applyViewModeClass() {
+  document.body.classList.toggle('view-ejecutiva', state.viewMode === 'ejecutiva');
+  document.body.classList.toggle('view-operativa', state.viewMode === 'operativa');
+  const btn = document.getElementById('viewModeToggle');
+  if (btn) {
+    btn.textContent = state.viewMode === 'ejecutiva' ? '👔 Ejecutiva' : '🛠 Operativa';
+    btn.title = `Vista actual: ${state.viewMode}. Click para alternar.`;
+  }
+}
+function setViewMode(mode) {
+  state.viewMode = mode;
+  applyViewModeClass();
+  if (state.currentDiagram === 'ciclo-vida' || state.currentDiagram === 'architecture-platform') {
+    try { renderNarrative(); } catch (e) {}
+  }
+}
+function toggleViewMode() {
+  setViewMode(state.viewMode === 'ejecutiva' ? 'operativa' : 'ejecutiva');
+}
+
+// ============ SLOs ============
+async function loadSlo() {
+  try {
+    const res = await fetch('api/slo');
+    if (!res.ok) throw new Error('slo http ' + res.status);
+    const data = await res.json();
+    state.slo = data.stages || {};
+    state.sloMeta = data.meta || null;
+  } catch (e) {
+    // Sin backend (ej. corriendo sobre nginx puro o file://) no hay SLOs: se omiten.
+    state.slo = null;
+    state.sloMeta = null;
+    console.warn('[slo] no disponible:', e.message);
+  }
+}
+
+// HTML del bloque de métricas para una etapa (o '' si no hay datos)
+function sloBlockHTML(nodeId) {
+  if (!state.slo || !nodeId) return '';
+  const m = state.slo[nodeId];
+  if (!m) return '';
+  const lead = m.avgLeadTimeDays != null ? `${m.avgLeadTimeDays}d` : '—';
+  const cardsHTML = (m.cards || []).slice(0, 5).map(c => `
+    <li class="slo-card slo-state-${String(c.state)}">
+      <span class="slo-card-num">${c.number}</span>
+      <span class="slo-card-title">${c.title}</span>
+      <span class="slo-card-state">${c.stateLabel}</span>
+    </li>`).join('');
+  const src = state.sloMeta?.source || '';
+  const srcBadge = src && src.startsWith('mock')
+    ? `<span class="slo-src slo-src-mock" title="Datos de ejemplo — falta conectar ServiceNow">mock</span>`
+    : `<span class="slo-src slo-src-live" title="ServiceNow en vivo">SNow</span>`;
+  return `
+    <div class="stage-slo">
+      <div class="slo-head">
+        <span class="slo-head-title">Tablero · ServiceNow</span>
+        ${srcBadge}
+      </div>
+      <div class="slo-metrics">
+        <div class="slo-metric"><span class="slo-num">${m.open}</span><span class="slo-lbl">En curso</span></div>
+        <div class="slo-metric"><span class="slo-num">${m.done}</span><span class="slo-lbl">Cerradas</span></div>
+        <div class="slo-metric"><span class="slo-num">${m.total}</span><span class="slo-lbl">Total</span></div>
+        <div class="slo-metric"><span class="slo-num">${lead}</span><span class="slo-lbl">Lead time</span></div>
+      </div>
+      ${cardsHTML ? `<ul class="slo-cards slo-detail-only">${cardsHTML}</ul>` : ''}
+    </div>`;
+}
 
 // ============ ZOOM / PAN ============
 function parseVB(str) {
@@ -360,6 +457,15 @@ async function loadData() {
     // Inicializar copias editables (deep clone)
     state.editedStages['ciclo-vida'] = JSON.parse(JSON.stringify(state.stages['ciclo-vida']));
     state.editedStages['architecture-platform'] = JSON.parse(JSON.stringify(state.stages['architecture-platform']));
+
+    // SLOs por etapa (no bloqueante: si falla, el front sigue sin métricas)
+    await loadSlo();
+
+    // Modelo operativo de Arquitectura (no bloqueante)
+    try {
+      const moRes = await fetch('data/modelo-operativo.json');
+      if (moRes.ok) state.modeloOperativo = await moRes.json();
+    } catch (e) { console.warn('[modelo-operativo] no disponible:', e.message); }
 
     switchDiagram('ciclo-vida');
   } catch (err) {
@@ -710,6 +816,7 @@ function renderNarrative() {
       </div>
       <h2 class="stage-title">${s.title}</h2>
       <p class="stage-lead">${s.lead}</p>
+      ${sloBlockHTML(s.nodeId)}
       ${sectionsHTML}
       ${s.callout ? `<div class="stage-callout">${s.callout}</div>` : ''}
     </div>
@@ -1268,8 +1375,9 @@ function initCover() {}
 // ============================================================
 const DIAGRAM_PANELS = ['ciclo-vida', 'architecture-platform'];
 const SPECIAL_PANELS = {
-  'seguimiento':    'panel-seguimiento',
-  'admin-usuarios': 'panel-admin-usuarios',
+  'seguimiento':      'panel-seguimiento',
+  'modelo-operativo': 'panel-modelo-operativo',
+  'admin-usuarios':   'panel-admin-usuarios',
 };
 
 function showPanel(diagramName) {
@@ -1311,11 +1419,82 @@ function switchDiagramWithPanels(diagramName) {
   if (diagramName in SPECIAL_PANELS) {
     showPanel(diagramName);
     if (diagramName === 'seguimiento') renderSeguimiento();
+    if (diagramName === 'modelo-operativo') renderModeloOperativo();
     if (diagramName === 'admin-usuarios') renderUsuarios();
     return;
   }
   showPanel(diagramName);
   _originalSwitchDiagram(diagramName);
+}
+
+// ============================================================
+// MÓDULO: MODELO OPERATIVO DE ARQUITECTURA DATA
+// Vista propia (reescritura de la solapa 2 del drawio, llevada al HTML).
+// Capacidades transversales de Arquitectura + interfaces con cada rol.
+// ============================================================
+function renderModeloOperativo() {
+  const mo = state.modeloOperativo;
+  const body = document.getElementById('moBody');
+  const titleEl = document.getElementById('moTitle');
+  const subEl = document.getElementById('moSubtitle');
+  if (!body) return;
+  if (!mo) {
+    body.innerHTML = '<div class="error-banner">No se pudo cargar data/modelo-operativo.json</div>';
+    return;
+  }
+  if (titleEl) titleEl.textContent = mo.title || 'Modelo Operativo · Arquitectura Data';
+  if (subEl) subEl.textContent = mo.subtitle || '';
+
+  // Bloque 1: capacidades transversales de Arquitectura
+  const capsHTML = (mo.capabilities || []).map(c => `
+    <article class="mo-cap" style="--mo-color:${c.color}">
+      <div class="mo-cap-head">
+        <span class="mo-cap-dot"></span>
+        <h3 class="mo-cap-title">${c.label}</h3>
+      </div>
+      <p class="mo-cap-summary">${c.summary || ''}</p>
+      <ul class="mo-cap-items mo-detail-only">
+        ${(c.items || []).map(i => `<li>${i}</li>`).join('')}
+      </ul>
+    </article>`).join('');
+
+  // Bloque 2: interfaces con cada rol (entra / sale)
+  const ifaceHTML = (mo.interfaces || []).map(f => `
+    <article class="mo-iface" style="--mo-color:${f.color}">
+      <div class="mo-iface-head">
+        <h4 class="mo-iface-title">${f.label}</h4>
+        <span class="mo-iface-role">${f.role || ''}</span>
+      </div>
+      <div class="mo-iface-flow mo-detail-only">
+        <div class="mo-iface-col">
+          <span class="mo-iface-lbl mo-in">▸ Entra</span>
+          <p>${f.in || ''}</p>
+        </div>
+        <div class="mo-iface-col">
+          <span class="mo-iface-lbl mo-out">Sale ▸</span>
+          <p>${f.out || ''}</p>
+        </div>
+      </div>
+      <p class="mo-iface-interaction">${f.interaction || ''}</p>
+    </article>`).join('');
+
+  body.innerHTML = `
+    <div class="mo-section">
+      <div class="mo-section-head">
+        <span class="mo-section-kicker">Transversal</span>
+        <h3 class="mo-section-title">Qué hace Arquitectura Data</h3>
+      </div>
+      <div class="mo-caps-grid">${capsHTML}</div>
+      ${mo.supportNote ? `<div class="mo-support-note">${mo.supportNote}</div>` : ''}
+    </div>
+    <div class="mo-section">
+      <div class="mo-section-head">
+        <span class="mo-section-kicker">Interacción por rol</span>
+        <h3 class="mo-section-title">Cómo se relaciona con la vertical</h3>
+      </div>
+      <div class="mo-ifaces-grid">${ifaceHTML}</div>
+    </div>
+  `;
 }
 
 // ============================================================

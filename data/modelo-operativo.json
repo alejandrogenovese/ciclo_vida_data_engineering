@@ -1,0 +1,103 @@
+{
+  "_comment": "Modelo Operativo de Arquitectura Data — reescritura de la solapa 2 del drawio, llevada al HTML. Editá este archivo para cambiar el contenido. 'capabilities' = qué hace Arquitectura de forma transversal. 'interfaces' = cómo interactúa con cada rol (qué entra / qué sale).",
+  "title": "Modelo Operativo · Arquitectura Data",
+  "subtitle": "Qué hace Arquitectura de forma transversal y cómo interactúa con cada rol de la vertical",
+  "capabilities": [
+    {
+      "id": "diseno-referencia",
+      "label": "Diseño de referencia",
+      "color": "#1F3864",
+      "summary": "Define la arquitectura target end-to-end y los patrones de referencia que el resto de la vertical reutiliza.",
+      "items": [
+        "Arquitectura target de datos (ingesta → modelado → consumo)",
+        "Patrones de referencia y blueprints por tipo de iniciativa",
+        "Definición de capas (raw, staging, curated, productos)",
+        "Diseño de dominios y data products"
+      ]
+    },
+    {
+      "id": "estandares-gobierno",
+      "label": "Estándares y gobierno",
+      "color": "#2E7D32",
+      "summary": "Establece las reglas del juego: naming, contracts, versionado y criterios de calidad que hacen el ecosistema gobernable.",
+      "items": [
+        "Naming conventions y estándares de modelado",
+        "Data contracts y versionado de interfaces",
+        "Criterios BAU vs Data Product",
+        "Guardrails de seguridad y clasificación del dato"
+      ]
+    },
+    {
+      "id": "observabilidad-dataops",
+      "label": "Observabilidad y DataOps",
+      "color": "#E65100",
+      "summary": "Da visibilidad sobre el estado de la plataforma y los datos: SLOs, lineage, calidad y monitoreo operativo.",
+      "items": [
+        "SLOs de freshness, completitud y disponibilidad",
+        "Lineage end-to-end y catálogo",
+        "Calidad de datos (tests dbt, Great Expectations, Elementary)",
+        "Monitoreo y alertas operativas"
+      ]
+    },
+    {
+      "id": "evaluacion-tecnologica",
+      "label": "Evaluación tecnológica",
+      "color": "#6A1B9A",
+      "summary": "Evalúa y habilita tecnología nueva antes de que entre al stack productivo, balanceando innovación y robustez.",
+      "items": [
+        "PoCs y evaluación de herramientas (AWS, dbt, GenAI)",
+        "Well-Architected y FinOps",
+        "Roadmap de adopción cloud (J2C)",
+        "Integración de AI/GenAI sobre la plataforma de datos"
+      ]
+    }
+  ],
+  "supportNote": "Soporte transversal a Ingeniería de BAU: Arquitectura acompaña el día a día de las iniciativas BAU sin frenarlas, aplicando los estándares y patrones definidos.",
+  "interfaces": [
+    {
+      "id": "business-solution",
+      "label": "Business Solution",
+      "color": "#FF8C00",
+      "role": "Canaliza la demanda del negocio",
+      "in": "Necesidades funcionales: nuevas métricas, dashboards, automatizaciones sobre fuentes conocidas.",
+      "out": "Iniciativas clasificadas (BAU / Data Product) con criterios de factibilidad aplicados.",
+      "interaction": "Arquitectura ayuda a clasificar la demanda y define si requiere modelado nuevo o no."
+    },
+    {
+      "id": "celula-modelado",
+      "label": "Célula de Modelado",
+      "color": "#1565C0",
+      "role": "Diseña y construye los modelos de datos",
+      "in": "Requerimientos de modelado dimensional / Data Vault, definición de dominio.",
+      "out": "Modelos productivos versionados, conformados a los estándares de naming y contracts.",
+      "interaction": "Arquitectura provee patrones de modelado y revisa robustez técnica antes de productivizar."
+    },
+    {
+      "id": "gobierno-dato",
+      "label": "Gobierno del Dato",
+      "color": "#00695C",
+      "role": "Asegura calidad, seguridad y cumplimiento",
+      "in": "Políticas de gobierno, clasificación del dato, requisitos regulatorios.",
+      "out": "Validación de contracts, lineage y clasificación aplicada sobre los productos.",
+      "interaction": "Arquitectura implementa los guardrails de gobierno en la plataforma (Lake Formation, catálogo)."
+    },
+    {
+      "id": "ingenieria-datos",
+      "label": "Ingeniería de Datos",
+      "color": "#1A237E",
+      "role": "Construye y opera los pipelines",
+      "in": "Diseños de referencia, patrones de orquestación, estándares de pipeline.",
+      "out": "Pipelines productivos (Airflow, dbt), ingestas y transformaciones operando con SLOs.",
+      "interaction": "Arquitectura define los patrones; Ingeniería los implementa y opera el run."
+    },
+    {
+      "id": "plataforma",
+      "label": "Plataforma",
+      "color": "#7B1FA2",
+      "role": "Provee la infraestructura y capacidades base",
+      "in": "Requisitos de plataforma: cómputo, almacenamiento, seguridad, capacidades cloud.",
+      "out": "Servicios de plataforma (Redshift, S3, OCP, IDP) y capacidades habilitadas.",
+      "interaction": "Arquitectura consume y a veces co-diseña capacidades; punto de coordinación con IDP / Data+."
+    }
+  ]
+}

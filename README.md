@@ -1,199 +1,193 @@
 # Ciclo de Vida del Desarrollo · Data & IA
 
-Storyline interactivo del modelo operativo de Data — Banco Galicia.
+Aplicación interactiva del modelo operativo de la vertical de Data — Banco Galicia.
+Recorre el ciclo de vida etapa por etapa, con narrativa sincronizada, métricas en vivo
+desde ServiceNow y vistas adaptadas según el rol de quien la usa.
 
-Diagrama interactivo donde se recorre el ciclo de vida etapa por etapa, con narrativa
-sincronizada. Pensado para que distintas áreas (negocio, modelado, ingeniería, gobierno,
-plataforma) entiendan el modelo desde su perspectiva.
+Pensada para dos audiencias: el **equipo** (operar el día a día) y **management**
+(comunicar la estrategia y el estado del modelo).
+
+---
+
+## Vistas
+
+La app tiene cuatro vistas, accesibles desde los tabs del header:
+
+| Tab | Qué muestra |
+|-----|-------------|
+| **Ciclo de Vida** | El recorrido etapa por etapa, filtrable por equipo solicitante, interacción y tipo de entrega (BAU / Data Product). Cada etapa muestra su narrativa + métricas de ServiceNow. |
+| **Arquitectura ↔ Plataforma** | El ciclo de artefactos entre Arquitectura y Plataforma. |
+| **Seguimiento** | Kanban de data products posicionados sobre el SVG del ciclo de vida. |
+| **Modelo Operativo** | Modelo operativo de Arquitectura Data: capacidades transversales + cómo interactúa con cada rol de la vertical. |
+| **⚙ Usuarios** (solo admin) | Gestión local de usuarios. |
+
+---
+
+## Acceso y roles
+
+Al entrar se pide login. Hay dos roles, con credenciales definidas en `app.js`
+(`AUTH_USERS`):
+
+| Usuario | Contraseña | Rol | Vista por defecto |
+|---------|-----------|-----|-------------------|
+| `admin` | `data2024` | admin | Operativa |
+| `visor` | `galicia` | visor | Ejecutiva |
+
+> ⚠️ Las credenciales están hardcodeadas en el front (`AUTH_USERS` en `app.js`).
+> Es un control de presentación, **no** de seguridad real. Para producción real
+> conviene integrar AD/SSO server-side. La integración AD está marcada como pendiente.
+
+### Vista Ejecutiva vs Operativa
+
+El rol determina la vista inicial, y se puede alternar con el botón del header
+(👔 Ejecutiva / 🛠 Operativa):
+
+- **Ejecutiva** (default `visor`) — resumen para management. Muestra etapas, estado y
+  las métricas clave de cada etapa. Colapsa el detalle: secciones, callouts, sub-pasos,
+  items de capacidades, flujos entra/sale del modelo operativo.
+- **Operativa** (default `admin`/`editor`) — todo el detalle, para operar el modelo.
+
+Implementado con las clases `body.view-ejecutiva` / `body.view-operativa` (en `style.css`)
+y las clases `.mo-detail-only` / `.slo-detail-only` sobre lo que se oculta en ejecutiva.
 
 ---
 
 ## Estructura del proyecto
 
 ```
-ciclo-vida-data/
-├── index.html              ← shell mínimo de la app
-├── style.css               ← estilos (paleta, tipografías, layout)
-├── app.js                  ← lógica (render, navegación, estado)
+ciclo_vida_data_engineering/
+├── index.html              ← shell de la app + paneles
+├── style.css               ← estilos (paleta, tipografías, layout, SLOs, modelo operativo)
+├── app.js                  ← lógica (render, navegación, estado, auth, vistas)
+├── server.js               ← servidor Node: estáticos + API /api/slo (proxy ServiceNow)
 ├── data/
-│   ├── stages.json         ← contenido narrativo de cada etapa
-│   └── diagram.json        ← posiciones de nodos, edges y config global
-├── Dockerfile              ← imagen nginx-alpine para deploy en el NUC
-├── docker-compose.yml      ← stack listo para levantar
-└── README.md
+│   ├── stages.json                       ← narrativa de cada etapa (por path origen×tipo)
+│   ├── diagram.json                      ← nodos, edges y config del diagrama principal
+│   ├── architecture-platform.json        ← diagrama tab Arq ↔ Plataforma
+│   ├── architecture-platform-stages.json ← narrativa tab Arq ↔ Plataforma
+│   ├── actors.json                       ← catálogo de actores (centralizado)
+│   ├── cells.json                        ← catálogo de células de negocio
+│   └── modelo-operativo.json             ← contenido de la vista Modelo Operativo
+├── Dockerfile              ← imagen node:18-alpine
+├── docker-compose.yml      ← stack listo (incluye env vars ServiceNow comentadas)
+├── package.json
+└── render.yaml             ← deploy en Render
 ```
 
-Para iterar el modelo solo se tocan los dos JSON de `data/`. El código no cambia.
+Para iterar **contenido** solo se tocan los JSON de `data/`. El código no cambia.
+
+---
+
+## API / Backend
+
+`server.js` sirve los archivos estáticos **y** expone una pequeña API:
+
+| Endpoint | Qué hace |
+|----------|----------|
+| `GET /api/health` | Healthcheck. Indica si ServiceNow está configurado o en modo mock. |
+| `GET /api/slo` | Métricas/SLOs por etapa. En prod consulta ServiceNow; sin credenciales devuelve datos **mock** con la misma forma. |
+
+### Métricas por etapa (ServiceNow)
+
+La idea: replicar un kanban en ServiceNow donde cada tarjeta (iniciativa) se asocia a
+una etapa del ciclo. El endpoint `/api/slo` consulta la tabla, agrupa por etapa y
+devuelve por cada `nodeId`: tarjetas **en curso**, **cerradas**, **total** y **lead time**
+promedio. El front lo renderiza dentro del panel de narrativa de cada etapa.
+
+**Modo mock (default).** Sin variables de entorno, `/api/slo` responde con tarjetas de
+ejemplo realistas. El front funciona al 100% y muestra un badge `mock`. Cuando se conecta
+ServiceNow, el badge pasa a `SNow`.
+
+**Conectar ServiceNow.** Setear estas variables de entorno (ver `docker-compose.yml`):
+
+| Variable | Descripción |
+|----------|-------------|
+| `SNOW_INSTANCE` | `https://<instancia>.service-now.com` |
+| `SNOW_USER` / `SNOW_PASS` | credenciales básicas |
+| `SNOW_TOKEN` | Bearer OAuth (alternativa a user/pass) |
+| `SNOW_TABLE` | tabla a consultar (default `sn_kanban_task`) |
+| `SNOW_MAP_BY` | `tag` o `id` — cómo se asocia la tarjeta a la etapa |
+| `SNOW_QUERY` | encoded query opcional (`sysparm_query`) |
+
+**Mapeo tarjeta → etapa.** Configurable por `SNOW_MAP_BY`:
+- `tag` (default): la tarjeta lleva una etiqueta que matchea el diccionario `STAGE_TAGS`
+  en `server.js`. Editá ese diccionario si en ServiceNow nombrás las etiquetas distinto.
+- `id`: el `nodeId` de la etapa viene directo en un campo (`u_stage` / `correlation_id`).
+
+Si ServiceNow falla en runtime, el endpoint degrada a mock (badge `mock`) para no romper
+el front, y deja el error en el log del servidor.
 
 ---
 
 ## Correrlo en local
 
-> ⚠️ **Importante:** el `index.html` no funciona abriéndolo con doble click.
-> El `fetch()` de los JSON falla por CORS sobre `file://`. Necesitás un servidor HTTP.
+> ⚠️ El `index.html` no funciona abriéndolo con doble click — el `fetch()` de los JSON
+> y de `/api/slo` falla sobre `file://`. Necesitás un servidor HTTP.
 
-### Opción A — Python (rápido, sin dependencias)
+### Con Node (recomendado — incluye la API de SLOs)
 
 ```bash
-cd ciclo-vida-data
+cd ciclo_vida_data_engineering
+npm install
+npm start
+# http://localhost:3000   (en modo mock para los SLOs)
+```
+
+### Con Python (estáticos solamente, sin API)
+
+```bash
+cd ciclo_vida_data_engineering
 python3 -m http.server 8080
-# abrí http://localhost:8080
-```
-
-### Opción B — VS Code + Live Server
-
-1. Abrí la carpeta en VS Code
-2. Instalá la extensión **Live Server** (Ritwick Dey)
-3. Click derecho en `index.html` → "Open with Live Server"
-4. Cada vez que guardás un archivo, el browser recarga solo.
-
-### Opción C — Node serve
-
-```bash
-npx serve .
+# http://localhost:8080   — los SLOs no aparecen (no hay /api/slo), el resto sí
 ```
 
 ---
 
-## Editar el contenido
+## Editar contenido
 
-### Cambiar texto de una etapa
+### Texto de una etapa del ciclo de vida
 
-Abrí `data/stages.json`. Cada elemento del array es una etapa. Estructura:
+`data/stages.json` → `paths` → `<origen-tipo>` (ej. `bs-bau`) → `stages[]`. Cada etapa
+tiene `nodeId`, `eyebrow`, `title`, `lead`, `sections[]` y `callout`. El `nodeId` vincula
+la narrativa al nodo del diagrama (`data/diagram.json`) y a las métricas de ServiceNow.
 
-```json
-{
-  "nodeId": "business-solution",
-  "eyebrow": "Origen · Demanda funcional",
-  "title": "La iniciativa <span class=\"italic\">nace en el negocio</span>",
-  "lead": "Texto principal en gris…",
-  "sections": [
-    { "label": "Participan", "content": "<div class=\"pill-grid\"><span class=\"pill\">DMs</span></div>" },
-    { "label": "Entrada", "content": "Texto…" }
-  ],
-  "callout": "<strong>Para todos:</strong> texto destacado al final.",
-  "color": { "primary": "#FF8C00", "soft": "#FFF3E0" }
-}
-```
+### Contenido de la vista Modelo Operativo
 
-- `nodeId` debe coincidir con un `id` declarado en `data/diagram.json` (es el vínculo
-  entre la narrativa y el nodo del diagrama).
-- HTML está permitido dentro de `lead`, `sections.content`, `callout`. Usá `<strong>`,
-  `<span class="italic">`, `<span class="pill">`, `<div class="pill-grid">`.
-- `color.primary` se usa para el dot, el título destacado y el border del callout.
+`data/modelo-operativo.json`:
+- `capabilities[]` — qué hace Arquitectura de forma transversal (cada una con `label`,
+  `color`, `summary`, `items[]`).
+- `interfaces[]` — cómo interactúa con cada rol (`label`, `color`, `role`, `in`, `out`,
+  `interaction`).
 
-### Agregar una etapa nueva
+### Etiquetas de ServiceNow por etapa
 
-Tocás los dos JSON:
-
-**1. En `data/stages.json`** — agregá un objeto al final del array con la estructura de
-arriba. El `nodeId` define a qué nodo del diagrama se vincula.
-
-**2. En `data/diagram.json`** — agregá tres cosas:
-
-a) Un nuevo nodo al array `nodes`:
-
-```json
-{
-  "id": "mi-etapa-nueva",
-  "stageIndex": 11,
-  "shape": "rect",
-  "geom": { "x": 30, "y": 50, "w": 140, "h": 60, "rx": 4 },
-  "labelPos": { "numY": 71, "labelY": 92 },
-  "pulse": { "cx": 100, "cy": 80, "r": 60 },
-  "num": "11",
-  "label": "Mi Etapa",
-  "colorVar": "--c-bs"
-}
-```
-
-- `stageIndex` debe coincidir con la posición del objeto en `stages.json` (0-indexed).
-- `shape` soporta `rect`, `pill` (rect con rx grande) y `hexagon` (definís `points`).
-- `colorVar` debe ser una variable CSS declarada en `style.css` (busca `--c-` en `:root`).
-
-b) Edges que conectan al nuevo nodo en el array `edges`:
-
-```json
-{
-  "id": "e-anterior-mia",
-  "d": "M 360 940 L 360 980",
-  "activeAt": [11],
-  "pastFrom": 11
-}
-```
-
-- `d` es el `path` SVG. Si no querés calcularlo a mano, podés abrir `index.html` en
-  el browser, inspeccionar los edges existentes y copiar/adaptar coordenadas.
-- `activeAt` es el array de `stageIndex` donde el edge se muestra resaltado.
-- `pastFrom` es el `stageIndex` a partir del cual el edge queda en estado "pasado".
-
-c) Si querés cambiar el color de la nueva etapa, agregá la variable CSS en `style.css`:
-
-```css
-:root {
-  --c-mi-etapa: #FF5733;
-}
-```
-
-### Mover un nodo
-
-En `data/diagram.json`, ajustá `geom.x` / `geom.y` del nodo. Acordate de ajustar
-también `pulse.cx` / `pulse.cy` (centro del pulso) y `labelPos.numY` / `labelPos.labelY`
-(posición del texto), o no van a quedar centrados.
-
-Si moviste un nodo, los edges que entran o salen de él probablemente queden mal —
-ajustá las coordenadas del `d` del edge correspondiente.
-
-### Cambiar el branding (logo, título, organización)
-
-En `data/diagram.json`, sección `config.brand`:
-
-```json
-"config": {
-  "brand": {
-    "mark": "Modelo Operativo",
-    "title": "Ciclo de Vida del Desarrollo <em>· Data &amp; IA</em>",
-    "org": "Banco Galicia"
-  }
-}
-```
-
-### Cambiar la velocidad del auto-play
-
-En `data/diagram.json`, sección `config`:
-
-```json
-"config": {
-  "autoplayMs": 6500
-}
-```
-
-Valor en milisegundos por etapa.
+`STAGE_TAGS` en `server.js` — mapea cada `nodeId` a las etiquetas que matchean en SNow.
 
 ---
 
-## Deploy en el NUC
+## Deploy
 
-Hay un `Dockerfile` y un `docker-compose.yml` listos. Imagen `nginx:alpine`, sin build
-step, sirve los archivos estáticos.
+### Render
+
+Hay `render.yaml` (runtime docker). Para que `/api/slo` consulte ServiceNow real, cargar
+las variables `SNOW_*` en el dashboard de Render.
+
+### NUC / Docker
 
 ```bash
-# Desde la carpeta del proyecto
 docker compose up -d
-# Disponible en http://192.168.1.89:8090
+# http://192.168.1.89:3000   (o el puerto que mapees)
 ```
 
-Para parar:
+Para conectar ServiceNow, descomentar las variables `SNOW_*` en `docker-compose.yml`.
 
-```bash
-docker compose down
-```
+### Roadmap — persistencia del kanban de Seguimiento
 
-Para actualizar contenido sin rebuild: editá los JSON en `data/`, no hace falta
-reiniciar el container porque están bind-mounted como volumen.
-
-Si querés exponerlo bajo un subdominio detrás de Nginx Proxy Manager, apuntá a
-`http://192.168.1.89:8090` y listo.
+Hoy el kanban de **Seguimiento** persiste en `localStorage` del navegador (clave
+`cvd_seguimiento`), pensado para Render. Cuando se lleve a **OCP o ECS**, la idea es mover
+el estado a una **DB clave-valor** (DynamoDB si va a ECS, Redis/Valkey con persistencia si
+va a OCP), detrás de una capa `store` con `get/put/list/delete` para no atar el código al
+destino. Pendiente hasta definir dónde se hostea.
 
 ---
 
@@ -201,27 +195,26 @@ Si querés exponerlo bajo un subdominio detrás de Nginx Proxy Manager, apuntá 
 
 | Tecla | Acción |
 |-------|--------|
-| `←` | Etapa anterior |
-| `→` | Etapa siguiente |
+| `←` / `→` | Etapa anterior / siguiente |
 | `Space` | Play / Pause auto-play |
-| `R` | Reiniciar al inicio |
+| `R` | Reiniciar |
+| `+` / `−` / `0` | Zoom in / out / reset |
 
 ---
 
 ## Stack técnico
 
-- HTML5 + CSS3 + Vanilla JS (módulos ES nativos)
-- SVG generado dinámicamente desde JSON
-- Google Fonts: Instrument Serif + Geist + Geist Mono
-- Sin frameworks. Sin build step. Sin dependencias npm.
-
----
+- HTML5 + CSS3 + Vanilla JS (módulos ES nativos), sin frameworks ni build step.
+- SVG generado dinámicamente desde JSON.
+- Backend Node nativo (`http`/`https`), sin dependencias en producción.
+- Google Fonts: Instrument Serif + Geist + Geist Mono.
 
 ## Decisiones de diseño
 
-- **Data separada de código**: agregar etapas no requiere tocar lógica.
-- **SVG generado por JS**: mover un nodo es cambiar un par de números en el JSON.
-- **Colores espejados del drawio original**: quien vio el .drawio reconoce el mapa al toque.
-- **Narrativa con callouts dirigidos por rol** (`<strong>Para arquitectos:</strong>`,
-  `<strong>Para los líderes:</strong>`): cada audiencia encuentra su anclaje.
-- **Sin build step**: cualquier persona del equipo puede editar los JSON sin instalar nada.
+- **Data separada de código**: el contenido vive en `data/*.json`.
+- **Backend mínimo**: `server.js` sirve estáticos y hace de proxy a ServiceNow
+  (credenciales server-side, nunca en el browser).
+- **Mock con la misma forma que prod**: el front no distingue mock de real salvo por un
+  badge; conectar ServiceNow no requiere tocar el front.
+- **Colores espejados del drawio original**: quien vio el .drawio reconoce el mapa.
+- **Vista por rol**: una sola app sirve para operar (operativa) y comunicar (ejecutiva).
