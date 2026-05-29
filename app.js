@@ -1518,8 +1518,6 @@ function segSelectDp(id) {
   _buildSegSvg();
   _updateSegSvg(dp.stageIndex);
 
-  // Mostrar narrative de la etapa actual
-  _renderSegNarrative(dp.stageIndex);
 }
 
 // ── SVG del ciclo de vida para Seguimiento ───────────────────────────────────
@@ -1650,38 +1648,6 @@ function _segPanToNode(nodeId, diagram) {
   const targetY = cy - baseVB.h / 2;
   const newVBStr = `${targetX} ${targetY} ${baseVB.w} ${baseVB.h}`;
   svg.setAttribute('viewBox', newVBStr);
-}
-
-// ── Narrative de etapa ───────────────────────────────────────────────────────
-
-function _renderSegNarrative(stageIndex) {
-  const narEl = document.getElementById('segNarrative');
-  if (!narEl) return;
-
-  const path = segGetPath();
-  const s    = path?.stages?.[stageIndex];
-  if (!s) { narEl.innerHTML = ''; return; }
-
-  narEl.style.setProperty('--stage-color', s.color?.primary || '#1F3864');
-  narEl.style.setProperty('--stage-color-soft', s.color?.soft || '#E8EDFB');
-
-  const sectionsHTML = (s.sections || []).map(sec =>
-    `<div class="stage-section">
-      <div class="stage-section-label">${sec.label}</div>
-      <div class="stage-section-content">${sectionContentHTML(sec)}</div>
-    </div>`
-  ).join('');
-
-  narEl.innerHTML = `
-    <div class="narrative-accent-bar"></div>
-    <div class="narrative-content" style="padding:20px 28px">
-      <div class="stage-eyebrow"><span class="stage-dot"></span>${s.eyebrow}</div>
-      <h2 class="stage-title">${s.title}</h2>
-      <p class="stage-lead">${s.lead}</p>
-      ${sectionsHTML}
-      ${s.callout ? `<div class="stage-callout">${s.callout}</div>` : ''}
-    </div>
-  `;
 }
 
 // ── Mover etapa ──────────────────────────────────────────────────────────────

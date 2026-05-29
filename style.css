@@ -2209,15 +2209,6 @@ kbd {
   display: block;
 }
 
-/* ── Narrative de etapa ── */
-.seg-narrative {
-  max-height: 220px;
-  overflow-y: auto;
-  border-top: 1px solid var(--line);
-  flex-shrink: 0;
-  background: var(--bg-elev);
-}
-
 /* ── Botones pequeños (reutilizados de la versión anterior) ── */
 .dp-btn {
   font-family: 'Geist', sans-serif;
