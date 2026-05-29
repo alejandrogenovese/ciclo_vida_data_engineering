@@ -1320,18 +1320,11 @@ function switchDiagramWithPanels(diagramName) {
 
 // ============================================================
 // MÓDULO: SEGUIMIENTO DE DATA PRODUCTS
+// Muestra cada DP posicionado en el SVG del ciclo de vida (path bs-dp)
 // ============================================================
 
-const ESTADIOS = [
-  { id: 'ideacion',      label: 'Ideación',       color: '#FF8C00' },
-  { id: 'factibilidad',  label: 'Factibilidad',    color: '#1565C0' },
-  { id: 'diseno',        label: 'Diseño',          color: '#7B1FA2' },
-  { id: 'desarrollo',    label: 'Desarrollo',      color: '#2E7D32' },
-  { id: 'qa',            label: 'QA / Testing',    color: '#D32F2F' },
-  { id: 'produccion',    label: 'Producción',      color: '#1B5E20' },
-];
-
 const SEG_STORAGE_KEY = 'cvd_seguimiento';
+const SEG_PATH_ID     = 'bs-dp';   // path del CVD que usan todos los DPs
 
 function segLoad() {
   try {
@@ -1350,7 +1343,7 @@ function getDefaultDataProducts() {
       id: 'dp-001',
       nombre: 'Flujo de créditos hipotecarios',
       descripcion: 'Data product para analítica del ciclo de vida de créditos hipotecarios.',
-      estadio: 'desarrollo',
+      stageIndex: 2,   // índice dentro del path bs-dp (0-based)
       equipo: 'Ingeniería de Datos',
       responsable: 'Diego Martínez',
       snowTicket: '',
@@ -1361,7 +1354,7 @@ function getDefaultDataProducts() {
       id: 'dp-002',
       nombre: 'Segmentación de clientes retail',
       descripcion: 'Modelos de segmentación para campañas retail.',
-      estadio: 'qa',
+      stageIndex: 5,
       equipo: 'Modelado',
       responsable: 'Walter López',
       snowTicket: 'CHG0012345',
@@ -1372,7 +1365,7 @@ function getDefaultDataProducts() {
       id: 'dp-003',
       nombre: 'Dashboard ejecutivo de rentabilidad',
       descripcion: 'Vista agregada de rentabilidad por segmento.',
-      estadio: 'ideacion',
+      stageIndex: 0,
       equipo: 'Arquitectura',
       responsable: 'Alejandro Genovese',
       snowTicket: '',
@@ -1382,229 +1375,433 @@ function getDefaultDataProducts() {
   ];
 }
 
-let segState = { data: [], search: '' };
+// Estado del módulo
+let segState = {
+  data: [],
+  search: '',
+  selectedId: null,
+  svgBuilt: false,
+};
+
+// ── Helpers de path ──────────────────────────────────────────────────────────
+
+function segGetPath() {
+  // Lee del estado editado (mismo que usa el CVD principal)
+  return state.editedStages?.[SEG_DIAGRAM_ID]?.paths?.[SEG_PATH_ID];
+}
+
+const SEG_DIAGRAM_ID = 'ciclo-vida';
+
+function segGetStageLabel(stageIndex) {
+  const path = segGetPath();
+  if (!path) return `Etapa ${stageIndex + 1}`;
+  const s = path.stages?.[stageIndex];
+  return s ? (s.eyebrow || s.title?.replace(/<[^>]+>/g, '') || `Etapa ${stageIndex + 1}`) : `Etapa ${stageIndex + 1}`;
+}
+
+function segGetStageCount() {
+  return segGetPath()?.stages?.length || 8;
+}
+
+// ── Renderizado principal ────────────────────────────────────────────────────
 
 function renderSeguimiento() {
   segState.data = segLoad();
-  const kanban = document.getElementById('estadiosKanban');
-  if (!kanban) return;
-  _buildKanban();
+  _buildSegDpList();
+  // Seleccionar el primero por defecto si no hay selección
+  if (!segState.selectedId && segState.data.length > 0) {
+    segSelectDp(segState.data[0].id);
+  } else if (segState.selectedId) {
+    segSelectDp(segState.selectedId);
+  }
 }
 
-function _buildKanban() {
-  const kanban = document.getElementById('estadiosKanban');
+// ── Lista lateral ────────────────────────────────────────────────────────────
+
+function _buildSegDpList() {
+  const list   = document.getElementById('segDpList');
+  if (!list) return;
   const search = segState.search.toLowerCase();
+  const items  = segState.data.filter(dp =>
+    !search ||
+    dp.nombre.toLowerCase().includes(search) ||
+    (dp.responsable || '').toLowerCase().includes(search)
+  );
 
-  kanban.innerHTML = ESTADIOS.map(est => {
-    const items = segState.data.filter(dp =>
-      dp.estadio === est.id &&
-      (!search || dp.nombre.toLowerCase().includes(search) || (dp.responsable || '').toLowerCase().includes(search))
-    );
+  if (items.length === 0) {
+    list.innerHTML = '<p class="seg-list-empty">Sin resultados</p>';
+    return;
+  }
 
-    const cardsHTML = items.map(dp => `
-      <div class="dp-card" data-id="${dp.id}" style="--est-color:${est.color}">
-        <div class="dp-card-top">
-          <span class="dp-card-nombre">${escHtml(dp.nombre)}</span>
-          ${dp.snowTicket ? `<span class="dp-snow-badge" title="ServiceNow">${escHtml(dp.snowTicket)}</span>` : ''}
-        </div>
-        <div class="dp-card-meta">
-          <span class="dp-card-equipo">${escHtml(dp.equipo)}</span>
-          <span class="dp-card-resp">${escHtml(dp.responsable)}</span>
-        </div>
-        <div class="dp-card-actions">
-          <button class="dp-btn dp-btn-detail" data-id="${dp.id}" title="Ver detalle">Ver</button>
-          ${isAdmin() ? `<button class="dp-btn dp-btn-move-left" data-id="${dp.id}" title="Estadio anterior">←</button>
-          <button class="dp-btn dp-btn-move-right" data-id="${dp.id}" title="Estadio siguiente">→</button>
-          <button class="dp-btn dp-btn-delete" data-id="${dp.id}" title="Eliminar">✕</button>` : ''}
-        </div>
-      </div>
-    `).join('');
-
+  list.innerHTML = items.map(dp => {
+    const stageCount = segGetStageCount();
+    const pct = stageCount > 1 ? Math.round((dp.stageIndex / (stageCount - 1)) * 100) : 0;
+    const stageLabel = segGetStageLabel(dp.stageIndex);
+    const isSelected = dp.id === segState.selectedId;
     return `
-      <div class="estadio-col" data-estadio="${est.id}">
-        <div class="estadio-col-header" style="--est-color:${est.color}">
-          <span class="estadio-col-label">${est.label}</span>
-          <span class="estadio-col-count">${items.length}</span>
+      <div class="seg-dp-row ${isSelected ? 'seg-dp-row-active' : ''}" data-dpid="${dp.id}">
+        <div class="seg-dp-row-name">${escHtml(dp.nombre)}</div>
+        <div class="seg-dp-row-meta">
+          <span class="seg-dp-row-resp">${escHtml(dp.responsable)}</span>
+          ${dp.snowTicket ? `<span class="seg-snow-chip">${escHtml(dp.snowTicket)}</span>` : ''}
         </div>
-        <div class="estadio-col-body">
-          ${cardsHTML || '<p class="estadio-empty">Sin items</p>'}
-          ${isAdmin() ? `<button class="dp-btn dp-btn-add-col" data-estadio="${est.id}" style="margin-top:8px;width:100%">+ Agregar aquí</button>` : ''}
+        <div class="seg-dp-row-stage">
+          <span class="seg-dp-row-stage-label">${escHtml(stageLabel)}</span>
+          <div class="seg-dp-progress-bar">
+            <div class="seg-dp-progress-fill" style="width:${pct}%"></div>
+          </div>
         </div>
       </div>
     `;
   }).join('');
 
-  // Bind events
-  kanban.querySelectorAll('.dp-btn-detail').forEach(btn => {
-    btn.addEventListener('click', () => openDpModal(btn.dataset.id));
-  });
-  kanban.querySelectorAll('.dp-btn-move-left').forEach(btn => {
-    btn.addEventListener('click', () => moveDp(btn.dataset.id, -1));
-  });
-  kanban.querySelectorAll('.dp-btn-move-right').forEach(btn => {
-    btn.addEventListener('click', () => moveDp(btn.dataset.id, 1));
-  });
-  kanban.querySelectorAll('.dp-btn-delete').forEach(btn => {
-    btn.addEventListener('click', () => deleteDp(btn.dataset.id));
-  });
-  kanban.querySelectorAll('.dp-btn-add-col').forEach(btn => {
-    btn.addEventListener('click', () => openNewDpModal(btn.dataset.estadio));
+  list.querySelectorAll('.seg-dp-row').forEach(row => {
+    row.addEventListener('click', () => segSelectDp(row.dataset.dpid));
   });
 }
 
-function moveDp(id, dir) {
+// ── Selección y renderizado del detalle ──────────────────────────────────────
+
+function segSelectDp(id) {
+  segState.selectedId = id;
   const dp = segState.data.find(d => d.id === id);
-  if (!dp) return;
-  const idx = ESTADIOS.findIndex(e => e.id === dp.estadio);
-  const newIdx = idx + dir;
-  if (newIdx < 0 || newIdx >= ESTADIOS.length) return;
-  dp.estadio = ESTADIOS[newIdx].id;
-  segSave(segState.data);
-  _buildKanban();
-}
 
-function deleteDp(id) {
-  if (!confirm('¿Eliminar este data product?')) return;
-  segState.data = segState.data.filter(d => d.id !== id);
-  segSave(segState.data);
-  _buildKanban();
-}
+  // Actualizar lista (resaltado activo)
+  _buildSegDpList();
 
-function openDpModal(id) {
-  const dp = segState.data.find(d => d.id === id);
-  if (!dp) return;
-  const est = ESTADIOS.find(e => e.id === dp.estadio);
-  const backdrop = document.getElementById('dpModalBackdrop');
-  const title    = document.getElementById('dpModalTitle');
-  const body     = document.getElementById('dpModalBody');
+  const emptyEl  = document.getElementById('segEmpty');
+  const detailEl = document.getElementById('segDetail');
+  if (!dp) {
+    if (emptyEl)  emptyEl.style.display  = '';
+    if (detailEl) detailEl.style.display = 'none';
+    return;
+  }
 
-  title.textContent = dp.nombre;
+  if (emptyEl)  emptyEl.style.display  = 'none';
+  if (detailEl) detailEl.style.display = '';
+
+  // Header del detalle
+  const titleEl   = document.getElementById('segDetailTitle');
+  const metaEl    = document.getElementById('segDetailMeta');
+  const actionsEl = document.getElementById('segDetailActions');
+
+  if (titleEl) titleEl.textContent = dp.nombre;
 
   const snowLink = dp.snowTicket
     ? `<a class="dp-snow-link" href="https://bancogalicia.service-now.com/nav_to.do?uri=change_request.do?sysparm_query=number=${dp.snowTicket}" target="_blank" rel="noopener">${dp.snowTicket} ↗</a>`
-    : '<span class="dp-muted">Sin ticket asociado</span>';
+    : '';
 
-  body.innerHTML = `
-    <div class="dp-detail-grid">
-      <div class="dp-detail-row">
-        <span class="dp-detail-label">Estadio actual</span>
-        <span class="dp-detail-val" style="color:${est?.color}">${est?.label || dp.estadio}</span>
-      </div>
-      <div class="dp-detail-row">
-        <span class="dp-detail-label">Equipo</span>
-        <span class="dp-detail-val">${escHtml(dp.equipo)}</span>
-      </div>
-      <div class="dp-detail-row">
-        <span class="dp-detail-label">Responsable</span>
-        <span class="dp-detail-val">${escHtml(dp.responsable)}</span>
-      </div>
-      <div class="dp-detail-row">
-        <span class="dp-detail-label">Ticket ServiceNow</span>
-        <span class="dp-detail-val">${snowLink}</span>
-      </div>
-      <div class="dp-detail-row">
-        <span class="dp-detail-label">Fecha creación</span>
-        <span class="dp-detail-val">${dp.fechaCreacion || '—'}</span>
-      </div>
-    </div>
-    <div class="dp-detail-desc">
-      <div class="dp-detail-label">Descripción</div>
-      <p>${escHtml(dp.descripcion)}</p>
-    </div>
-    ${dp.notas ? `<div class="dp-detail-desc"><div class="dp-detail-label">Notas</div><p>${escHtml(dp.notas)}</p></div>` : ''}
-    ${isAdmin() ? `
-    <hr class="dp-divider">
-    <form id="dpEditForm" data-id="${id}">
-      <div class="dp-edit-row">
-        <div class="form-field">
-          <label class="form-label">Ticket ServiceNow</label>
-          <input class="form-input" id="dpEditSnow" type="text" value="${escAttr(dp.snowTicket)}" placeholder="CHG0012345">
-        </div>
-        <div class="form-field">
-          <label class="form-label">Notas</label>
-          <textarea class="form-input" id="dpEditNotas" rows="2">${escHtml(dp.notas)}</textarea>
-        </div>
-      </div>
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Guardar cambios</button>
-      </div>
-    </form>` : ''}
+  if (metaEl) metaEl.innerHTML = `
+    <span class="seg-meta-chip">${escHtml(dp.equipo)}</span>
+    <span class="seg-meta-chip">${escHtml(dp.responsable)}</span>
+    ${snowLink ? `<span class="seg-meta-snow">${snowLink}</span>` : ''}
+    <span class="seg-meta-fecha">desde ${dp.fechaCreacion || '—'}</span>
   `;
 
-  if (isAdmin()) {
-    document.getElementById('dpEditForm')?.addEventListener('submit', (e) => {
-      e.preventDefault();
-      dp.snowTicket = document.getElementById('dpEditSnow').value.trim();
-      dp.notas = document.getElementById('dpEditNotas').value.trim();
-      segSave(segState.data);
-      closeDpModal();
-      _buildKanban();
-    });
+  if (actionsEl) {
+    actionsEl.innerHTML = isAdmin() ? `
+      <button class="btn" id="segBtnPrev" title="Etapa anterior" ${dp.stageIndex === 0 ? 'disabled' : ''}>← Anterior</button>
+      <button class="btn btn-primary" id="segBtnNext" title="Etapa siguiente" ${dp.stageIndex >= segGetStageCount() - 1 ? 'disabled' : ''}>Siguiente →</button>
+      <button class="btn" id="segBtnEdit" title="Editar datos del DP">✎ Editar</button>
+      <button class="btn" id="segBtnDelete" title="Eliminar DP" style="color:#c0392b;border-color:#c0392b">✕</button>
+    ` : '';
+
+    if (isAdmin()) {
+      document.getElementById('segBtnPrev')?.addEventListener('click', () => segMoveStage(id, -1));
+      document.getElementById('segBtnNext')?.addEventListener('click', () => segMoveStage(id,  1));
+      document.getElementById('segBtnEdit')?.addEventListener('click', () => openEditDpModal(id));
+      document.getElementById('segBtnDelete')?.addEventListener('click', () => segDeleteDp(id));
+    }
   }
 
-  backdrop.style.display = 'flex';
+  // Construir / actualizar el SVG de seguimiento
+  _buildSegSvg();
+  _updateSegSvg(dp.stageIndex);
+
+  // Mostrar narrative de la etapa actual
+  _renderSegNarrative(dp.stageIndex);
 }
 
-function openNewDpModal(estadioId) {
+// ── SVG del ciclo de vida para Seguimiento ───────────────────────────────────
+// Reutiliza los mismos datos de diagram.json pero en el SVG #segSvg
+
+function _buildSegSvg() {
+  if (segState.svgBuilt) return;
+  segState.svgBuilt = true;
+
+  const diagram = state.diagrams[SEG_DIAGRAM_ID];
+  if (!diagram) return;
+
+  const svg = document.getElementById('segSvg');
+  if (!svg) return;
+
+  // ViewBox
+  const vb = diagram.viewBox;
+  svg.setAttribute('viewBox', vb);
+
+  // Transversal
+  const transG = document.getElementById('segSvgTransverse');
+  if (diagram.transverse?.enabled) {
+    const t = diagram.transverse;
+    transG.setAttribute('opacity', '0.6');
+    const bracketEl = document.createElementNS(SVG_NS, 'path');
+    bracketEl.setAttribute('class', 'transverse-bracket');
+    bracketEl.setAttribute('d', t.bracket);
+    transG.appendChild(bracketEl);
+    if (t.labelPos && t.label) {
+      const textEl = document.createElementNS(SVG_NS, 'text');
+      textEl.setAttribute('class', 'transverse-label');
+      textEl.setAttribute('x', t.labelPos.x);
+      textEl.setAttribute('y', t.labelPos.y);
+      textEl.setAttribute('transform', `rotate(${t.labelPos.rotate || 0} ${t.labelPos.x} ${t.labelPos.y})`);
+      textEl.setAttribute('text-anchor', 'middle');
+      textEl.textContent = t.label;
+      transG.appendChild(textEl);
+    }
+  }
+
+  // Edges
+  const edgesG = document.getElementById('segSvgEdges');
+  diagram.edges.forEach(edge => {
+    const p = document.createElementNS(SVG_NS, 'path');
+    p.setAttribute('class', 'edge');
+    p.setAttribute('id', 'seg-edge-' + edge.id);
+    p.setAttribute('d', edge.d);
+    // Apuntar al marker local
+    if (edge.d) p.setAttribute('marker-end', 'url(#seg-arrow)');
+    edgesG.appendChild(p);
+  });
+
+  // Nodes
+  const nodesG = document.getElementById('segSvgNodes');
+  diagram.nodes.forEach(node => {
+    const g = buildNode(node);
+    g.setAttribute('id', 'seg-node-' + node.id);
+    // Quitar click handler — en seguimiento los nodos no navegan
+    g.style.cursor = 'default';
+    g.replaceWith(g.cloneNode(true));   // remove event listeners
+    const gClean = g.cloneNode(true);
+    nodesG.appendChild(gClean);
+  });
+}
+
+function _updateSegSvg(stageIndex) {
+  const diagram = state.diagrams[SEG_DIAGRAM_ID];
+  if (!diagram) return;
+
+  const path = segGetPath();
+  if (!path) return;
+
+  const nodeSequence = path.nodeSequence;
+  const activeNodeId = nodeSequence[stageIndex];
+
+  // Colorear nodos
+  document.querySelectorAll('#segSvgNodes .node').forEach(nodeEl => {
+    const nodeId = nodeEl.dataset.nodeId;
+    const indices = nodeSequence.reduce((acc, id, i) => id === nodeId ? [...acc, i] : acc, []);
+    if (indices.length === 0) {
+      nodeEl.dataset.state = 'inactive';
+    } else if (indices.includes(stageIndex)) {
+      nodeEl.dataset.state = 'current';
+    } else if (indices.every(i => i < stageIndex)) {
+      nodeEl.dataset.state = 'past';
+    } else {
+      nodeEl.dataset.state = 'future';
+    }
+  });
+
+  // Colorear edges
+  document.querySelectorAll('#segSvgEdges .edge').forEach(e => {
+    e.classList.remove('active', 'past', 'inactive');
+  });
+  diagram.edges.forEach(edgeDef => {
+    const e = document.getElementById('seg-edge-' + edgeDef.id);
+    if (!e || !edgeDef.connects) return;
+    const [from, to] = edgeDef.connects;
+    let isActive = false, isPast = false;
+    for (let i = 0; i < nodeSequence.length - 1; i++) {
+      if (nodeSequence[i] === from && nodeSequence[i + 1] === to) {
+        if (stageIndex === i + 1) isActive = true;
+        else if (stageIndex > i + 1) isPast = true;
+      }
+    }
+    if (isActive) e.classList.add('active');
+    else if (isPast) e.classList.add('past');
+    else e.classList.add('inactive');
+  });
+
+  // Pan automático al nodo activo
+  _segPanToNode(activeNodeId, diagram);
+}
+
+function _segPanToNode(nodeId, diagram) {
+  const svg   = document.getElementById('segSvg');
+  if (!svg) return;
+  const node  = diagram.nodes.find(n => n.id === nodeId);
+  if (!node?.geom) return;
+
+  const g = node.geom;
+  const cx = g.x !== undefined ? g.x + g.w / 2 : 0;
+  const cy = g.y !== undefined ? g.y + g.h / 2 : 0;
+
+  // Usar el viewBox del diagrama para calcular el viewport centrado en el nodo
+  const baseVB = parseVB(diagram.initialZoom || diagram.viewBox);
+  const targetX = cx - baseVB.w / 2;
+  const targetY = cy - baseVB.h / 2;
+  const newVBStr = `${targetX} ${targetY} ${baseVB.w} ${baseVB.h}`;
+  svg.setAttribute('viewBox', newVBStr);
+}
+
+// ── Narrative de etapa ───────────────────────────────────────────────────────
+
+function _renderSegNarrative(stageIndex) {
+  const narEl = document.getElementById('segNarrative');
+  if (!narEl) return;
+
+  const path = segGetPath();
+  const s    = path?.stages?.[stageIndex];
+  if (!s) { narEl.innerHTML = ''; return; }
+
+  narEl.style.setProperty('--stage-color', s.color?.primary || '#1F3864');
+  narEl.style.setProperty('--stage-color-soft', s.color?.soft || '#E8EDFB');
+
+  const sectionsHTML = (s.sections || []).map(sec =>
+    `<div class="stage-section">
+      <div class="stage-section-label">${sec.label}</div>
+      <div class="stage-section-content">${sectionContentHTML(sec)}</div>
+    </div>`
+  ).join('');
+
+  narEl.innerHTML = `
+    <div class="narrative-accent-bar"></div>
+    <div class="narrative-content" style="padding:20px 28px">
+      <div class="stage-eyebrow"><span class="stage-dot"></span>${s.eyebrow}</div>
+      <h2 class="stage-title">${s.title}</h2>
+      <p class="stage-lead">${s.lead}</p>
+      ${sectionsHTML}
+      ${s.callout ? `<div class="stage-callout">${s.callout}</div>` : ''}
+    </div>
+  `;
+}
+
+// ── Mover etapa ──────────────────────────────────────────────────────────────
+
+function segMoveStage(id, dir) {
+  const dp = segState.data.find(d => d.id === id);
+  if (!dp) return;
+  const total = segGetStageCount();
+  const newIdx = dp.stageIndex + dir;
+  if (newIdx < 0 || newIdx >= total) return;
+  dp.stageIndex = newIdx;
+  segSave(segState.data);
+  segSelectDp(id);
+}
+
+function segDeleteDp(id) {
+  if (!confirm('¿Eliminar este data product?')) return;
+  segState.data = segState.data.filter(d => d.id !== id);
+  segSave(segState.data);
+  segState.selectedId = segState.data[0]?.id || null;
+  _buildSegDpList();
+  if (segState.selectedId) {
+    segSelectDp(segState.selectedId);
+  } else {
+    document.getElementById('segEmpty').style.display  = '';
+    document.getElementById('segDetail').style.display = 'none';
+  }
+}
+
+// ── Modales nuevo / editar DP ────────────────────────────────────────────────
+
+function openNewDpModal() {
   const backdrop = document.getElementById('dpModalBackdrop');
   const title    = document.getElementById('dpModalTitle');
   const body     = document.getElementById('dpModalBody');
-  const est      = ESTADIOS.find(e => e.id === estadioId);
 
-  title.textContent = `Nuevo Data Product — ${est?.label || estadioId}`;
-  body.innerHTML = `
-    <form id="dpNewForm">
+  title.textContent = 'Nuevo Data Product';
+  body.innerHTML = _dpFormHTML(null);
+  _bindDpForm(null);
+  backdrop.style.display = 'flex';
+}
+
+function openEditDpModal(id) {
+  const dp       = segState.data.find(d => d.id === id);
+  if (!dp) return;
+  const backdrop = document.getElementById('dpModalBackdrop');
+  const title    = document.getElementById('dpModalTitle');
+  const body     = document.getElementById('dpModalBody');
+
+  title.textContent = 'Editar Data Product';
+  body.innerHTML = _dpFormHTML(dp);
+  _bindDpForm(dp);
+  backdrop.style.display = 'flex';
+}
+
+function _dpFormHTML(dp) {
+  return `
+    <form id="dpForm">
       <div class="form-field">
         <label class="form-label">Nombre *</label>
-        <input class="form-input" id="dpNewNombre" type="text" placeholder="Nombre del data product">
+        <input class="form-input" id="dpFNombre" type="text" value="${escAttr(dp?.nombre || '')}" placeholder="Nombre del data product">
       </div>
       <div class="form-field">
         <label class="form-label">Descripción</label>
-        <textarea class="form-input" id="dpNewDesc" rows="2" placeholder="Breve descripción del objetivo…"></textarea>
+        <textarea class="form-input" id="dpFDesc" rows="2">${escHtml(dp?.descripcion || '')}</textarea>
       </div>
       <div class="form-field">
         <label class="form-label">Equipo</label>
-        <input class="form-input" id="dpNewEquipo" type="text" placeholder="Ingeniería de Datos">
+        <input class="form-input" id="dpFEquipo" type="text" value="${escAttr(dp?.equipo || '')}" placeholder="Ingeniería de Datos">
       </div>
       <div class="form-field">
         <label class="form-label">Responsable</label>
-        <input class="form-input" id="dpNewResp" type="text" placeholder="Nombre y apellido">
+        <input class="form-input" id="dpFResp" type="text" value="${escAttr(dp?.responsable || '')}" placeholder="Nombre y apellido">
       </div>
       <div class="form-field">
         <label class="form-label">Ticket ServiceNow</label>
-        <input class="form-input" id="dpNewSnow" type="text" placeholder="CHG0012345 (opcional)">
+        <input class="form-input" id="dpFSnow" type="text" value="${escAttr(dp?.snowTicket || '')}" placeholder="CHG0012345 (pendiente integración API)">
       </div>
-      <div class="form-error" id="dpNewError"></div>
+      <div class="form-error" id="dpFError"></div>
       <div class="form-actions">
-        <button type="button" class="btn" id="dpNewCancel">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Crear</button>
+        <button type="button" class="btn" id="dpFCancel">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
       </div>
     </form>
   `;
+}
 
-  document.getElementById('dpNewCancel').addEventListener('click', closeDpModal);
-  document.getElementById('dpNewForm').addEventListener('submit', (e) => {
+function _bindDpForm(existingDp) {
+  document.getElementById('dpFCancel')?.addEventListener('click', closeDpModal);
+  document.getElementById('dpForm')?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const nombre = document.getElementById('dpNewNombre').value.trim();
-    if (!nombre) { document.getElementById('dpNewError').textContent = 'El nombre es obligatorio.'; return; }
-    const newDp = {
-      id: 'dp-' + Date.now(),
-      nombre,
-      descripcion: document.getElementById('dpNewDesc').value.trim(),
-      estadio: estadioId,
-      equipo: document.getElementById('dpNewEquipo').value.trim(),
-      responsable: document.getElementById('dpNewResp').value.trim(),
-      snowTicket: document.getElementById('dpNewSnow').value.trim(),
-      fechaCreacion: new Date().toISOString().slice(0, 10),
-      notas: '',
-    };
-    segState.data.push(newDp);
+    const nombre = document.getElementById('dpFNombre').value.trim();
+    if (!nombre) { document.getElementById('dpFError').textContent = 'El nombre es obligatorio.'; return; }
+
+    if (existingDp) {
+      existingDp.nombre      = nombre;
+      existingDp.descripcion = document.getElementById('dpFDesc').value.trim();
+      existingDp.equipo      = document.getElementById('dpFEquipo').value.trim();
+      existingDp.responsable = document.getElementById('dpFResp').value.trim();
+      existingDp.snowTicket  = document.getElementById('dpFSnow').value.trim();
+    } else {
+      segState.data.push({
+        id: 'dp-' + Date.now(),
+        nombre,
+        descripcion: document.getElementById('dpFDesc').value.trim(),
+        stageIndex:  0,
+        equipo:      document.getElementById('dpFEquipo').value.trim(),
+        responsable: document.getElementById('dpFResp').value.trim(),
+        snowTicket:  document.getElementById('dpFSnow').value.trim(),
+        fechaCreacion: new Date().toISOString().slice(0, 10),
+        notas: '',
+      });
+    }
     segSave(segState.data);
     closeDpModal();
-    _buildKanban();
+    const selId = existingDp ? existingDp.id : segState.data[segState.data.length - 1].id;
+    segState.selectedId = selId;
+    _buildSegDpList();
+    segSelectDp(selId);
   });
-
-  backdrop.style.display = 'flex';
 }
 
 function closeDpModal() {
@@ -1612,19 +1809,16 @@ function closeDpModal() {
   if (backdrop) backdrop.style.display = 'none';
 }
 
-function initSeguimiento() {
-  // Botón nuevo (header del panel)
-  document.getElementById('nuevoDataProductBtn')?.addEventListener('click', () => {
-    openNewDpModal('ideacion');
-  });
+// ── Init ─────────────────────────────────────────────────────────────────────
 
-  // Búsqueda
+function initSeguimiento() {
+  document.getElementById('nuevoDataProductBtn')?.addEventListener('click', openNewDpModal);
+
   document.getElementById('seguimientoSearch')?.addEventListener('input', (e) => {
     segState.search = e.target.value;
-    _buildKanban();
+    _buildSegDpList();
   });
 
-  // Close modal
   document.getElementById('dpModalClose')?.addEventListener('click', closeDpModal);
   document.getElementById('dpModalBackdrop')?.addEventListener('click', (e) => {
     if (e.target === e.currentTarget) closeDpModal();

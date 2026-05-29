@@ -121,26 +121,60 @@
   </aside>
 
   <!-- ============ PANEL SEGUIMIENTO ============ -->
-  <section class="full-panel" id="panel-seguimiento" style="display:none">
-    <div class="panel-header">
-      <div class="panel-header-left">
-        <h2 class="panel-title">Seguimiento de Data Products</h2>
-        <p class="panel-subtitle">Visualizá el estadio actual de cada data product y su vinculación con ServiceNow</p>
+  <section class="full-panel seg-layout" id="panel-seguimiento" style="display:none">
+
+    <!-- Sidebar: lista de DPs -->
+    <aside class="seg-sidebar" id="segSidebar">
+      <div class="seg-sidebar-header">
+        <span class="seg-sidebar-title">Data Products</span>
+        <button class="btn btn-primary seg-nuevo-btn" id="nuevoDataProductBtn">+ Nuevo</button>
       </div>
-      <div class="panel-header-actions">
-        <div class="seguimiento-search-wrap">
-          <input class="seguimiento-search" id="seguimientoSearch" type="text" placeholder="Buscar data product…">
+      <div class="seg-search-wrap">
+        <input class="seg-search" id="seguimientoSearch" type="text" placeholder="Buscar…">
+      </div>
+      <div class="seg-dp-list" id="segDpList">
+        <!-- generado por JS -->
+      </div>
+    </aside>
+
+    <!-- Main: diagrama SVG del ciclo de vida con el nodo activo del DP -->
+    <div class="seg-main" id="segMain">
+      <!-- Estado vacío -->
+      <div class="seg-empty" id="segEmpty">
+        <p>Seleccioná un data product de la lista para ver su posición en el ciclo de vida.</p>
+      </div>
+
+      <!-- Detalle del DP seleccionado -->
+      <div class="seg-detail" id="segDetail" style="display:none">
+        <div class="seg-detail-header">
+          <div class="seg-detail-info">
+            <h3 class="seg-detail-title" id="segDetailTitle"></h3>
+            <div class="seg-detail-meta" id="segDetailMeta"></div>
+          </div>
+          <div class="seg-detail-actions" id="segDetailActions"></div>
         </div>
-        <button class="btn btn-primary" id="nuevoDataProductBtn">+ Nuevo</button>
+
+        <!-- SVG del ciclo de vida (copia independiente para Seguimiento) -->
+        <div class="seg-svg-wrap" id="segSvgWrap">
+          <svg class="seg-svg" id="segSvg" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <marker id="seg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#0D1B2A"/>
+              </marker>
+            </defs>
+            <g id="segSvgTransverse"></g>
+            <g id="segSvgEdges"></g>
+            <g id="segSvgAnnotations"></g>
+            <g id="segSvgNodes"></g>
+          </svg>
+        </div>
+
+        <!-- Narrative del estadio actual -->
+        <div class="seg-narrative" id="segNarrative"></div>
       </div>
     </div>
 
-    <!-- Kanban de estadios -->
-    <div class="estadios-kanban" id="estadiosKanban">
-      <!-- Columnas generadas por JS -->
-    </div>
-
-    <!-- Modal detalle -->
+    <!-- Modal nuevo/editar DP -->
     <div class="dp-modal-backdrop" id="dpModalBackdrop" style="display:none">
       <div class="dp-modal" id="dpModal">
         <div class="dp-modal-header">
